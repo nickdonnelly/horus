@@ -27,6 +27,7 @@ private:
     bool mousePressed = false;
 
 protected:
+    void keyPressEvent(QKeyEvent *evt);
     void mousePressEvent(QMouseEvent *evt);
     void mouseReleaseEvent(QMouseEvent *evt);
     void mouseMoveEvent(QMouseEvent *evt);

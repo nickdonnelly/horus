@@ -3,6 +3,7 @@
 #include "qdesktopwidget.h"
 #include "qtextstream.h"
 #include "QMouseEvent"
+#include "QKeyEvent"
 
 ScreenWindow::ScreenWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,18 +14,23 @@ ScreenWindow::ScreenWindow(QWidget *parent) :
     QDesktopWidget * dtw = QApplication::desktop();
     windowW = dtw->screen()->width();
     windowH = dtw->screen()->height();
+    ui->lblInstructions->resize(windowW, ui->lblInstructions->height());
     full = QRegion(0, 0, windowW, windowH);
     setParent(0);
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowState(Qt::WindowFullScreen);
     setWindowFlags(Qt::WindowStaysOnTopHint);
     setMask(full);
-#ifdef Q_OS_LINUX
-//    setWindowFlags(Qt::X11BypassWindowManagerHint);
-#endif
-    setStyleSheet("background: rgba(0, 0, 0, 40);");
+
+
     showFullScreen();
     raise();
+}
+
+void ScreenWindow::keyPressEvent(QKeyEvent *evt){
+    if(evt->key() == Qt::Key_Escape){
+        close();
+    }
 }
 
  void ScreenWindow::mousePressEvent(QMouseEvent *evt){
@@ -35,6 +41,8 @@ ScreenWindow::ScreenWindow(QWidget *parent) :
 
         startXRel = evt->x();
         startYRel = evt->y();
+    }else if(evt->button() == Qt::RightButton){
+        close();
     }
  }
 
@@ -47,6 +55,7 @@ ScreenWindow::ScreenWindow(QWidget *parent) :
         endYRel = evt->y();
 
         setMask(full);
+        update(); // repaint instruction
     }
  }
 
