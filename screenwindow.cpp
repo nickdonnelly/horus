@@ -16,10 +16,12 @@ ScreenWindow::ScreenWindow(QWidget *parent) :
     windowH = dtw->screen()->height();
     ui->lblInstructions->resize(windowW, ui->lblInstructions->height());
     full = QRegion(0, 0, windowW, windowH);
-    setParent(0);
+    setParent(0); // no parent widget
+    move(0, 0); // for windows...
+    resize(windowW, windowH); // for windows...
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowState(Qt::WindowFullScreen);
-    setWindowFlags(Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
     setMask(full);
 
 
