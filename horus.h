@@ -16,6 +16,7 @@ public:
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void messageClicked();
+    void openScreenshotWindow();
 
 private:
     void createTrayIcon();

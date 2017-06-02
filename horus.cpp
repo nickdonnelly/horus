@@ -9,8 +9,6 @@
 Horus::Horus()
 {
     createTrayIcon();
-    setVisible(false);
-    hide();
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     trayIcon->show();
@@ -23,25 +21,40 @@ void Horus::messageClicked(){
 }
 
 void Horus::iconActivated(QSystemTrayIcon::ActivationReason reason){
-    QTextStream(stdout) << "CLICKED" << endl;
     switch(reason){
+    case QSystemTrayIcon::Context:
+        break;
     case QSystemTrayIcon::Trigger:
+        openScreenshotWindow();
+        break;
     case QSystemTrayIcon::DoubleClick:
-        ScreenWindow sWindow;
-        sWindow.show();
+        ScreenWindow *sWindow;
+        sWindow = new ScreenWindow();
+        sWindow->show();
         break;
     }
 }
 
-void Horus::createTrayIcon(){
-    QAction actionTakeScreen(tr("Take &Screenshot"), this);
-    QAction actionQuit(tr("&Quit"), this);
-    connect(&actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
+void Horus::openScreenshotWindow(){
+   ScreenWindow *sw = new ScreenWindow();
+   sw->show();
+}
 
+void Horus::createTrayIcon(){
+//    QAction actionTakeScreen("Take Screenshot", this);
+//    testAction = new QAction("Test", this);
+//    connect(testAction, SIGNAL(triggered()), this, SLOT(test()));
+//    quitAction = new QAction(tr("&Quit"), this);
+//    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+
+    QAction *actionTakeScreenshot, *actionQuit;
     trayIconMenu = new QMenu(this);
-    trayIconMenu->addAction(&actionTakeScreen);
+    actionTakeScreenshot = trayIconMenu->addAction(tr("Take &Screenshot"));
     trayIconMenu->addSeparator();
-    trayIconMenu->addAction(&actionQuit);
+    actionQuit = trayIconMenu->addAction(tr("&Quit"));
+
+    connect(actionTakeScreenshot, SIGNAL(triggered()), this, SLOT(openScreenshotWindow()));
+    connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(QIcon("horus.png"));

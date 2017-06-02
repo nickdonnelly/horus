@@ -7,10 +7,10 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     //ScreenWindow w;
     //w.show();
+    a.setQuitOnLastWindowClosed(false);
     Horus h;
-//    h.show();
-//    h.hide();
 
+//    h.hide();
 
     return a.exec();
 }
