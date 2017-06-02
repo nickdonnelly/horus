@@ -17,7 +17,10 @@ public:
 
 private:
     Ui::ScreenWindow *ui;
+    QWidget * windowScreen;
     QRegion full;
+    int originX, originY;
+    int iw, ih;
     int windowW, windowH;
     int mouseX, mouseY;
     int startX, startXRel;
@@ -25,8 +28,11 @@ private:
     int endX, endXRel;
     int endY, endYRel;
     bool mousePressed = false;
+    void takeScreenshot();
+    void takeScreenshot(int x, int y, int w, int h);
 
 protected:
+    void paintEvent(QPaintEvent *evt);
     void keyPressEvent(QKeyEvent *evt);
     void mousePressEvent(QMouseEvent *evt);
     void mouseReleaseEvent(QMouseEvent *evt);
