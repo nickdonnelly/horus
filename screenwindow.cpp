@@ -149,7 +149,6 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
      QFile file(lastSaveLocation);
      file.open(QIODevice::WriteOnly);
      screenMap.save(&file, "PNG");
-     hide();
      uploader->upload(lastSaveLocation);
      close();
  }

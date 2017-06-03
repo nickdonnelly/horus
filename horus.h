@@ -1,6 +1,7 @@
 #ifndef HORUS_H
 #define HORUS_H
 
+#include <screenwindow.h>
 #include <QDialog>
 #include <QObject>
 #include <QSettings>
@@ -25,6 +26,7 @@ private slots:
 private:
     void createTrayIcon();
     HorusUploader * uploader;
+    ScreenWindow * sw;
     QSettings * sets;
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;

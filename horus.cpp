@@ -21,7 +21,8 @@ Horus::Horus()
 
     uploader = new HorusUploader();
     sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
-
+    sw = new ScreenWindow(uploader);
+    sw->hide();
     connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
 }
 
@@ -52,8 +53,11 @@ void Horus::iconActivated(QSystemTrayIcon::ActivationReason reason){
 }
 
 void Horus::openScreenshotWindow(){
-   ScreenWindow *sw = new ScreenWindow(uploader);
-   sw->show();
+    sw->close();
+    sw->deleteLater();
+   delete sw;
+   sw = new ScreenWindow(uploader);
+   sw->show();   
 }
 
 void Horus::openSettingsWindow(){

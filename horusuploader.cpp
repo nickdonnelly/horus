@@ -15,6 +15,7 @@ HorusUploader::HorusUploader()
 
 }
 
+
 void HorusUploader::upload(QString filename){
     QFile toUpload(filename);
     if(toUpload.exists()){
@@ -42,7 +43,11 @@ void HorusUploader::upload(QString filename){
             reply->close();
         }else{
             QTextStream(stdout) << reply->error() << endl;
+            reply->close();
         }
-
+        toUpload.close();
+        delete reply;
+        postData.clear();
+        imgData.clear();
     }
 }
