@@ -2,6 +2,7 @@
 #define SCREENWINDOW_H
 
 #include <QMainWindow>
+#include <QString>
 
 namespace Ui {
 class ScreenWindow;
@@ -30,6 +31,9 @@ private:
     bool mousePressed = false;
     void takeScreenshot();
     void takeScreenshot(int x, int y, int w, int h);
+    QString getAppSaveDirectory();
+    QString getFilename();
+    QString getImagesDirectory();
 
 protected:
     void paintEvent(QPaintEvent *evt);

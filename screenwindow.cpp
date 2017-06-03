@@ -3,10 +3,13 @@
 #include "qdesktopwidget.h"
 #include "qtextstream.h"
 #include <QMouseEvent>
+#include <QDir>
 #include <QKeyEvent>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QScreen>
+#include <QDateTime>
+#include <QStandardPaths>
 
 ScreenWindow::ScreenWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -102,7 +105,10 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
       hide();
      // TODO: Use screens() and iterate through for a list in the future to splice the pixmaps together
      QPixmap screenMap = QGuiApplication::primaryScreen()->grabWindow(0, 0, 0, windowW, windowH);
-     QFile file("testfull.png");
+     if(!QDir(getAppSaveDirectory()).exists()){
+         QDir().mkpath(getAppSaveDirectory());
+     }
+     QFile file(getAppSaveDirectory() + "/cache_last_taken.png");
      file.open(QIODevice::WriteOnly);
      screenMap.save(&file, "PNG");
      close();
@@ -112,11 +118,29 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
      hide();
      // TODO: Use screens() and iterate through for a list in the future to splice the pixmaps together
      QPixmap screenMap = QGuiApplication::primaryScreen()->grabWindow(0, x, y, w, h);
-     QFile file("test.png");
+     QFile file(getImagesDirectory() + "/" + getFilename());
      file.open(QIODevice::WriteOnly);
      screenMap.save(&file, "PNG");
      close();
  }
+
+
+QString ScreenWindow::getImagesDirectory(){
+    if(!QDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus").exists()){
+        QDir().mkdir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus");
+    }
+    return QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus";
+}
+
+QString ScreenWindow::getAppSaveDirectory(){
+   return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+}
+
+QString ScreenWindow::getFilename(){
+    QDateTime dt = QDateTime::currentDateTime();
+    return dt.toString("dd-MMM-yyyy HH-mm") + ".png";
+}
 
 ScreenWindow::~ScreenWindow()
 {
