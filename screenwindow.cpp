@@ -173,7 +173,7 @@ QString ScreenWindow::getAppSaveDirectory(){
 
 QString ScreenWindow::getFilename(){
     QDateTime dt = QDateTime::currentDateTime();
-    return dt.toString("dd-MMM-yyyy HH-mm") + ".png";
+    return dt.toString("dd-MMM-yyyy HH-mm-ss") + ".png";
 }
 
 ScreenWindow::~ScreenWindow()
