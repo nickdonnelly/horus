@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QObject>
+#include <QSettings>
 #include <QCloseEvent>
 #include <horusuploader.h>
 #include <QSystemTrayIcon>
@@ -24,7 +25,7 @@ private slots:
 private:
     void createTrayIcon();
     HorusUploader * uploader;
-
+    QSettings * sets;
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
 

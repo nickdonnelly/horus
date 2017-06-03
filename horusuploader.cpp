@@ -23,7 +23,7 @@ void HorusUploader::upload(QString filename){
         QNetworkAccessManager nMgr;
         QObject::connect(&nMgr, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
 
-        QNetworkRequest req(QUrl(QString("http://localhost:3350/image/upload")));
+        QNetworkRequest req(QUrl(QString("http://horus.donnelly.cc/image/upload")));
         req.setHeader(QNetworkRequest::ContentTypeHeader, "image/png");
         QByteArray imgData = toUpload.readAll();
         int origSize = imgData.length();
@@ -37,14 +37,12 @@ void HorusUploader::upload(QString filename){
         el.exec();
 
         if(reply->error() == QNetworkReply::NoError){
-            QTextStream(stdout) << "No error" << endl;
             reply->open(QIODevice::ReadOnly);
-            QTextStream(stdout) << "Reply " << QString(reply->readAll()) << endl;
+            emit uploadCompleted(QString(reply->readAll()));
             reply->close();
         }else{
             QTextStream(stdout) << reply->error() << endl;
         }
 
-        emit uploadCompleted(filename);
     }
 }

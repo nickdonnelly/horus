@@ -4,10 +4,13 @@
 #include <horusuploader.h>
 #include <QApplication>
 #include <QString>
+#include <QDesktopServices>
 #include <QSystemTrayIcon>
 #include <QTextStream>
 #include <QMenu>
+#include <QSettings>
 #include <QAction>
+#include <QClipboard>
 
 Horus::Horus()
 {
@@ -17,16 +20,19 @@ Horus::Horus()
     trayIcon->show();
 
     uploader = new HorusUploader();
+    sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
 
     connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
-    uploader->upload("hello");
-    uploader->upload("goodbye");
 }
 
 void Horus::uploadComplete(QString url){
-    // Notify user, copy to clipboard, open in browser, etc.
-    // TODO
-    QTextStream(stdout) << url << endl;
+    if(sets->value("openInBrowser", true).toBool()){
+        QDesktopServices::openUrl(QString("http://") + url);
+    }
+    if(sets->value("copyMode", "url").toString() == "url"){
+        QClipboard* board = QApplication::clipboard();
+        board->setText(url);
+    }
 }
 
 void Horus::messageClicked(){
