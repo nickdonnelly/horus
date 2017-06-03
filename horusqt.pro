@@ -28,11 +28,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         screenwindow.cpp \
-    horus.cpp
+    horus.cpp \
+    settingsdialog.cpp
 
 HEADERS += \
         screenwindow.h \
-    horus.h
+    horus.h \
+    settingsdialog.h
 
 FORMS += \
-        screenwindow.ui
+        screenwindow.ui \
+    settingsdialog.ui

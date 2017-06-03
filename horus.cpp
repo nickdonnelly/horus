@@ -1,4 +1,5 @@
 #include "horus.h"
+#include <settingsdialog.h>
 #include <screenwindow.h>
 #include <QApplication>
 #include <QSystemTrayIcon>
@@ -40,20 +41,21 @@ void Horus::openScreenshotWindow(){
    sw->show();
 }
 
-void Horus::createTrayIcon(){
-//    QAction actionTakeScreen("Take Screenshot", this);
-//    testAction = new QAction("Test", this);
-//    connect(testAction, SIGNAL(triggered()), this, SLOT(test()));
-//    quitAction = new QAction(tr("&Quit"), this);
-//    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+void Horus::openSettingsWindow(){
+    SettingsDialog *sd = new SettingsDialog();
+    sd->show();
+}
 
-    QAction *actionTakeScreenshot, *actionQuit;
+void Horus::createTrayIcon(){
+    QAction *actionTakeScreenshot, *actionSettings, *actionQuit;
     trayIconMenu = new QMenu(this);
-    actionTakeScreenshot = trayIconMenu->addAction(tr("Take &Screenshot"));
+    actionTakeScreenshot = trayIconMenu->addAction(tr("Take Screenshot"));
+    actionSettings = trayIconMenu->addAction(tr("Settings"));
     trayIconMenu->addSeparator();
-    actionQuit = trayIconMenu->addAction(tr("&Quit"));
+    actionQuit = trayIconMenu->addAction(tr("Quit"));
 
     connect(actionTakeScreenshot, SIGNAL(triggered()), this, SLOT(openScreenshotWindow()));
+    connect(actionSettings, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 
     trayIcon = new QSystemTrayIcon(this);
