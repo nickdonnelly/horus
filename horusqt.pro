@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -29,12 +29,14 @@ SOURCES += \
         main.cpp \
         screenwindow.cpp \
     horus.cpp \
-    settingsdialog.cpp
+    settingsdialog.cpp \
+    horusuploader.cpp
 
 HEADERS += \
         screenwindow.h \
     horus.h \
-    settingsdialog.h
+    settingsdialog.h \
+    horusuploader.h
 
 FORMS += \
         screenwindow.ui \

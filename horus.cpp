@@ -1,7 +1,9 @@
 #include "horus.h"
 #include <settingsdialog.h>
 #include <screenwindow.h>
+#include <horusuploader.h>
 #include <QApplication>
+#include <QString>
 #include <QSystemTrayIcon>
 #include <QTextStream>
 #include <QMenu>
@@ -13,12 +15,21 @@ Horus::Horus()
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     trayIcon->show();
+
+    uploader = new HorusUploader();
+
+    connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
+    uploader->upload("hello");
+    uploader->upload("goodbye");
 }
 
+void Horus::uploadComplete(QString url){
+    // Notify user, copy to clipboard, open in browser, etc.
+    // TODO
+    QTextStream(stdout) << url << endl;
+}
 
 void Horus::messageClicked(){
-    ScreenWindow sWindow;
-    sWindow.show();
 }
 
 void Horus::iconActivated(QSystemTrayIcon::ActivationReason reason){
@@ -29,15 +40,13 @@ void Horus::iconActivated(QSystemTrayIcon::ActivationReason reason){
         openScreenshotWindow();
         break;
     case QSystemTrayIcon::DoubleClick:
-        ScreenWindow *sWindow;
-        sWindow = new ScreenWindow();
-        sWindow->show();
+        openScreenshotWindow();
         break;
     }
 }
 
 void Horus::openScreenshotWindow(){
-   ScreenWindow *sw = new ScreenWindow();
+   ScreenWindow *sw = new ScreenWindow(uploader);
    sw->show();
 }
 

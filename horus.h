@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QObject>
 #include <QCloseEvent>
+#include <horusuploader.h>
 #include <QSystemTrayIcon>
 
 class Horus : public QDialog
@@ -18,9 +19,11 @@ private slots:
     void messageClicked();
     void openScreenshotWindow();
     void openSettingsWindow();
+    void uploadComplete(QString url);
 
 private:
     void createTrayIcon();
+    HorusUploader * uploader;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;

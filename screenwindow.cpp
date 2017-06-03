@@ -1,4 +1,5 @@
 #include "screenwindow.h"
+#include <horusuploader.h>
 #include "ui_screenwindow.h"
 #include "qdesktopwidget.h"
 #include "qtextstream.h"
@@ -14,6 +15,32 @@
 ScreenWindow::ScreenWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ScreenWindow)
+{
+    ui->setupUi(this);
+//    QRect r = QApplication::desktop()->screenGeometry(1);
+    QDesktopWidget * dtw = QApplication::desktop();
+    windowScreen = dtw->screen();
+    windowW = dtw->screen()->width();
+    windowH = dtw->screen()->height();
+    ui->lblInstructions->resize(windowW, ui->lblInstructions->height());
+    full = QRegion(0, 0, windowW, windowH);
+    setParent(0); // no parent widget
+    move(0, 0); // for windows...
+    resize(windowW, windowH); // for windows...
+    setAttribute(Qt::WA_TranslucentBackground);
+    setWindowState(Qt::WindowFullScreen);
+    setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+    setMask(full);
+
+    showFullScreen();
+    raise();
+}
+
+
+ScreenWindow::ScreenWindow(HorusUploader *u, QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::ScreenWindow),
+    uploader(u)
 {
     ui->setupUi(this);
 //    QRect r = QApplication::desktop()->screenGeometry(1);
@@ -118,10 +145,17 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
      hide();
      // TODO: Use screens() and iterate through for a list in the future to splice the pixmaps together
      QPixmap screenMap = QGuiApplication::primaryScreen()->grabWindow(0, x, y, w, h);
-     QFile file(getImagesDirectory() + "/" + getFilename());
+     lastSaveLocation = getImagesDirectory() + "/" + getFilename();
+     QFile file(lastSaveLocation);
      file.open(QIODevice::WriteOnly);
      screenMap.save(&file, "PNG");
+     hide();
+     uploader->upload(lastSaveLocation);
      close();
+ }
+
+ QString ScreenWindow::getLastSaveLocation(){
+     return lastSaveLocation;
  }
 
 
