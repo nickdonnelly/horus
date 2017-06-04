@@ -17,12 +17,15 @@ Horus::Horus()
     createTrayIcon();
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
+    firstTime = true;
     trayIcon->show();
 
     uploader = new HorusUploader();
     sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
-    sw = new ScreenWindow(uploader);
-    sw->hide();
+//    sw = new ScreenWindow(uploader);
+//    sw->show();
+//    sw->hide();
+//    sw->close();
     connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
 }
 
@@ -53,11 +56,16 @@ void Horus::iconActivated(QSystemTrayIcon::ActivationReason reason){
 }
 
 void Horus::openScreenshotWindow(){
-    sw->close();
-    sw->deleteLater();
-   delete sw;
-   sw = new ScreenWindow(uploader);
-   sw->show();   
+//    sw->close();
+//    sw->deleteLater();
+//    delete sw;
+    if(!firstTime){
+        sw->close();
+        sw->deleteLater();
+    }
+    firstTime = false;
+    sw = new ScreenWindow(uploader);
+    sw->show();
 }
 
 void Horus::openSettingsWindow(){

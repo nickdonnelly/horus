@@ -25,6 +25,7 @@ private slots:
 
 private:
     void createTrayIcon();
+    bool firstTime;
     HorusUploader * uploader;
     ScreenWindow * sw;
     QSettings * sets;

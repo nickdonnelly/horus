@@ -30,6 +30,9 @@ ScreenWindow::ScreenWindow(QWidget *parent) :
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowState(Qt::WindowFullScreen);
     setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+#ifdef Q_OS_LINUX
+    setWindowFlags(Qt::X11BypassWindowManagerHint);
+#endif
     setMask(full);
 
     showFullScreen();

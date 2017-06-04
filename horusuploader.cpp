@@ -24,7 +24,7 @@ void HorusUploader::upload(QString filename){
         QNetworkAccessManager nMgr;
         QObject::connect(&nMgr, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
 
-        QNetworkRequest req(QUrl(QString("http://horus.donnelly.cc/image/upload")));
+        QNetworkRequest req(QUrl(QString("https://horus.donnelly.cc/image/upload")));
         req.setHeader(QNetworkRequest::ContentTypeHeader, "image/png");
         QByteArray imgData = toUpload.readAll();
         int origSize = imgData.length();
