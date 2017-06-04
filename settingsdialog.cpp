@@ -2,15 +2,16 @@
 #include "ui_settingsdialog.h"
 #include <QSettings>
 
-SettingsDialog::SettingsDialog(QWidget *parent) :
+SettingsDialog::SettingsDialog(QSettings * settings, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SettingsDialog)
 {
     ui->setupUi(this);
+
     // Get rid of stupid help button
     setWindowFlags(windowFlags() & ~(Qt::WindowContextHelpButtonHint));
     // Load the settings into the UI.
-    sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
+    sets = settings;
     updateUIFromSettings(sets);
 }
 
@@ -27,6 +28,7 @@ void SettingsDialog::updateUIFromSettings(QSettings * settings){
     ui->tbServerURL->setText(settings->value("serverURL", "").toString());
     ui->tbServerPort->setText(settings->value("serverPort", "").toString());
     ui->tbAuthToken->setText(settings->value("authToken", "").toString());
+    ui->cbSSL->setChecked(settings->value("useSSL", false).toBool());
     QString scopyMode = settings->value("copyMode", "none").toString();
     if(scopyMode == "url"){
         ui->rbCopyURL->setChecked(true);
@@ -55,6 +57,7 @@ void SettingsDialog::saveSettings(QSettings * settings){
     settings->setValue("serverURL", ui->tbServerURL->text());
     settings->setValue("serverPort", ui->tbServerPort->text());
     settings->setValue("authToken", ui->tbAuthToken->text());
+    settings->setValue("useSSL", ui->cbSSL->isChecked());
 
     settings->sync();
 }

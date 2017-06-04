@@ -20,8 +20,8 @@ Horus::Horus()
     firstTime = true;
     trayIcon->show();
 
-    uploader = new HorusUploader();
     sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
+    uploader = new HorusUploader(sets->value("serverURL", "").toString(), sets->value("serverPort", "80").toString(), QString(""), sets->value("useSSL", false).toBool());
 //    sw = new ScreenWindow(uploader);
 //    sw->show();
 //    sw->hide();
@@ -69,7 +69,7 @@ void Horus::openScreenshotWindow(){
 }
 
 void Horus::openSettingsWindow(){
-    SettingsDialog *sd = new SettingsDialog();
+    SettingsDialog *sd = new SettingsDialog(sets);
     sd->show();
 }
 

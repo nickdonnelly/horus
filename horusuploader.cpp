@@ -10,9 +10,12 @@
 #include <QUrlQuery>
 #include <QEventLoop>
 
-HorusUploader::HorusUploader()
+HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString authToken, bool useSSL)
 {
-
+    sslOn = useSSL;
+    SERVER_URL = serverURL;
+    SERVER_PORT = serverPort;
+    AUTH_TOKEN = authToken;
 }
 
 
@@ -24,7 +27,11 @@ void HorusUploader::upload(QString filename){
         QNetworkAccessManager nMgr;
         QObject::connect(&nMgr, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
 
-        QNetworkRequest req(QUrl(QString("https://horus.donnelly.cc/image/upload")));
+        QString reqURL("");
+        reqURL += "http";
+        if(sslOn){ reqURL += "s"; }
+        reqURL += "://" + SERVER_URL + ":" + SERVER_PORT + "/image/upload";
+        QNetworkRequest req(QUrl(QString("").append(reqURL)));
         req.setHeader(QNetworkRequest::ContentTypeHeader, "image/png");
         QByteArray imgData = toUpload.readAll();
         int origSize = imgData.length();

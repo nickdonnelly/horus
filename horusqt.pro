@@ -41,3 +41,8 @@ HEADERS += \
 FORMS += \
         screenwindow.ui \
     settingsdialog.ui
+
+DISTFILES +=
+
+RESOURCES += \
+    horus.qrc

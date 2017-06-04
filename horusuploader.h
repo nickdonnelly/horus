@@ -7,10 +7,13 @@ class HorusUploader : public QObject
 {
     Q_OBJECT
 public:
-    HorusUploader();
+    HorusUploader(QString serverURL, QString serverPort, QString authToken, bool useSSL);
 
     void upload(QString filename);
 
+private:
+    QString SERVER_URL, SERVER_PORT, AUTH_TOKEN;
+    bool sslOn;
 
 signals:
     void uploadCompleted(QString url);
