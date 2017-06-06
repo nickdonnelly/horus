@@ -9,12 +9,15 @@
 #include <QTextStream>
 #include <QMenu>
 #include <QSettings>
+#include <QDir>
 #include <QAction>
+#include <QIcon>
 #include <QClipboard>
 
 Horus::Horus()
 {
     createTrayIcon();
+    setWindowIcon(QIcon(":/res/horus.png"));
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     firstTime = true;
@@ -69,17 +72,25 @@ void Horus::openScreenshotWindow(){
 }
 
 void Horus::openSettingsWindow(){
-    SettingsDialog *sd = new SettingsDialog(sets);
+    SettingsDialog *sd = new SettingsDialog(sets, this);
     sd->show();
 }
 
 void Horus::createTrayIcon(){
-    QAction *actionTakeScreenshot, *actionSettings, *actionQuit;
+    QAction *actionTakeScreenshot, *actionBoxVideo, *actionSettings, *actionQuit;
     trayIconMenu = new QMenu(this);
     actionTakeScreenshot = trayIconMenu->addAction(tr("Take Screenshot"));
+    actionTakeScreenshot->setIcon(QIcon(":/res/screenshot.png"));
+
+    actionBoxVideo = trayIconMenu->addAction(tr("Take Recording"));
+    actionBoxVideo->setIcon(QIcon(":/res/recording.png"));
+
     actionSettings = trayIconMenu->addAction(tr("Settings"));
+    actionSettings->setIcon(QIcon(":/res/settings.png"));
+
     trayIconMenu->addSeparator();
     actionQuit = trayIconMenu->addAction(tr("Quit"));
+    actionQuit->setIcon(QIcon(":/res/stop.png"));
 
     connect(actionTakeScreenshot, SIGNAL(triggered()), this, SLOT(openScreenshotWindow()));
     connect(actionSettings, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));

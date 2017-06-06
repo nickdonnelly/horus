@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/screenshot.png</file>
+        <file>res/settings.png</file>
+        <file>res/horus.png</file>
+        <file>res/horus_recording.png</file>
+        <file>res/recording.png</file>
+        <file>res/stop.png</file>
+    </qresource>
+</RCC>

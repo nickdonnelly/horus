@@ -2,14 +2,14 @@
 #define HORUS_H
 
 #include <screenwindow.h>
-#include <QDialog>
 #include <QObject>
 #include <QSettings>
 #include <QCloseEvent>
 #include <horusuploader.h>
+#include <QMainWindow>
 #include <QSystemTrayIcon>
 
-class Horus : public QDialog
+class Horus : public QMainWindow
 {
     Q_OBJECT
 

@@ -45,4 +45,4 @@ FORMS += \
 DISTFILES +=
 
 RESOURCES += \
-    horus.qrc
+    horus-resources.qrc
