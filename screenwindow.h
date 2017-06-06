@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QString>
-#include <QScreen>
 #include <horusuploader.h>
 
 namespace Ui {
@@ -24,9 +23,7 @@ private:
     Ui::ScreenWindow *ui;
     HorusUploader * uploader;
     QWidget * windowScreen;
-    QPixmap  frames[10];
     QRegion full;
-    QScreen * screen;
     int originX, originY;
     int iw, ih;
     int windowW, windowH;
@@ -35,7 +32,6 @@ private:
     int startY, startYRel;
     int endX, endXRel;
     int endY, endYRel;
-    int count;
     bool mousePressed = false;
     QString lastSaveLocation;
     void takeScreenshot();
@@ -43,9 +39,6 @@ private:
     QString getAppSaveDirectory();
     QString getFilename();
     QString getImagesDirectory();
-
-public slots:
-    void timeout();
 
 protected:
     void paintEvent(QPaintEvent *evt);

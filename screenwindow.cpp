@@ -5,8 +5,6 @@
 #include "qtextstream.h"
 #include <QMouseEvent>
 #include <QDir>
-#include <QScreen>
-#include <QTimer>
 #include <QKeyEvent>
 #include <QPaintEvent>
 #include <QPainter>
@@ -32,7 +30,6 @@ ScreenWindow::ScreenWindow(QWidget *parent) :
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowState(Qt::WindowFullScreen);
     setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
-    screen = QGuiApplication::primaryScreen();
 #ifdef Q_OS_LINUX
     setWindowFlags(Qt::X11BypassWindowManagerHint);
 #endif
@@ -99,36 +96,11 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
         iw = std::abs(endXRel - startXRel);
         ih = std::abs(endYRel - startYRel);
 
-//        takeScreenshot(originX, originY, iw, ih);
-//        takeScreenshot();
-        QTimer * timer = new QTimer(this);
-        timer->setInterval(110);
-        timer->setSingleShot(false);
-        connect(timer, SIGNAL(timeout()), this, SLOT(timeout()));
-        count = 0;
-        timer->start(110);
-
-        while(count < 10){
-
-        }
-        timer->stop();
-        for(int i = 0; i < 10; i++){
-            QString filename("frame_");
-            filename += i;
-            filename += ".png";
-            frames[i].save(filename);
-        }
+        takeScreenshot(originX, originY, iw, ih);
+        takeScreenshot();
     }else if(evt->button() == Qt::RightButton){
         close();
     }
-
- }
-
- void ScreenWindow::timeout(){
-     count++;
-     if(count <= 10){
-        frames[count] = screen->grabWindow(0);
-     }
 
  }
 
