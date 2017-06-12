@@ -19,7 +19,8 @@ HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString auth
 }
 
 
-void HorusUploader::upload(QString filename){
+void HorusUploader::upload(bool isVideo, QString filename){
+    filename = filename.trimmed();
     QFile toUpload(filename);
     if(toUpload.exists()){
         toUpload.open(QIODevice::ReadOnly);
@@ -27,29 +28,42 @@ void HorusUploader::upload(QString filename){
         QNetworkAccessManager nMgr;
         QObject::connect(&nMgr, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
 
+
         QString reqURL("");
         reqURL += "http";
         if(sslOn){ reqURL += "s"; }
         reqURL += "://" + SERVER_URL + ":" + SERVER_PORT + "/image/upload";
         QNetworkRequest req(QUrl(QString("").append(reqURL)));
-        req.setHeader(QNetworkRequest::ContentTypeHeader, "image/png");
+        if(isVideo){
+            req.setHeader(QNetworkRequest::ContentTypeHeader, "video/webm");
+        }else{
+            req.setHeader(QNetworkRequest::ContentTypeHeader, "image/png");
+        }
+
         QByteArray imgData = toUpload.readAll();
         int origSize = imgData.length();
 
         QByteArray postData;
-        postData.append("data:image/png;base64,");
+        if(isVideo){
+            postData.append("data:video/webm;base64,");
+        }else{
+            postData.append("data:image/png;base64,");
+        }
+
         postData.append(QString(imgData.toBase64()));
         req.setHeader(QNetworkRequest::ContentLengthHeader, postData.length());
         QNetworkReply *reply = nMgr.post(req, postData);
 
+
         el.exec();
+
 
         if(reply->error() == QNetworkReply::NoError){
             reply->open(QIODevice::ReadOnly);
             emit uploadCompleted(QString(reply->readAll()));
             reply->close();
         }else{
-            QTextStream(stdout) << reply->error() << endl;
+            QTextStream(stdout) << "error " <<  reply->error() << endl;
             reply->close();
         }
         toUpload.close();

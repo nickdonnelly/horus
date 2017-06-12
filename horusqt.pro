@@ -24,19 +24,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-
 SOURCES += \
         main.cpp \
         screenwindow.cpp \
     horus.cpp \
     settingsdialog.cpp \
-    horusuploader.cpp
+    horusuploader.cpp \
+    videosynthesizer.cpp
 
 HEADERS += \
         screenwindow.h \
     horus.h \
     settingsdialog.h \
-    horusuploader.h
+    horusuploader.h \
+    videosynthesizer.h
 
 FORMS += \
         screenwindow.ui \

@@ -19,9 +19,12 @@ public:
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void messageClicked();
+    void openVideoWindow();
     void openScreenshotWindow();
     void openSettingsWindow();
     void uploadComplete(QString url);
+    void recordingStart();
+    void recordingFinished();
 
 private:
     void createTrayIcon();
@@ -31,6 +34,8 @@ private:
     QSettings * sets;
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
+    QIcon main_icon;
+    QIcon recording_icon;
 
 protected:
     void closeEvent(QCloseEvent * evt);

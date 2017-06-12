@@ -15,12 +15,13 @@ class ScreenWindow : public QMainWindow
 
 public:
     explicit ScreenWindow(QWidget *parent = 0);
-    ScreenWindow(HorusUploader * u, QWidget *parent = 0);
+    ScreenWindow(bool isVideo, HorusUploader * u, QWidget *parent = 0);
     ~ScreenWindow();
     QString getLastSaveLocation();
 
 private:
     Ui::ScreenWindow *ui;
+    bool useVideo;
     HorusUploader * uploader;
     QWidget * windowScreen;
     QRegion full;
@@ -36,9 +37,14 @@ private:
     QString lastSaveLocation;
     void takeScreenshot();
     void takeScreenshot(int x, int y, int w, int h);
+    void takeVideo(int duration, int vX, int vY, int vWidth, int vHeight);
     QString getAppSaveDirectory();
-    QString getFilename();
+    QString getFilename(const QString ext);
     QString getImagesDirectory();
+
+signals:
+    void recordStarted();
+    void recordEnded();
 
 protected:
     void paintEvent(QPaintEvent *evt);

@@ -21,6 +21,8 @@ Horus::Horus()
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     firstTime = true;
+    main_icon = QIcon(":/res/horus.png");
+    recording_icon = QIcon(":/res/horus_recording.png");
     trayIcon->show();
 
     sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
@@ -34,12 +36,21 @@ Horus::Horus()
 
 void Horus::uploadComplete(QString url){
     if(sets->value("openInBrowser", true).toBool()){
-        QDesktopServices::openUrl(QString("http://") + url);
+        QDesktopServices::openUrl(url);
     }
     if(sets->value("copyMode", "url").toString() == "url"){
         QClipboard* board = QApplication::clipboard();
         board->setText(url);
     }
+}
+
+
+void Horus::recordingStart(){
+   trayIcon->setIcon(recording_icon);
+}
+
+void Horus::recordingFinished(){
+   trayIcon->setIcon(main_icon);
 }
 
 void Horus::messageClicked(){
@@ -67,7 +78,19 @@ void Horus::openScreenshotWindow(){
         sw->deleteLater();
     }
     firstTime = false;
-    sw = new ScreenWindow(uploader);
+    sw = new ScreenWindow(false, uploader);
+    sw->show();
+}
+
+void Horus::openVideoWindow(){
+    if(!firstTime){
+        sw->close();
+        sw->deleteLater();
+    }
+    firstTime = false;
+    sw = new ScreenWindow(true, uploader);
+    connect(sw, SIGNAL(recordStarted()), this, SLOT(recordingStart()));
+    connect(sw, SIGNAL(recordEnded()), this, SLOT(recordingFinished()));
     sw->show();
 }
 
@@ -82,7 +105,7 @@ void Horus::createTrayIcon(){
     actionTakeScreenshot = trayIconMenu->addAction(tr("Take Screenshot"));
     actionTakeScreenshot->setIcon(QIcon(":/res/screenshot.png"));
 
-    actionBoxVideo = trayIconMenu->addAction(tr("Take Recording"));
+    actionBoxVideo = trayIconMenu->addAction(tr("Take 10s Recording"));
     actionBoxVideo->setIcon(QIcon(":/res/recording.png"));
 
     actionSettings = trayIconMenu->addAction(tr("Settings"));
@@ -93,6 +116,7 @@ void Horus::createTrayIcon(){
     actionQuit->setIcon(QIcon(":/res/stop.png"));
 
     connect(actionTakeScreenshot, SIGNAL(triggered()), this, SLOT(openScreenshotWindow()));
+    connect(actionBoxVideo, SIGNAL(triggered()), this, SLOT(openVideoWindow()));
     connect(actionSettings, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 

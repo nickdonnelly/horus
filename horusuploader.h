@@ -9,7 +9,7 @@ class HorusUploader : public QObject
 public:
     HorusUploader(QString serverURL, QString serverPort, QString authToken, bool useSSL);
 
-    void upload(QString filename);
+    void upload(bool isVideo, QString filename);
 
 private:
     QString SERVER_URL, SERVER_PORT, AUTH_TOKEN;
