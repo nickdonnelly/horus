@@ -145,6 +145,9 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
       hide();
      // TODO: Use screens() and iterate through for a list in the future to splice the pixmaps together
      QPixmap screenMap = QGuiApplication::primaryScreen()->grabWindow(0, 0, 0, windowW, windowH);
+//     for(QScreen& s : QGuiApplication::screens()){
+//        s.grabWindow(0, 0, 0); // whole thing.
+//     }
      if(!QDir(getAppSaveDirectory()).exists()){
          QDir().mkpath(getAppSaveDirectory());
      }
