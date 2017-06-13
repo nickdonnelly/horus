@@ -191,7 +191,7 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
      processStr += QString::number(vWidth);
      processStr += "x";
      processStr += QString::number(vHeight);
-     processStr += " -i :0.0+" + QString::number(vX) + "," + QString::number(vY);
+     processStr += " -i :0.0+" + QString::number(vX) + "," + QString::number(vY) + " -t " + QString::number(duration);
      processStr += fileStr;
 
 #endif
