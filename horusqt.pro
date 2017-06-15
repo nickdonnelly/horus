@@ -30,14 +30,16 @@ SOURCES += \
     horus.cpp \
     settingsdialog.cpp \
     horusuploader.cpp \
-    videosynthesizer.cpp
+    videosynthesizer.cpp \
+    imagehelper.cpp
 
 HEADERS += \
         screenwindow.h \
     horus.h \
     settingsdialog.h \
     horusuploader.h \
-    videosynthesizer.h
+    videosynthesizer.h \
+    imagehelper.h
 
 FORMS += \
         screenwindow.ui \

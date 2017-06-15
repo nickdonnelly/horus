@@ -1,5 +1,6 @@
 #include "screenwindow.h"
 #include <horusuploader.h>
+#include <imagehelper.h>
 #include "ui_screenwindow.h"
 #include "qdesktopwidget.h"
 #include "qtextstream.h"
@@ -145,9 +146,14 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
       hide();
      // TODO: Use screens() and iterate through for a list in the future to splice the pixmaps together
      QPixmap screenMap = QGuiApplication::primaryScreen()->grabWindow(0, 0, 0, windowW, windowH);
-//     for(QScreen& s : QGuiApplication::screens()){
-//        s.grabWindow(0, 0, 0); // whole thing.
-//     }
+     int l = QGuiApplication::screens().length();
+     QPixmap * images = new QPixmap[l];
+     for(int i = 0; i < l; i++){
+         QScreen * s = QGuiApplication::screens().at(i);
+        images[i] = s->grabWindow(0); // whole thing.
+     }
+     ImageHelper::stitch_pixmap(images, l);
+
      if(!QDir(getAppSaveDirectory()).exists()){
          QDir().mkpath(getAppSaveDirectory());
      }
