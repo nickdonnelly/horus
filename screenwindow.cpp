@@ -50,14 +50,13 @@ ScreenWindow::ScreenWindow(QWidget *parent) :
 ScreenWindow::ScreenWindow(HorusUploader *u, int vidDuration, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ScreenWindow),
-    uploader(u)
+    uploader(u),
+    videoDuration(vidDuration)
 {
     ui->setupUi(this);
 //    QRect r = QApplication::desktop()->screenGeometry(1);
-    videoDuration = vidDuration;
-    if(videoDuration > 0){
-        useVideo = true;
-    }
+    useVideo = videoDuration != -1;
+
     QDesktopWidget * dtw = QApplication::desktop();
     windowScreen = dtw->screen();
     windowW = dtw->screen()->width();

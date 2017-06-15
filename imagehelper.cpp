@@ -20,7 +20,7 @@ QPixmap ImageHelper::stitch_pixmap(QPixmap * images, int len){
         painter->drawPixmap(curX, 0, images[i].width(), images[i].height(), images[i]);
         curX += images[i].width();
     }
-    result.save("abc123.png");
+    //result.save("abc123.png");
 
     return result;
 }

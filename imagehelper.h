@@ -8,7 +8,6 @@ class ImageHelper : public QObject
 {
     Q_OBJECT
 public:
-    ~ImageHelper();
     static QPixmap stitch_pixmap(QPixmap * images, int len);
 
 };
