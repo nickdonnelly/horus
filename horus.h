@@ -22,6 +22,7 @@ private slots:
     void openVideoWindow10();
     void openVideoWindowDur();
     void openScreenshotWindow();
+    void openEditLastWindow();
     void openSettingsWindow();
     void uploadComplete(QString url);
     void recordingStart();

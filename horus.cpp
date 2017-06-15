@@ -1,6 +1,7 @@
 #include "horus.h"
 #include <settingsdialog.h>
 #include <screenwindow.h>
+#include <editimagewindow.h>
 #include <horusuploader.h>
 #include <QInputDialog>
 #include <QApplication>
@@ -123,8 +124,18 @@ void Horus::openSettingsWindow(){
     sd->show();
 }
 
+void Horus::openEditLastWindow(){
+    QString fileStr(ScreenWindow::getAppSaveDirectory() + "/cache_last_taken.png");
+    if(QFile::exists(fileStr)){
+        EditImageWindow *editWindow = new EditImageWindow(fileStr, this);
+        editWindow->show();
+    }else{
+
+    }
+}
+
 void Horus::createTrayIcon(){
-    QAction *actionTakeScreenshot, *actionBoxVideo, *actionBoxVideoDur, *actionSettings, *actionQuit;
+    QAction *actionTakeScreenshot, *actionBoxVideo, *actionBoxVideoDur, *actionEditLast, *actionSettings, *actionQuit;
     trayIconMenu = new QMenu(this);
     actionTakeScreenshot = trayIconMenu->addAction(tr("Take Screenshot"));
     actionTakeScreenshot->setIcon(QIcon(":/res/screenshot.png"));
@@ -135,16 +146,22 @@ void Horus::createTrayIcon(){
     actionBoxVideoDur = trayIconMenu->addAction(tr("Take Custom Recording"));
     actionBoxVideoDur->setIcon(QIcon(":/res/recording.png"));
 
+    actionEditLast = trayIconMenu->addAction(tr("Edit Previous Screenshot"));
+    // TODO: Get this icon
+    //actionEditLast->setIcon(QIcon(":/res/edit.png"));
+
+    trayIconMenu->addSeparator();
+
     actionSettings = trayIconMenu->addAction(tr("Settings"));
     actionSettings->setIcon(QIcon(":/res/settings.png"));
 
-    trayIconMenu->addSeparator();
     actionQuit = trayIconMenu->addAction(tr("Quit"));
     actionQuit->setIcon(QIcon(":/res/stop.png"));
 
     connect(actionTakeScreenshot, SIGNAL(triggered()), this, SLOT(openScreenshotWindow()));
     connect(actionBoxVideo, SIGNAL(triggered()), this, SLOT(openVideoWindow10()));
     connect(actionBoxVideoDur, SIGNAL(triggered()), this, SLOT(openVideoWindowDur()));
+    connect(actionEditLast, SIGNAL(triggered()), this, SLOT(openEditLastWindow()));
     connect(actionSettings, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 

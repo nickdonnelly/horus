@@ -18,6 +18,9 @@ public:
     ScreenWindow(HorusUploader * u, int vidDuration = -1, QWidget *parent = 0);
     ~ScreenWindow();
     QString getLastSaveLocation();
+    static QString getAppSaveDirectory();
+    static QString getFilename(const QString ext);
+    static QString getImagesDirectory();
 
 private:
     Ui::ScreenWindow *ui;
@@ -39,9 +42,6 @@ private:
     void takeScreenshot();
     void takeScreenshot(int x, int y, int w, int h);
     void takeVideo(int duration, int vX, int vY, int vWidth, int vHeight);
-    QString getAppSaveDirectory();
-    QString getFilename(const QString ext);
-    QString getImagesDirectory();
 
 signals:
     void recordStarted();

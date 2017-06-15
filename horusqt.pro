@@ -31,7 +31,8 @@ SOURCES += \
     settingsdialog.cpp \
     horusuploader.cpp \
     videosynthesizer.cpp \
-    imagehelper.cpp
+    imagehelper.cpp \
+    editimagewindow.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -39,11 +40,13 @@ HEADERS += \
     settingsdialog.h \
     horusuploader.h \
     videosynthesizer.h \
-    imagehelper.h
+    imagehelper.h \
+    editimagewindow.h
 
 FORMS += \
         screenwindow.ui \
-    settingsdialog.ui
+    settingsdialog.ui \
+    editimagewindow.ui
 
 DISTFILES +=
 
