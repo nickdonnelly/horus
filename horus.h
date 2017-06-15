@@ -19,7 +19,8 @@ public:
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void messageClicked();
-    void openVideoWindow();
+    void openVideoWindow10();
+    void openVideoWindowDur();
     void openScreenshotWindow();
     void openSettingsWindow();
     void uploadComplete(QString url);

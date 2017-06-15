@@ -15,7 +15,7 @@ class ScreenWindow : public QMainWindow
 
 public:
     explicit ScreenWindow(QWidget *parent = 0);
-    ScreenWindow(bool isVideo, HorusUploader * u, QWidget *parent = 0);
+    ScreenWindow(HorusUploader * u, int vidDuration = -1, QWidget *parent = 0);
     ~ScreenWindow();
     QString getLastSaveLocation();
 
@@ -26,6 +26,7 @@ private:
     QWidget * windowScreen;
     QRegion full;
     int originX, originY;
+    int videoDuration;
     int iw, ih;
     int windowW, windowH;
     int mouseX, mouseY;

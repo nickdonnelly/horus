@@ -2,8 +2,11 @@
 #include <settingsdialog.h>
 #include <screenwindow.h>
 #include <horusuploader.h>
+#include <QInputDialog>
 #include <QApplication>
 #include <QString>
+#include <QStyle>
+#include <QDesktopWidget>
 #include <QDesktopServices>
 #include <QSystemTrayIcon>
 #include <QTextStream>
@@ -78,20 +81,41 @@ void Horus::openScreenshotWindow(){
         sw->deleteLater();
     }
     firstTime = false;
-    sw = new ScreenWindow(false, uploader);
+    sw = new ScreenWindow(uploader, -1);
     sw->show();
 }
 
-void Horus::openVideoWindow(){
+void Horus::openVideoWindow10(){
     if(!firstTime){
         sw->close();
         sw->deleteLater();
     }
     firstTime = false;
-    sw = new ScreenWindow(true, uploader);
+    sw = new ScreenWindow(uploader, 10);
     connect(sw, SIGNAL(recordStarted()), this, SLOT(recordingStart()));
     connect(sw, SIGNAL(recordEnded()), this, SLOT(recordingFinished()));
     sw->show();
+}
+
+void Horus::openVideoWindowDur(){
+    bool ok;
+    QInputDialog * dialog = new QInputDialog(this);
+    // TODO: This move operation is not working on linux.
+    dialog->move(QApplication::desktop()->screenGeometry().center() - dialog->pos()/2);
+    int dur = dialog->getInt(this, tr(""), tr("Record duration (s):"),
+                                       QLineEdit::Normal, 3, 20, 1, &ok);
+    dialog->deleteLater();
+    if(ok){
+        if(!firstTime){
+            sw->close();
+            sw->deleteLater();
+        }
+        firstTime = false;
+        sw = new ScreenWindow(uploader, dur);
+        connect(sw, SIGNAL(recordStarted()), this, SLOT(recordingStart()));
+        connect(sw, SIGNAL(recordEnded()), this, SLOT(recordingFinished()));
+        sw->show();
+    }
 }
 
 void Horus::openSettingsWindow(){
@@ -100,13 +124,16 @@ void Horus::openSettingsWindow(){
 }
 
 void Horus::createTrayIcon(){
-    QAction *actionTakeScreenshot, *actionBoxVideo, *actionSettings, *actionQuit;
+    QAction *actionTakeScreenshot, *actionBoxVideo, *actionBoxVideoDur, *actionSettings, *actionQuit;
     trayIconMenu = new QMenu(this);
     actionTakeScreenshot = trayIconMenu->addAction(tr("Take Screenshot"));
     actionTakeScreenshot->setIcon(QIcon(":/res/screenshot.png"));
 
     actionBoxVideo = trayIconMenu->addAction(tr("Take 10s Recording"));
     actionBoxVideo->setIcon(QIcon(":/res/recording.png"));
+
+    actionBoxVideoDur = trayIconMenu->addAction(tr("Take Custom Recording"));
+    actionBoxVideoDur->setIcon(QIcon(":/res/recording.png"));
 
     actionSettings = trayIconMenu->addAction(tr("Settings"));
     actionSettings->setIcon(QIcon(":/res/settings.png"));
@@ -116,7 +143,8 @@ void Horus::createTrayIcon(){
     actionQuit->setIcon(QIcon(":/res/stop.png"));
 
     connect(actionTakeScreenshot, SIGNAL(triggered()), this, SLOT(openScreenshotWindow()));
-    connect(actionBoxVideo, SIGNAL(triggered()), this, SLOT(openVideoWindow()));
+    connect(actionBoxVideo, SIGNAL(triggered()), this, SLOT(openVideoWindow10()));
+    connect(actionBoxVideoDur, SIGNAL(triggered()), this, SLOT(openVideoWindowDur()));
     connect(actionSettings, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 

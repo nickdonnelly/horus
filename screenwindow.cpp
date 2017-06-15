@@ -4,6 +4,7 @@
 #include "ui_screenwindow.h"
 #include "qdesktopwidget.h"
 #include "qtextstream.h"
+#include <QInputDialog>
 #include <QProcess>
 #include <QMouseEvent>
 #include <QDir>
@@ -46,14 +47,17 @@ ScreenWindow::ScreenWindow(QWidget *parent) :
 }
 
 
-ScreenWindow::ScreenWindow(bool isVideo, HorusUploader *u, QWidget *parent) :
+ScreenWindow::ScreenWindow(HorusUploader *u, int vidDuration, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ScreenWindow),
     uploader(u)
 {
     ui->setupUi(this);
 //    QRect r = QApplication::desktop()->screenGeometry(1);
-    useVideo = isVideo;
+    videoDuration = vidDuration;
+    if(videoDuration > 0){
+        useVideo = true;
+    }
     QDesktopWidget * dtw = QApplication::desktop();
     windowScreen = dtw->screen();
     windowW = dtw->screen()->width();
@@ -104,7 +108,9 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
         ih = std::abs(endYRel - startYRel);
 
         if(useVideo){
-            takeVideo(10, originX, originY, iw ,ih);
+            // Get the desired duration
+
+            takeVideo(videoDuration, originX, originY, iw ,ih);
         }else{
             takeScreenshot(originX, originY, iw, ih);
             takeScreenshot();
@@ -201,6 +207,7 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
      processStr += "x";
      processStr += QString::number(vHeight);
      processStr += " -i :0.0+" + QString::number(vX) + "," + QString::number(vY) + " -t " + QString::number(duration);
+     processStr += " -vf \"format=rgba\"";
      processStr += fileStr;
 
 #endif
