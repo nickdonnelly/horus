@@ -32,7 +32,8 @@ SOURCES += \
     horusuploader.cpp \
     videosynthesizer.cpp \
     imagehelper.cpp \
-    editimagewindow.cpp
+    editimagewindow.cpp \
+    horusrectitem.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -41,7 +42,8 @@ HEADERS += \
     horusuploader.h \
     videosynthesizer.h \
     imagehelper.h \
-    editimagewindow.h
+    editimagewindow.h \
+    horusrectitem.h
 
 FORMS += \
         screenwindow.ui \

@@ -17,6 +17,7 @@ private:
 
 signals:
     void uploadCompleted(QString url);
+    void uploadFailed(QString reason);
 };
 
 #endif // HORUSUPLOADER_H

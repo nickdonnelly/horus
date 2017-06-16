@@ -63,7 +63,7 @@ void HorusUploader::upload(bool isVideo, QString filename){
             emit uploadCompleted(QString(reply->readAll()));
             reply->close();
         }else{
-            QTextStream(stdout) << "error " <<  reply->error() << endl;
+            emit uploadFailed(QString(reply->error()));
             reply->close();
         }
         toUpload.close();
