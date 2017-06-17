@@ -73,39 +73,43 @@ void EditImageWindow::rectMoved(QPointF position){
     float dx = position.x() - startX;
     float dy = position.y() - startY;
     QPointF rPos = rectangleItem->pos();
-    rectangleItem->setPos(rPos.x() + dx, rPos.y() + dy);
+    float newX, newY;
+    newX = std::max(0.0f, (float)rPos.x() + dx);
+    newY = std::max(0.0f, (float)rPos.y() + dy);
+    if(rPos.x() + dx + rectangleItem->rect().width() > imgOriginalWidth){
+        newX = (float)imgOriginalWidth - rectangleItem->rect().width();
+    }
 
+    if(rPos.y() + dy + rectangleItem->rect().height() > imgOriginalHeight){
+        newY = (float)imgOriginalHeight - rectangleItem->rect().height();
+    }
+
+    rectangleItem->setPos(newX, newY);
+    outlineItem->setPos(newX, newY);
 }
 
 void EditImageWindow::resizeEvent(QResizeEvent *evt){
     QMainWindow::resizeEvent(evt);
-    //QPoint pos;
-    //pos.setX((scene->width()/2) - (imageItem->boundingRect().width()/2));
-    //pos.setY((scene->height()/2) - (imageItem->boundingRect().height()/2));
     ui->graphicsView->fitInView(imageItem->boundingRect(), Qt::KeepAspectRatio);
     ui->graphicsView->centerOn(imageItem);
-
-    //imgScaleFactor = (float)imgOriginalWidth / (float)imageItem->boundingRect().width();
 }
 
 void EditImageWindow::paintEvent(QPaintEvent *evt){
     QMainWindow::paintEvent(evt);
-    //QPainter painter(ui->frameImage);
-    //painter.drawPixmap(0, 0, 150, 200, *imagePixmap);
 }
 
 void EditImageWindow::rectHeightChanged(int value){
     int rX, rY;
-    rX = rectangleItem->pos().x();
-    rY = rectangleItem->pos().y();
+    rX = rectangleItem->rect().x();
+    rY = rectangleItem->rect().y();
     rectangleItem->setRect(rX, rY, rectangleItem->rect().width(), value);
     outlineItem->setRect(rX, rY, rectangleItem->rect().width(), value);
 }
 
 void EditImageWindow::rectWidthChanged(int value){
     int rX, rY;
-    rX = rectangleItem->pos().x();
-    rY = rectangleItem->pos().y();
+    rX = rectangleItem->rect().x();
+    rY = rectangleItem->rect().y();
     rectangleItem->setRect(rX, rY, value, rectangleItem->rect().height());
     outlineItem->setRect(rX, rY, value, rectangleItem->rect().height());
 }
