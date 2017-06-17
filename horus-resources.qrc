@@ -6,5 +6,6 @@
         <file>res/horus_recording.png</file>
         <file>res/recording.png</file>
         <file>res/stop.png</file>
+        <file>res/edit_last.png</file>
     </qresource>
 </RCC>

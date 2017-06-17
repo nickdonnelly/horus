@@ -2,6 +2,7 @@
 #define EDITIMAGEWINDOW_H
 
 #include <horusrectitem.h>
+#include <horusuploader.h>
 #include <QMainWindow>
 #include <QString>
 #include <QResizeEvent>
@@ -22,7 +23,7 @@ class EditImageWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit EditImageWindow(QString filename, QWidget *parent = 0);
+    explicit EditImageWindow(QString filename, HorusUploader * upl, QWidget *parent = 0);
     ~EditImageWindow();
 
 private slots:
@@ -32,19 +33,27 @@ private slots:
     void rectMouseUp();
     void rectMoved(QPointF position);
 
+    void cancelPressed();
+    void okPressed();
+    void confirmConfirmed();
+    void confirmCancelled();
+
 
 private:
     Ui::EditImageWindow *ui;
-    bool dragging;
+    bool dragging, showingCropped;
     int imgOriginalWidth, imgOriginalHeight;
     float imgScaleFactor;
     int rdx, rdy, mx, my, mxOld, myOld;
     float startX, startY;
 
-    QString fileLoc;
+    HorusUploader * uploader;
+
+    QString fileLoc, croppedFilename;
     QPixmap * imagePixmap;
+    QPixmap cropped;
     QGraphicsScene * scene;
-    QGraphicsItem *imageItem;
+    QGraphicsItem *imageItem, *croppedItem;
     QGraphicsRectItem *outlineItem;
     HorusRectItem *rectangleItem;
 

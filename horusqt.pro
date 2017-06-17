@@ -50,7 +50,8 @@ FORMS += \
     settingsdialog.ui \
     editimagewindow.ui
 
-DISTFILES +=
+DISTFILES += \
+    res/edit_last.png
 
 RESOURCES += \
     horus-resources.qrc

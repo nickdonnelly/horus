@@ -127,7 +127,7 @@ void Horus::openSettingsWindow(){
 void Horus::openEditLastWindow(){
     QString fileStr(ScreenWindow::getAppSaveDirectory() + "/cache_last_taken.png");
     if(QFile::exists(fileStr)){
-        EditImageWindow *editWindow = new EditImageWindow(fileStr, this);
+        EditImageWindow *editWindow = new EditImageWindow(fileStr, uploader, this);
         editWindow->show();
     }else{
 
@@ -147,8 +147,7 @@ void Horus::createTrayIcon(){
     actionBoxVideoDur->setIcon(QIcon(":/res/recording.png"));
 
     actionEditLast = trayIconMenu->addAction(tr("Edit Previous Screenshot"));
-    // TODO: Get this icon
-    //actionEditLast->setIcon(QIcon(":/res/edit.png"));
+    actionEditLast->setIcon(QIcon(":/res/edit_last.png"));
 
     trayIconMenu->addSeparator();
 
