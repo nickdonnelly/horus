@@ -15,7 +15,7 @@ HorusGraphicsScene::HorusGraphicsScene(QObject *parent) : QGraphicsScene(parent)
     dragging(false), isDrawingMode(false), poly(), path(), points(), pathItems()
 {
     brush_color = Qt::red;
-    brush_width = 5;
+    brush_width = 15;
     indicatorPoint = addLine(0, 0, 0, 0, QPen(brush_color, brush_width));
     indicatorPoint->setVisible(false);
     indicatorPoint->setZValue(1);

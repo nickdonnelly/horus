@@ -245,6 +245,7 @@ void EditImageWindow::drawingModeToggled(){
         ui->lblHeight->setVisible(true);
         ui->btnClear->setVisible(false);
         ui->frameColors->setVisible(false);
+        ui->btnBox->setEnabled(true);
 
         rectangleItem->setVisible(true);
         outlineItem->setVisible(true);
@@ -254,6 +255,7 @@ void EditImageWindow::drawingModeToggled(){
 
         ui->sliderBrushSize->setVisible(true);
         ui->btnClear->setVisible(true);
+        ui->btnBox->setEnabled(false);
         ui->lblBrushSize->setVisible(true);
         ui->sliderH->setVisible(false);
         ui->sliderW->setVisible(false);
