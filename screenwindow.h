@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QProcess>
 #include <horusuploader.h>
 
 namespace Ui {
@@ -38,10 +39,13 @@ private:
     int endX, endXRel;
     int endY, endYRel;
     bool mousePressed = false;
-    QString lastSaveLocation;
+    QString lastSaveLocation, fileStr;
     void takeScreenshot();
     void takeScreenshot(int x, int y, int w, int h);
     void takeVideo(int duration, int vX, int vY, int vWidth, int vHeight);
+
+public slots:
+    void ffmpegFinished(int exitCode, QProcess::ExitStatus status);
 
 signals:
     void recordStarted();

@@ -182,9 +182,9 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
 
  void ScreenWindow::takeVideo(int duration, int vX, int vY, int vWidth, int vHeight){
      hide();
-     QProcess process;
+     QProcess * process = new QProcess();
      QString processStr("ffmpeg");
-     QString fileStr("");
+     fileStr = QString("");
      fileStr += " \"" + getImagesDirectory() + "/" + getFilename(".webm\"");
 
 #ifdef Q_OS_WIN
@@ -211,13 +211,17 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
 
 #endif
      emit recordStarted();
-     process.execute(processStr);
+     connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(ffmpegFinished(int, QProcess::ExitStatus)));
+     process->start(processStr);
+ }
+
+ void ScreenWindow::ffmpegFinished(int exitCode, QProcess::ExitStatus status){
      emit recordEnded();
      QThread::msleep(500); // let the file handles close so exists() returns true.
-
      uploader->upload(true, fileStr.replace("\"", ""));
      close();
  }
+
 
  QString ScreenWindow::getLastSaveLocation(){
      return lastSaveLocation;

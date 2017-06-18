@@ -33,7 +33,8 @@ SOURCES += \
     videosynthesizer.cpp \
     imagehelper.cpp \
     editimagewindow.cpp \
-    horusrectitem.cpp
+    horusrectitem.cpp \
+    horusgraphicsscene.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     videosynthesizer.h \
     imagehelper.h \
     editimagewindow.h \
-    horusrectitem.h
+    horusrectitem.h \
+    horusgraphicsscene.h
 
 FORMS += \
         screenwindow.ui \

@@ -2,6 +2,7 @@
 #define EDITIMAGEWINDOW_H
 
 #include <horusrectitem.h>
+#include <horusgraphicsscene.h>
 #include <horusuploader.h>
 #include <QMainWindow>
 #include <QString>
@@ -33,15 +34,27 @@ private slots:
     void rectMouseUp();
     void rectMoved(QPointF position);
 
+
+    void drawingModeToggled();
     void cancelPressed();
     void okPressed();
     void confirmConfirmed();
     void confirmCancelled();
 
+    void clearPressed();
+    void brushWidthChanged(int value);
+
+    void colorRed(){ scene->setBrushColor(QColor(255, 0, 0, 255)); }
+    void colorOrange(){ scene->setBrushColor(QColor(255, 165, 0, 255)); }
+    void colorBlack(){ scene->setBrushColor(QColor(0, 0, 0, 255)); }
+    void colorBlue(){ scene->setBrushColor(QColor(0, 0, 255, 255)); }
+    void colorGreen(){ scene->setBrushColor(QColor(0, 255, 0, 255)); }
+    void colorPink(){ scene->setBrushColor(QColor(255, 0, 255, 255)); }
+
 
 private:
     Ui::EditImageWindow *ui;
-    bool dragging, showingCropped;
+    bool dragging, inDrawingMode, showingCropped;
     int imgOriginalWidth, imgOriginalHeight;
     float imgScaleFactor;
     int rdx, rdy, mx, my, mxOld, myOld;
@@ -52,7 +65,7 @@ private:
     QString fileLoc, croppedFilename;
     QPixmap * imagePixmap;
     QPixmap cropped;
-    QGraphicsScene * scene;
+    HorusGraphicsScene * scene;
     QGraphicsItem *imageItem, *croppedItem;
     QGraphicsRectItem *outlineItem;
     HorusRectItem *rectangleItem;

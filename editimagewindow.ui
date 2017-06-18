@@ -29,6 +29,9 @@
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QGraphicsView" name="graphicsView">
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
          </property>
@@ -70,46 +73,183 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="3" column="2">
-        <widget class="QDialogButtonBox" name="btnBox">
-         <property name="standardButtons">
-          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lblBrushSize">
+         <property name="text">
+          <string>Brush Size: 3</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QSlider" name="sliderW">
+       <item row="5" column="0">
+        <widget class="QSlider" name="sliderBrushSize">
+         <property name="minimum">
+          <number>3</number>
+         </property>
+         <property name="value">
+          <number>5</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QSlider" name="sliderH">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="lblWidth">
          <property name="text">
           <string>Crop Width: </string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="7" column="0">
+        <widget class="QSlider" name="sliderW">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QSlider" name="sliderH">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
         <widget class="QLabel" name="lblHeight">
          <property name="text">
           <string>Crop Height: </string>
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
+       <item row="7" column="2">
+        <widget class="QDialogButtonBox" name="btnBox">
+         <property name="standardButtons">
+          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
         <widget class="QDialogButtonBox" name="btnBoxConfirm">
          <property name="standardButtons">
           <set>QDialogButtonBox::Abort|QDialogButtonBox::Save</set>
          </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QFrame" name="frame">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QPushButton" name="btnDrawMode">
+            <property name="text">
+             <string>Enter Drawing Mode</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnClear">
+            <property name="text">
+             <string>Clear</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QFrame" name="frameColors">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>60</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+border: 0px;
+width: 35px;
+height: 35px;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QPushButton" name="btnRed">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgba(255,0,0,255);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnOrange">
+            <property name="styleSheet">
+             <string notr="true">background-color: orange;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnPink">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgba(255,0,255,255);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnGreen">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgba(0,255,0,255);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnBlue">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgba(0,0,255,255);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnBlack">
+            <property name="styleSheet">
+             <string notr="true">background: rgba(0,0,0,255);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -123,11 +263,10 @@
      <x>0</x>
      <y>0</y>
      <width>1040</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
