@@ -1,3 +1,4 @@
+#include "horus.h"
 #include "horusuploader.h"
 #include <QString>
 #include <QFile>
@@ -71,4 +72,27 @@ void HorusUploader::upload(bool isVideo, QString filename){
         postData.clear();
         imgData.clear();
     }
+}
+
+
+void HorusUploader::checkLatestVersion(){
+    QString reqURL("http");
+    if(sslOn){ reqURL += "s"; }
+    reqURL += "://" + SERVER_URL + ":" + SERVER_PORT + "/version/"; // that trailing slash is actually important.
+    QEventLoop el;
+    QNetworkAccessManager manager;
+    QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
+    QNetworkRequest req(QUrl(QString("").append(reqURL)));
+    QNetworkReply * reply = manager.get(req);
+
+    el.exec();
+
+    reply->open(QIODevice::ReadOnly);
+    if(reply->error()){
+        emit version(Horus::HORUS_VERSION);
+    }else{
+        emit version(QString(reply->readAll()));
+    }
+    reply->close();
+    delete reply;
 }

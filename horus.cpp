@@ -1,10 +1,12 @@
 #include "horus.h"
 #include <settingsdialog.h>
+#include <updatedownloaddialog.h>
 #include <screenwindow.h>
 #include <editimagewindow.h>
 #include <horusuploader.h>
 #include <QInputDialog>
 #include <QApplication>
+#include <QMessageBox>
 #include <QString>
 #include <QStyle>
 #include <QDesktopWidget>
@@ -18,8 +20,10 @@
 #include <QIcon>
 #include <QClipboard>
 
-Horus::Horus()
-{
+
+const QString Horus::HORUS_VERSION = QString("0.9.0");
+
+Horus::Horus(){
     createTrayIcon();
     setWindowIcon(QIcon(":/res/horus.png"));
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
@@ -31,11 +35,9 @@ Horus::Horus()
 
     sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
     uploader = new HorusUploader(sets->value("serverURL", "").toString(), sets->value("serverPort", "80").toString(), QString(""), sets->value("useSSL", false).toBool());
-//    sw = new ScreenWindow(uploader);
-//    sw->show();
-//    sw->hide();
-//    sw->close();
     connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
+    connect(uploader, SIGNAL(version(QString)), this, SLOT(versionStringReturned(QString)));
+    uploader->checkLatestVersion();
 }
 
 void Horus::uploadComplete(QString url){
@@ -172,4 +174,20 @@ void Horus::createTrayIcon(){
 void Horus::closeEvent(QCloseEvent *evt){
     hide();
     evt->ignore();
+}
+
+void Horus::versionStringReturned(QString version){
+    if(version != HORUS_VERSION){
+        QMessageBox * confBox = new QMessageBox(this);
+        confBox->addButton(QMessageBox::Yes);
+        confBox->addButton(QMessageBox::No);
+        confBox->setText("A Horus update is available. Would you like to download it?");
+        confBox->setWindowTitle("Horus Update Available");
+        int res = confBox->exec();
+
+        if(res == QMessageBox::Yes){
+            UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog();
+            downloadDialog->show();
+        }
+    }
 }

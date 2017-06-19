@@ -10,6 +10,7 @@ public:
     HorusUploader(QString serverURL, QString serverPort, QString authToken, bool useSSL);
 
     void upload(bool isVideo, QString filename);
+    void checkLatestVersion();
 
 private:
     QString SERVER_URL, SERVER_PORT, AUTH_TOKEN;
@@ -18,6 +19,7 @@ private:
 signals:
     void uploadCompleted(QString url);
     void uploadFailed(QString reason);
+    void version(QString version);
 };
 
 #endif // HORUSUPLOADER_H

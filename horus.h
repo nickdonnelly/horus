@@ -16,6 +16,8 @@ class Horus : public QMainWindow
 public:
     Horus();
 
+    static const QString HORUS_VERSION;
+
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void messageClicked();
@@ -27,6 +29,7 @@ private slots:
     void uploadComplete(QString url);
     void recordingStart();
     void recordingFinished();
+    void versionStringReturned(QString version);
 
 private:
     void createTrayIcon();
