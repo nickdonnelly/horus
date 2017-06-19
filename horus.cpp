@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("0.9.0");
+const QString Horus::HORUS_VERSION = QString("1.0.0");
 
 Horus::Horus(){
     createTrayIcon();
@@ -186,7 +186,7 @@ void Horus::versionStringReturned(QString version){
         int res = confBox->exec();
 
         if(res == QMessageBox::Yes){
-            UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog();
+            UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog("https://horus.donnelly.cc/getlatestversion/?license_key=1BC6C760BE045E11C8C70A590398E93848E2DAEE23397DF036AC656CAC04477C&platform=linux");
             downloadDialog->show();
         }
     }
