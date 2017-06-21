@@ -30,6 +30,8 @@ private:
     QString reqURL;
 
     void downloadUpdate();
+
+    void attemptExtract();
 };
 
 #endif // UPDATEDOWNLOADDIALOG_H

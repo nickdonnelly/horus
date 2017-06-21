@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("1.0.0");
+const QString Horus::HORUS_VERSION = QString("0.9.0");
 
 Horus::Horus(){
     createTrayIcon();
