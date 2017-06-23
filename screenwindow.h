@@ -50,6 +50,7 @@ public slots:
 signals:
     void recordStarted();
     void recordEnded();
+    void stillTaken(QPixmap still);
 
 protected:
     void paintEvent(QPaintEvent *evt);

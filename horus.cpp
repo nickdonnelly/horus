@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("0.9.0");
+const QString Horus::HORUS_VERSION = QString("1.0.0");
 
 Horus::Horus(){
     createTrayIcon();
@@ -50,6 +50,12 @@ void Horus::uploadComplete(QString url){
     }
 }
 
+void Horus::stillImageTaken(QPixmap still){
+    if(sets->value("copyMode", "none").toString() == "image"){
+        QClipboard* board = QApplication::clipboard();
+        board->setPixmap(still);
+    }
+}
 
 void Horus::recordingStart(){
    trayIcon->setIcon(recording_icon);
@@ -76,15 +82,13 @@ void Horus::iconActivated(QSystemTrayIcon::ActivationReason reason){
 }
 
 void Horus::openScreenshotWindow(){
-//    sw->close();
-//    sw->deleteLater();
-//    delete sw;
     if(!firstTime){
         sw->close();
         sw->deleteLater();
     }
     firstTime = false;
     sw = new ScreenWindow(uploader, -1);
+    connect(sw, SIGNAL(stillTaken(QPixmap)), this, SLOT(stillImageTaken(QPixmap)));
     sw->show();
 }
 

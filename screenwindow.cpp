@@ -172,6 +172,7 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
      hide();
      // TODO: Use screens() and iterate through for a list in the future to splice the pixmaps together
      QPixmap screenMap = QGuiApplication::primaryScreen()->grabWindow(0, x, y, w, h);
+     emit stillTaken(screenMap);
      lastSaveLocation = getImagesDirectory() + "/" + getFilename(".png");
      QFile file(lastSaveLocation);
      file.open(QIODevice::WriteOnly);
