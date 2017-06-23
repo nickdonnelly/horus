@@ -185,7 +185,7 @@ void Horus::versionStringReturned(QString version){
         QMessageBox * confBox = new QMessageBox(this);
         confBox->addButton(QMessageBox::Yes);
         confBox->addButton(QMessageBox::No);
-        confBox->setText("A Horus update is available. Would you like to download it?");
+        confBox->setText("A Horus update is available. Would you like to download it?\nYour version: " + HORUS_VERSION + "\nNew Version: " + version);
         confBox->setWindowTitle("Horus Update Available");
         int res = confBox->exec();
 
