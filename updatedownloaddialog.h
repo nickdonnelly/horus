@@ -22,6 +22,7 @@ signals:
 protected slots:
     void progressUpdate(qint64 bytesReceived, qint64 bytesTotal);
     void downloaded(QNetworkReply*);
+    void restartClicked();
 
 private:
     Ui::UpdateDownloadDialog *ui;

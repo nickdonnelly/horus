@@ -21,16 +21,16 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("1.0.0");
+const QString Horus::HORUS_VERSION = QString("0.9.0");
 
 Horus::Horus(){
+    main_icon = QIcon(":/res/horus.png");
+    recording_icon = QIcon(":/res/horus_recording.png");
     createTrayIcon();
-    setWindowIcon(QIcon(":/res/horus.png"));
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     firstTime = true;
-    main_icon = QIcon(":/res/horus.png");
-    recording_icon = QIcon(":/res/horus_recording.png");
+    setWindowIcon(main_icon);
     trayIcon->show();
 
     sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
@@ -171,7 +171,7 @@ void Horus::createTrayIcon(){
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 
     trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setIcon(QIcon("horus.png"));
+    trayIcon->setIcon(main_icon);
     trayIcon->setContextMenu(trayIconMenu);
 }
 

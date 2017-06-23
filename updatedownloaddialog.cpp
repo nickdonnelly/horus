@@ -16,17 +16,29 @@ UpdateDownloadDialog::UpdateDownloadDialog(QString url, QWidget *parent) :
     ui(new Ui::UpdateDownloadDialog)
 {
     ui->setupUi(this);
+    ui->btnRestart->setVisible(false);
     ui->pbDownload->setMinimum(0);
     ui->pbDownload->setMaximum(100);
     ui->pbDownload->setValue(0);
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloaded(QNetworkReply*)));
+    connect(ui->btnRestart, SIGNAL(pressed()), this, SLOT(restartClicked()));
     downloadUpdate();
 }
 
 UpdateDownloadDialog::~UpdateDownloadDialog()
 {
     delete ui;
+}
+
+void UpdateDownloadDialog::restartClicked(){
+    QProcess proc;
+#ifdef Q_OS_WIN
+    proc.startDetached("horusqt.exe");
+#elif defined Q_OS_LINUX
+    proc.startDetached("./horusqt");
+#endif
+    qApp->exit(0);
 }
 
 void UpdateDownloadDialog::progressUpdate(qint64 bytesReceived, qint64 bytesTotal){
@@ -56,6 +68,7 @@ void UpdateDownloadDialog::downloaded(QNetworkReply* reply){
 }
 
 void UpdateDownloadDialog::attemptExtract(){
+    ui->lblDownload->setText("Extracting update package...");
     QString platform_string("");
     QDir update_extract_dir("update_package");
     if(update_extract_dir.exists()){
@@ -63,7 +76,6 @@ void UpdateDownloadDialog::attemptExtract(){
     }
 
     update_extract_dir.mkdir("update_package");
-#ifdef Q_OS_LINUX
     QProcess proc(this);
     int exitCode = proc.execute("unzip horus_update.zip -d update_package");
     if(exitCode == 0){
@@ -78,14 +90,18 @@ void UpdateDownloadDialog::attemptExtract(){
                 }
             }
             // Below line doesn't execute correctly
-            //proc.execute("mv update_package/* .");
+            QStringList updatefiles = QDir("update_package").entryList();
+            ui->lblDownload->setText("Overwriting old files...");
+            for(int i = 0; i < updatefiles.size(); i++){
+                QFile thisFile("update_package/" + updatefiles.at(i));
+                thisFile.copy(updatefiles.at(i)); // same name, current directory.
+                thisFile.remove();
+            }
+            update_extract_dir.rmdir("update_package"); // it should be empty anyway.
+            ui->lblDownload->setText("Restart Horus for the update to take effect.");
+            ui->btnRestart->setVisible(true);
         }
     }else{
         ui->lblDownload->setText(tr("Could not extract update package. Are you sure you have write permission?"));
     }
-
-#elif Q_OS_WIN
-    platform_string += "win64";
-    // Figure this shit out later
-#endif
 }
