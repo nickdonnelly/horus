@@ -29,6 +29,7 @@ private:
     QNetworkAccessManager * manager;
     QByteArray downloadedData;
     QString reqURL;
+    QString update_dir_str;
 
     void downloadUpdate();
 

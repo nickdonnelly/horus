@@ -182,7 +182,8 @@ void Horus::closeEvent(QCloseEvent *evt){
 
 void Horus::versionStringReturned(QString version){
     if(version != HORUS_VERSION){
-        QMessageBox * confBox = new QMessageBox(this);
+        QMessageBox * confBox = new QMessageBox();
+        confBox->setWindowIcon(main_icon);
         confBox->addButton(QMessageBox::Yes);
         confBox->addButton(QMessageBox::No);
         confBox->setText("A Horus update is available. Would you like to download it?\nYour version: " + HORUS_VERSION + "\nNew Version: " + version);
@@ -190,7 +191,8 @@ void Horus::versionStringReturned(QString version){
         int res = confBox->exec();
 
         if(res == QMessageBox::Yes){
-            UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog("https://horus.donnelly.cc/getlatestversion/?license_key=1BC6C760BE045E11C8C70A590398E93848E2DAEE23397DF036AC656CAC04477C&platform=linux");
+            UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog("https://horus.donnelly.cc/getlatestversion/?license_key=1BC6C760BE045E11C8C70A590398E93848E2DAEE23397DF036AC656CAC04477C&platform=win64");
+            downloadDialog->setWindowIcon(main_icon);
             downloadDialog->show();
         }
     }

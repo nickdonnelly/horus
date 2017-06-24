@@ -20,7 +20,12 @@ UpdateDownloadDialog::UpdateDownloadDialog(QString url, QWidget *parent) :
     ui->pbDownload->setMinimum(0);
     ui->pbDownload->setMaximum(100);
     ui->pbDownload->setValue(0);
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint); // get rid of help button
     manager = new QNetworkAccessManager(this);
+    update_dir_str = qApp->applicationDirPath() + "/update_package";
+    if(!QDir(update_dir_str).exists()){
+        QDir(update_dir_str).mkpath(update_dir_str);
+    }
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(downloaded(QNetworkReply*)));
     connect(ui->btnRestart, SIGNAL(pressed()), this, SLOT(restartClicked()));
     downloadUpdate();
@@ -34,9 +39,9 @@ UpdateDownloadDialog::~UpdateDownloadDialog()
 void UpdateDownloadDialog::restartClicked(){
     QProcess proc;
 #ifdef Q_OS_WIN
-    proc.startDetached("horusqt.exe");
+    proc.startDetached(qApp->applicationDirPath() + "/horusqt.exe");
 #elif defined Q_OS_LINUX
-    proc.startDetached("./horusqt");
+    proc.startDetached(qApp->applicationDirPath() + "/horusqt");
 #endif
     qApp->exit(0);
 }
@@ -57,11 +62,10 @@ void UpdateDownloadDialog::downloaded(QNetworkReply* reply){
     downloadedData = reply->readAll();
     reply->close();
 
-    QFile updatePackage("horus_update.zip");
+    QFile updatePackage(update_dir_str + "/horus_update.zip");
     bool isOpened = updatePackage.open(QIODevice::WriteOnly);
     if(isOpened){
-        int bytesWritten = updatePackage.write(downloadedData);
-        QTextStream(stdout) << "Wrote update package to horus_update.zip: " << bytesWritten << " bytes written" << endl;
+        updatePackage.write(downloadedData);
     }
     updatePackage.close();
     attemptExtract();
@@ -69,39 +73,18 @@ void UpdateDownloadDialog::downloaded(QNetworkReply* reply){
 
 void UpdateDownloadDialog::attemptExtract(){
     ui->lblDownload->setText("Extracting update package...");
-    QString platform_string("");
-    QDir update_extract_dir("update_package");
-    if(update_extract_dir.exists()){
-        update_extract_dir.removeRecursively(); // remove files from previous updates.
-    }
 
-    update_extract_dir.mkdir("update_package");
+    QDir update_extract_dir(update_dir_str);
+    update_extract_dir.mkdir(update_dir_str);
     QProcess proc(this);
-    int exitCode = proc.execute("unzip horus_update.zip -d update_package");
+    int exitCode = proc.execute("\"" + qApp->applicationDirPath() + "/bin/unzip\" -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"");
     if(exitCode == 0){
         // success
-        QTextStream(stdout) << "Unzipped horus_update.zip to update_package" << endl;
-        QDir processDirectory(qApp->applicationDirPath());
-        if(processDirectory.exists()){
-            QStringList fileList = processDirectory.entryList();
-            for(int i = 0; i < fileList.size(); i++){
-                if(fileList.at(i) != QString("horus-settings.ini") && fileList.at(i) != QString("update_package")){
-                    processDirectory.remove(fileList.at(i));
-                }
-            }
-            // Below line doesn't execute correctly
-            QStringList updatefiles = QDir("update_package").entryList();
-            ui->lblDownload->setText("Overwriting old files...");
-            for(int i = 0; i < updatefiles.size(); i++){
-                QFile thisFile("update_package/" + updatefiles.at(i));
-                thisFile.copy(updatefiles.at(i)); // same name, current directory.
-                thisFile.remove();
-            }
-            update_extract_dir.rmdir("update_package"); // it should be empty anyway.
-            ui->lblDownload->setText("Restart Horus for the update to take effect.");
-            ui->btnRestart->setVisible(true);
-        }
+        ui->lblDownload->setText("Restart Horus for the update to take effect.");
+        ui->btnRestart->setVisible(true);
+        ui->pbDownload->setVisible(false);
     }else{
         ui->lblDownload->setText(tr("Could not extract update package. Are you sure you have write permission?"));
+        QTextStream(stdout) << "Unzip exited with code " << exitCode << endl;
     }
 }

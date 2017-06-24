@@ -184,12 +184,12 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
  void ScreenWindow::takeVideo(int duration, int vX, int vY, int vWidth, int vHeight){
      hide();
      QProcess * process = new QProcess();
-     QString processStr("ffmpeg");
+     QString processStr("");
      fileStr = QString("");
      fileStr += " \"" + getImagesDirectory() + "/" + getFilename(".webm\"");
 
 #ifdef Q_OS_WIN
-     processStr += ".exe -f gdigrab -video_size ";
+     processStr += "bin/ffmpeg.exe -f gdigrab -video_size ";
      processStr += QString::number(vWidth);
      processStr += "x";
      processStr += QString::number(vHeight);
@@ -202,7 +202,7 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
      processStr += fileStr;
 
 #else
-     processStr += " -f x11grab -framerate 15 -video_size ";
+     processStr += "ffmpeg -f x11grab -framerate 15 -video_size ";
      processStr += QString::number(vWidth);
      processStr += "x";
      processStr += QString::number(vHeight);
