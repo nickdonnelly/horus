@@ -30,7 +30,6 @@ SOURCES += \
     horus.cpp \
     settingsdialog.cpp \
     horusuploader.cpp \
-    videosynthesizer.cpp \
     imagehelper.cpp \
     editimagewindow.cpp \
     horusrectitem.cpp \
@@ -42,7 +41,6 @@ HEADERS += \
     horus.h \
     settingsdialog.h \
     horusuploader.h \
-    videosynthesizer.h \
     imagehelper.h \
     editimagewindow.h \
     horusrectitem.h \
