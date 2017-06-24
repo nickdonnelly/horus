@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("1.0.0");
+const QString Horus::HORUS_VERSION = QString("1.1.0");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
@@ -186,12 +186,19 @@ void Horus::versionStringReturned(QString version){
         confBox->setWindowIcon(main_icon);
         confBox->addButton(QMessageBox::Yes);
         confBox->addButton(QMessageBox::No);
-        confBox->setText("A Horus update is available. Would you like to download it?\nYour version: " + HORUS_VERSION + "\nNew Version: " + version);
         confBox->setWindowTitle("Horus Update Available");
+         QString platformString("");
+#ifdef Q_OS_WIN
+            platformString += "win64";
+#elif defined Q_OS_LINUX
+            platformString += "linux";
+#endif
+        confBox->setText("A Horus update is available. Would you like to download it?\nYour version: " + HORUS_VERSION + "\nNew version: " + version + "\nPlatform: " + platformString);
+
         int res = confBox->exec();
 
         if(res == QMessageBox::Yes){
-            UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog("https://horus.donnelly.cc/getlatestversion/?license_key=1BC6C760BE045E11C8C70A590398E93848E2DAEE23397DF036AC656CAC04477C&platform=win64");
+                       UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog("https://horus.donnelly.cc/getlatestversion/?license_key=" + sets->value("authToken", "").toString() + "&platform=" + platformString);
             downloadDialog->setWindowIcon(main_icon);
             downloadDialog->show();
         }
