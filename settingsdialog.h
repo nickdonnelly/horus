@@ -19,6 +19,7 @@ public:
 
 private slots:
     void on_buttonBox_clicked(QAbstractButton *button);
+    void aboutClick();
 
 private:
     Ui::SettingsDialog *ui;

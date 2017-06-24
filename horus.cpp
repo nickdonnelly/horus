@@ -126,7 +126,8 @@ void Horus::openVideoWindowDur(){
 }
 
 void Horus::openSettingsWindow(){
-    SettingsDialog *sd = new SettingsDialog(sets, this);
+    SettingsDialog *sd = new SettingsDialog(sets);
+    sd->setWindowIcon(main_icon);
     sd->show();
 }
 

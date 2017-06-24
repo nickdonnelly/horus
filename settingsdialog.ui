@@ -24,7 +24,7 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>289</width>
+    <width>387</width>
     <height>387</height>
    </size>
   </property>
@@ -186,6 +186,19 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QPushButton" name="btnAbout">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>350</y>
+     <width>51</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>About</string>
+   </property>
   </widget>
  </widget>
  <resources/>

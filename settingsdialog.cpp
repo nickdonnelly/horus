@@ -1,6 +1,8 @@
 #include "settingsdialog.h"
+#include <horus.h>
 #include "ui_settingsdialog.h"
 #include <QSettings>
+#include <QMessageBox>
 
 SettingsDialog::SettingsDialog(QSettings * settings, QWidget *parent) :
     QDialog(parent),
@@ -10,6 +12,7 @@ SettingsDialog::SettingsDialog(QSettings * settings, QWidget *parent) :
 
     // Get rid of stupid help button
     setWindowFlags(windowFlags() & ~(Qt::WindowContextHelpButtonHint));
+    connect(ui->btnAbout, SIGNAL(pressed()), this, SLOT(aboutClick()));
     // Load the settings into the UI.
     sets = settings;
     updateUIFromSettings(sets);
@@ -70,4 +73,13 @@ void SettingsDialog::on_buttonBox_clicked(QAbstractButton *button)
    }else{
        close();
    }
+}
+
+void SettingsDialog::aboutClick(){
+    QMessageBox * aboutBox = new QMessageBox(this);
+    aboutBox->setWindowIcon(QIcon(":/res/horus.png"));
+    aboutBox->setIcon(QMessageBox::Information);
+    aboutBox->setText("Horus © 2017.\n"
+                      "Version number: " + Horus::HORUS_VERSION);
+    aboutBox->exec();
 }
