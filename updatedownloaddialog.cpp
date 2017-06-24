@@ -77,7 +77,13 @@ void UpdateDownloadDialog::attemptExtract(){
     QDir update_extract_dir(update_dir_str);
     update_extract_dir.mkdir(update_dir_str);
     QProcess proc(this);
-    int exitCode = proc.execute("\"" + qApp->applicationDirPath() + "/bin/unzip\" -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"");
+    QString procStr("");
+#ifdef Q_OS_WIN
+    procStr += "\"" + qApp->applicationDirPath() + "/bin/unzip\" -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"";
+#elif defined Q_OS_LINUX
+    procStr += "unzip\" -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"";
+#endif
+    int exitCode = proc.execute(procStr);
     if(exitCode == 0){
         // success
         ui->lblDownload->setText("Restart Horus for the update to take effect.");

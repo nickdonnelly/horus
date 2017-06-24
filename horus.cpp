@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("0.9.0");
+const QString Horus::HORUS_VERSION = QString("1.0.0");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
@@ -34,7 +34,7 @@ Horus::Horus(){
     trayIcon->show();
 
     sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
-    uploader = new HorusUploader(sets->value("serverURL", "").toString(), sets->value("serverPort", "80").toString(), QString(""), sets->value("useSSL", false).toBool());
+    uploader = new HorusUploader(sets->value("serverURL", "").toString(), sets->value("serverPort", "80").toString(), sets->value("authToken", "").toString(), sets->value("useSSL", false).toBool());
     connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
     connect(uploader, SIGNAL(version(QString)), this, SLOT(versionStringReturned(QString)));
     uploader->checkLatestVersion();
