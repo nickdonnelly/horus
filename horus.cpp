@@ -70,13 +70,14 @@ void Horus::messageClicked(){
 
 void Horus::iconActivated(QSystemTrayIcon::ActivationReason reason){
     switch(reason){
-    case QSystemTrayIcon::Context:
-        break;
     case QSystemTrayIcon::Trigger:
         openScreenshotWindow();
         break;
     case QSystemTrayIcon::DoubleClick:
         openScreenshotWindow();
+        break;
+    case QSystemTrayIcon::Context:
+    default:
         break;
     }
 }
@@ -188,18 +189,20 @@ void Horus::versionStringReturned(QString version){
         confBox->addButton(QMessageBox::Yes);
         confBox->addButton(QMessageBox::No);
         confBox->setWindowTitle("Horus Update Available");
-         QString platformString("");
+        QString platformString("");
+
 #ifdef Q_OS_WIN
-            platformString += "win64";
+        platformString += "win64";
 #elif defined Q_OS_LINUX
-            platformString += "linux";
+        platformString += "linux";
 #endif
+
         confBox->setText("A Horus update is available. Would you like to download it?\nYour version: " + HORUS_VERSION + "\nNew version: " + version + "\nPlatform: " + platformString);
 
         int res = confBox->exec();
 
         if(res == QMessageBox::Yes){
-                       UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog("https://horus.donnelly.cc/getlatestversion/?license_key=" + sets->value("authToken", "").toString() + "&platform=" + platformString);
+            UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog("https://horus.donnelly.cc/getlatestversion/?license_key=" + sets->value("authToken", "").toString() + "&platform=" + platformString);
             downloadDialog->setWindowIcon(main_icon);
             downloadDialog->show();
         }
