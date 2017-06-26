@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("1.1.0");
+const QString Horus::HORUS_VERSION = QString("1.1.1");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
@@ -41,12 +41,21 @@ Horus::Horus(){
 }
 
 void Horus::uploadComplete(QString url){
-    if(sets->value("openInBrowser", true).toBool()){
-        QDesktopServices::openUrl(url);
-    }
-    if(sets->value("copyMode", "url").toString() == "url"){
-        QClipboard* board = QApplication::clipboard();
-        board->setText(url);
+    if(url == "license_key_invalid"){
+        QMessageBox * mb = new QMessageBox();
+        mb->setWindowIcon(main_icon);
+        mb->setIcon(QMessageBox::Critical);
+        mb->setWindowTitle("Upload failed");
+        mb->setText("The image upload failed: the license key you have provided is invalid.");
+        mb->exec();
+    }else{
+        if(sets->value("openInBrowser", true).toBool()){
+            QDesktopServices::openUrl(url);
+        }
+        if(sets->value("copyMode", "url").toString() == "url"){
+            QClipboard* board = QApplication::clipboard();
+            board->setText(url);
+        }
     }
 }
 

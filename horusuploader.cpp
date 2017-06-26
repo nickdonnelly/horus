@@ -33,7 +33,7 @@ void HorusUploader::upload(bool isVideo, QString filename){
         QString reqURL("");
         reqURL += "http";
         if(sslOn){ reqURL += "s"; }
-        reqURL += "://" + SERVER_URL + ":" + SERVER_PORT + "/image/upload";
+        reqURL += "://" + SERVER_URL + ":" + SERVER_PORT + "/image/upload?license_key=" + AUTH_TOKEN;
         QNetworkRequest req(QUrl(QString("").append(reqURL)));
         if(isVideo){
             req.setHeader(QNetworkRequest::ContentTypeHeader, "video/webm");
