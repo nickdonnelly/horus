@@ -27,6 +27,7 @@ private slots:
     void openEditLastWindow();
     void openSettingsWindow();
     void uploadComplete(QString url);
+    void uploadFailed(QString url);
     void stillImageTaken(QPixmap still);
     void recordingStart();
     void recordingFinished();

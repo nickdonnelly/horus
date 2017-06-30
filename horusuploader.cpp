@@ -58,13 +58,15 @@ void HorusUploader::upload(bool isVideo, QString filename){
 
         el.exec();
 
+        int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
-        if(reply->error() == QNetworkReply::NoError){
+        // 201 == created, 200 == ok
+        if(statusCode == 201 && reply->error() == QNetworkReply::NoError){
             reply->open(QIODevice::ReadOnly);
             emit uploadCompleted(QString(reply->readAll()));
             reply->close();
         }else{
-            emit uploadFailed(QString(reply->error()));
+            emit uploadFailed("Server returned " + QString::number(statusCode).append(" ") + QString(reply->error()));
             reply->close();
         }
         toUpload.close();

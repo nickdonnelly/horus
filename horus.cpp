@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("1.1.1");
+const QString Horus::HORUS_VERSION = QString("1.3.0");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
@@ -36,6 +36,7 @@ Horus::Horus(){
     sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
     uploader = new HorusUploader(sets->value("serverURL", "").toString(), sets->value("serverPort", "80").toString(), sets->value("authToken", "").toString(), sets->value("useSSL", false).toBool());
     connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
+    connect(uploader, SIGNAL(uploadFailed(QString)), this, SLOT(uploadFailed(QString)));
     connect(uploader, SIGNAL(version(QString)), this, SLOT(versionStringReturned(QString)));
     uploader->checkLatestVersion();
 }
@@ -57,6 +58,15 @@ void Horus::uploadComplete(QString url){
             board->setText(url);
         }
     }
+}
+
+void Horus::uploadFailed(QString failure){
+    QMessageBox * mb = new QMessageBox();
+    mb->setWindowIcon(main_icon);
+    mb->setIcon(QMessageBox::Critical);
+    mb->setWindowTitle("Upload failed");
+    mb->setText("There was a failure in uploading the image:\n" + failure);
+    mb->exec();
 }
 
 void Horus::stillImageTaken(QPixmap still){
