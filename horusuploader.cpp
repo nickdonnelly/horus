@@ -52,6 +52,7 @@ void HorusUploader::upload(bool isVideo, QString filename){
         }
 
         postData.append(QString(imgData.toBase64()));
+
         req.setHeader(QNetworkRequest::ContentLengthHeader, postData.length());
         QNetworkReply *reply = nMgr.post(req, postData);
 
@@ -62,7 +63,6 @@ void HorusUploader::upload(bool isVideo, QString filename){
 
         // 201 == created, 200 == ok
         if(statusCode == 201 && reply->error() == QNetworkReply::NoError){
-            reply->open(QIODevice::ReadOnly);
             emit uploadCompleted(QString(reply->readAll()));
             reply->close();
         }else{
@@ -70,7 +70,7 @@ void HorusUploader::upload(bool isVideo, QString filename){
             reply->close();
         }
         toUpload.close();
-        delete reply;
+        reply->deleteLater();
         postData.clear();
         imgData.clear();
     }
