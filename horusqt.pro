@@ -34,7 +34,9 @@ SOURCES += \
     editimagewindow.cpp \
     horusrectitem.cpp \
     horusgraphicsscene.cpp \
-    updatedownloaddialog.cpp
+    updatedownloaddialog.cpp \
+    filedropper.cpp \
+    uploadfileswindow.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -45,13 +47,16 @@ HEADERS += \
     editimagewindow.h \
     horusrectitem.h \
     horusgraphicsscene.h \
-    updatedownloaddialog.h
+    updatedownloaddialog.h \
+    filedropper.h \
+    uploadfileswindow.h
 
 FORMS += \
         screenwindow.ui \
     settingsdialog.ui \
     editimagewindow.ui \
-    updatedownloaddialog.ui
+    updatedownloaddialog.ui \
+    uploadfileswindow.ui
 
 DISTFILES += \
     res/edit_last.png

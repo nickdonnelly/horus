@@ -2,6 +2,7 @@
 #define HORUS_H
 
 #include <screenwindow.h>
+#include <filedropper.h>
 #include <QObject>
 #include <QSettings>
 #include <QCloseEvent>
@@ -37,6 +38,7 @@ private:
     void createTrayIcon();
     bool firstTime;
     HorusUploader * uploader;
+    FileDropper * fileDropper;
     ScreenWindow * sw;
     QSettings * sets;
     QSystemTrayIcon *trayIcon;

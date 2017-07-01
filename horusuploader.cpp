@@ -2,6 +2,7 @@
 #include "horusuploader.h"
 #include <QString>
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
@@ -17,8 +18,25 @@ HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString auth
     SERVER_URL = serverURL;
     SERVER_PORT = serverPort;
     AUTH_TOKEN = authToken;
+    gmgr = new QNetworkAccessManager(this);
+    QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
 }
 
+QString HorusUploader::build_base_req_string(){
+    QString reqURL("");
+    reqURL += "http";
+    if(sslOn){ reqURL += "s"; }
+    reqURL += "://" + SERVER_URL + ":" + SERVER_PORT + "/";
+    return reqURL;
+}
+
+void HorusUploader::append_auth_str(QString * req, bool firstParam){
+    if(firstParam){
+        req->append("?license_key=" + AUTH_TOKEN);
+    }else{
+        req->append("&license_key=" + AUTH_TOKEN);
+    }
+}
 
 void HorusUploader::upload(bool isVideo, QString filename){
     filename = filename.trimmed();
@@ -30,10 +48,8 @@ void HorusUploader::upload(bool isVideo, QString filename){
         QObject::connect(&nMgr, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
 
 
-        QString reqURL("");
-        reqURL += "http";
-        if(sslOn){ reqURL += "s"; }
-        reqURL += "://" + SERVER_URL + ":" + SERVER_PORT + "/image/upload?license_key=" + AUTH_TOKEN;
+        QString reqURL = build_base_req_string().append("image/upload");
+        append_auth_str(&reqURL, true);
         QNetworkRequest req(QUrl(QString("").append(reqURL)));
         if(isVideo){
             req.setHeader(QNetworkRequest::ContentTypeHeader, "video/webm");
@@ -56,7 +72,6 @@ void HorusUploader::upload(bool isVideo, QString filename){
         req.setHeader(QNetworkRequest::ContentLengthHeader, postData.length());
         QNetworkReply *reply = nMgr.post(req, postData);
 
-
         el.exec();
 
         int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -64,11 +79,10 @@ void HorusUploader::upload(bool isVideo, QString filename){
         // 201 == created, 200 == ok
         if(statusCode == 201 && reply->error() == QNetworkReply::NoError){
             emit uploadCompleted(QString(reply->readAll()));
-            reply->close();
         }else{
-            emit uploadFailed("Server returned " + QString::number(statusCode).append(" ") + QString(reply->error()));
-            reply->close();
+            emit uploadFailed("Server returned " + QString(reply->readAll()));
         }
+        reply->close();
         toUpload.close();
         reply->deleteLater();
         postData.clear();
@@ -76,11 +90,65 @@ void HorusUploader::upload(bool isVideo, QString filename){
     }
 }
 
+void HorusUploader::uploadFile(QString filename){
+    filename = filename.trimmed();
+    QFile toUpload(filename);
+    if(toUpload.exists()){
+        // Open file, initialize request string, allocate event loop
+        QFileInfo toUploadInfo(filename);
+        toUpload.open(QIODevice::ReadOnly);
+
+        if(toUpload.size() > 10485760){ // 10mb
+            emit uploadFailed("File: " + filename + " larger than 10MB! Upload aborted.");
+            return;
+        }else if(toUploadInfo.isDir()){
+            emit uploadFailed("File: " + filename + " is a directory! Upload aborted.");
+            return;
+        }
+        QNetworkRequest req;
+
+        QString reqURL = build_base_req_string().append("file/upload/");
+        if(filename.endsWith(".txt")){
+            reqURL += "text";
+            req.setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
+        }else{
+            reqURL += "binary";
+            req.setHeader(QNetworkRequest::ContentTypeHeader, "application/octet-stream");
+        }
+        append_auth_str(&reqURL, true);
+        reqURL += "&filename=" + toUploadInfo.fileName().replace(" ", "").replace("%20", ""); // just the raw filename without path
+        req.setUrl(QUrl(QString("").append(reqURL)));
+
+        // Add data, determine length
+        QByteArray postData = toUpload.readAll();
+        req.setHeader(QNetworkRequest::ContentLengthHeader, postData.length());
+        toUpload.close();
+
+        // Fire request and wait for completion
+        QNetworkReply *reply = gmgr->post(req, postData);
+        QObject::connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(uploadProgressSlot(qint64,qint64)));
+    }
+}
+
+void HorusUploader::fileUploadComplete(QNetworkReply *reply){
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    if(statusCode == 201){
+        emit uploadCompleted(QString(reply->readAll()));
+    }else{
+        QUrlQuery q(reply->request().url());
+        emit uploadFailed("Failed on file: " + q.queryItemValue("filename"));
+    }
+    reply->close();
+    reply->deleteLater();
+}
+
+void HorusUploader::uploadProgressSlot(qint64 bytesSent, qint64 bytesTotal){
+    emit uploadProgress(bytesSent, bytesTotal);
+}
+
 
 void HorusUploader::checkLatestVersion(){
-    QString reqURL("http");
-    if(sslOn){ reqURL += "s"; }
-    reqURL += "://" + SERVER_URL + ":" + SERVER_PORT + "/version/"; // that trailing slash is actually important.
+    QString reqURL = build_base_req_string().append("version/");
     QEventLoop el;
     QNetworkAccessManager manager;
     QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
@@ -97,4 +165,11 @@ void HorusUploader::checkLatestVersion(){
     }
     reply->close();
     delete reply;
+}
+
+void HorusUploader::resetCreds(QString serverURL, QString serverPort, QString authToken, bool useSSL){
+    sslOn = useSSL;
+    SERVER_URL = serverURL;
+    SERVER_PORT = serverPort;
+    AUTH_TOKEN = authToken;
 }

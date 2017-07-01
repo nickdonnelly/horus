@@ -26,6 +26,8 @@ const QString Horus::HORUS_VERSION = QString("1.3.0");
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
     recording_icon = QIcon(":/res/horus_recording.png");
+    sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
+    fileDropper = new FileDropper(sets);
     createTrayIcon();
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
@@ -33,7 +35,6 @@ Horus::Horus(){
     setWindowIcon(main_icon);
     trayIcon->show();
 
-    sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
     uploader = new HorusUploader(sets->value("serverURL", "").toString(), sets->value("serverPort", "80").toString(), sets->value("authToken", "").toString(), sets->value("useSSL", false).toBool());
     connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
     connect(uploader, SIGNAL(uploadFailed(QString)), this, SLOT(uploadFailed(QString)));
@@ -156,13 +157,13 @@ void Horus::openEditLastWindow(){
     if(QFile::exists(fileStr)){
         EditImageWindow *editWindow = new EditImageWindow(fileStr, uploader, this);
         editWindow->show();
-    }else{
-
     }
 }
 
 void Horus::createTrayIcon(){
-    QAction *actionTakeScreenshot, *actionBoxVideo, *actionBoxVideoDur, *actionEditLast, *actionSettings, *actionQuit;
+    QAction *actionTakeScreenshot, *actionBoxVideo, *actionBoxVideoDur,
+            *actionEditLast, *actionSettings, *actionQuit,
+            *actionDropFile;
     trayIconMenu = new QMenu(this);
     actionTakeScreenshot = trayIconMenu->addAction(tr("Take Screenshot"));
     actionTakeScreenshot->setIcon(QIcon(":/res/screenshot.png"));
@@ -175,6 +176,9 @@ void Horus::createTrayIcon(){
 
     actionEditLast = trayIconMenu->addAction(tr("Edit Previous Screenshot"));
     actionEditLast->setIcon(QIcon(":/res/edit_last.png"));
+
+    actionDropFile = trayIconMenu->addAction(tr("Drop File(s) On Clipboard"));
+    actionDropFile->setIcon(QIcon(":/res/dropfile.png"));
 
     trayIconMenu->addSeparator();
 
@@ -190,6 +194,7 @@ void Horus::createTrayIcon(){
     connect(actionEditLast, SIGNAL(triggered()), this, SLOT(openEditLastWindow()));
     connect(actionSettings, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(actionDropFile, SIGNAL(triggered()), fileDropper, SLOT(fileDropped()));
 
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(main_icon);

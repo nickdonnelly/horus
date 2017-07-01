@@ -7,5 +7,6 @@
         <file>res/recording.png</file>
         <file>res/stop.png</file>
         <file>res/edit_last.png</file>
+        <file>res/dropfile.png</file>
     </qresource>
 </RCC>

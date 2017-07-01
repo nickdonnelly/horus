@@ -2,6 +2,8 @@
 #define HORUSUPLOADER_H
 
 #include <QObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 class HorusUploader : public QObject
 {
@@ -10,15 +12,25 @@ public:
     HorusUploader(QString serverURL, QString serverPort, QString authToken, bool useSSL);
 
     void upload(bool isVideo, QString filename);
+    void uploadFile(QString filename);
     void checkLatestVersion();
+    void resetCreds(QString serverURL, QString serverPort, QString authToken, bool useSSL);
 
 private:
     QString SERVER_URL, SERVER_PORT, AUTH_TOKEN;
+    QString build_base_req_string();
+    QNetworkAccessManager * gmgr;
+    void append_auth_str(QString * req, bool firstParam);
     bool sslOn;
+
+public slots:
+    void uploadProgressSlot(qint64 bytesSend, qint64 bytesTotal);
+    void fileUploadComplete(QNetworkReply *reply);
 
 signals:
     void uploadCompleted(QString url);
     void uploadFailed(QString reason);
+    void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
     void version(QString version);
 };
 

@@ -80,6 +80,7 @@ void SettingsDialog::aboutClick(){
     aboutBox->setWindowIcon(QIcon(":/res/horus.png"));
     aboutBox->setIcon(QMessageBox::Information);
     aboutBox->setText("Horus © 2017.\n"
-                      "Version number: " + Horus::HORUS_VERSION);
+                      "Version number: " + Horus::HORUS_VERSION
+                      + "\nContext menu icons courtesy of EmojiOne.");
     aboutBox->exec();
 }
