@@ -87,6 +87,7 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="sb"/>
  </widget>
  <resources/>
  <connections/>

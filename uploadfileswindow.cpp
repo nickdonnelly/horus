@@ -3,6 +3,7 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QLabel>
+#include <QStatusBar>
 #include <QProgressBar>
 #include <QClipboard>
 #include <QApplication>
@@ -37,6 +38,7 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, QSettings * sets, QWidge
         ui->lvFiles->insertItem(i, newItem);
     }
     show();
+    ui->sb->showMessage("Ready");
     startNextFile();
 }
 
@@ -71,6 +73,8 @@ void UploadFilesWindow::fileUploadFailed(QString reason){
 void UploadFilesWindow::selectedCompleteChanged(QListWidgetItem *current, QListWidgetItem *previous){
     QClipboard *clip = QApplication::clipboard();
     clip->setText(current->text().trimmed());
+    ui->sb->showMessage("Copied " +  current->text().trimmed() + " to clipboard");
+
     // Notify user of copy? Status bars or something?
 }
 
@@ -83,6 +87,9 @@ void UploadFilesWindow::startNextFile(){
         ui->lblCurrentFile->setText("Current File: " + currentFile);
         delete item;
 
+        ui->sb->showMessage("Uploading " + currentFile);
         uploader->uploadFile(currentFile);
+    }else{
+        ui->sb->showMessage("Uploading complete. Click entries in the completed list to copy them to the clipboard.");
     }
 }
