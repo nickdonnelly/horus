@@ -15,8 +15,7 @@ class ScreenWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ScreenWindow(QWidget *parent = 0);
-    ScreenWindow(HorusUploader * u, int vidDuration = -1, QWidget *parent = 0);
+    explicit ScreenWindow(HorusUploader * u, int vidDuration = -1, QWidget *parent = 0);
     ~ScreenWindow();
     QString getLastSaveLocation();
     static QString getAppSaveDirectory();

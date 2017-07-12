@@ -5,7 +5,9 @@
 #include "qdesktopwidget.h"
 #include "qtextstream.h"
 #include <QInputDialog>
+#include <QDesktopWidget>
 #include <QProcess>
+#include <QWindow>
 #include <QMouseEvent>
 #include <QDir>
 #include <QKeyEvent>
@@ -19,34 +21,6 @@
 #include <windows.h>
 #endif
 
-ScreenWindow::ScreenWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::ScreenWindow)
-{
-    ui->setupUi(this);
-//    QRect r = QApplication::desktop()->screenGeometry(1);
-    QDesktopWidget * dtw = QApplication::desktop();
-    windowScreen = dtw->screen();
-    windowW = dtw->screen()->width();
-    windowH = dtw->screen()->height();
-    ui->lblInstructions->resize(windowW, ui->lblInstructions->height());
-    full = QRegion(0, 0, windowW, windowH);
-    setParent(0); // no parent widget
-    move(0, 0); // for windows...
-    resize(windowW, windowH); // for windows...
-    setAttribute(Qt::WA_TranslucentBackground);
-    setWindowState(Qt::WindowFullScreen);
-    setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
-#ifdef Q_OS_LINUX
-    setWindowFlags(Qt::X11BypassWindowManagerHint);
-#endif
-    setMask(full);
-
-    showFullScreen();
-    raise();
-}
-
-
 ScreenWindow::ScreenWindow(HorusUploader *u, int vidDuration, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ScreenWindow),
@@ -56,19 +30,25 @@ ScreenWindow::ScreenWindow(HorusUploader *u, int vidDuration, QWidget *parent) :
     ui->setupUi(this);
 //    QRect r = QApplication::desktop()->screenGeometry(1);
     useVideo = videoDuration != -1;
+    //this->windowHandle()->setScreen()
 
     QDesktopWidget * dtw = QApplication::desktop();
     windowScreen = dtw->screen();
-    windowW = dtw->screen()->width();
-    windowH = dtw->screen()->height();
+    windowW = dtw->width();
+    windowH = dtw->height();
     ui->lblInstructions->resize(windowW, ui->lblInstructions->height());
     full = QRegion(0, 0, windowW, windowH);
     setParent(0); // no parent widget
     move(0, 0); // for windows...
     resize(windowW, windowH); // for windows...
     setAttribute(Qt::WA_TranslucentBackground);
-    setWindowState(Qt::WindowFullScreen);
+    //setWindowState(Qt::WindowFullScreen);
+
+#ifdef Q_OS_WIN
     setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+#elif defined Q_OS_LINUX
+    setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint|Qt::X11BypassWindowManagerHint);
+#endif
     setMask(full);
 
     showFullScreen();
@@ -147,37 +127,51 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
      }
  }
 
- void ScreenWindow::takeScreenshot(){
-      hide();
-     // TODO: Use screens() and iterate through for a list in the future to splice the pixmaps together
-     QPixmap screenMap = QGuiApplication::primaryScreen()->grabWindow(0, 0, 0, windowW, windowH);
-     int l = QGuiApplication::screens().length();
-     QPixmap * images = new QPixmap[l];
-     for(int i = 0; i < l; i++){
-         QScreen * s = QGuiApplication::screens().at(i);
-        images[i] = s->grabWindow(0); // whole thing.
-     }
-     ImageHelper::stitch_pixmap(images, l);
+void ScreenWindow::takeScreenshot(){
+    hide();
+    QDesktopWidget* s = QApplication::desktop();
+    QRect compositeGeometry;
+    for(int i = 0; i < s->screenCount(); ++i){
+        QRect screenGeometry = s->screen(i)->geometry();
+        compositeGeometry = compositeGeometry.united(screenGeometry);
+    }
 
-     if(!QDir(getAppSaveDirectory()).exists()){
-         QDir().mkpath(getAppSaveDirectory());
-     }
-     QFile file(getAppSaveDirectory() + "/cache_last_taken.png");
-     file.open(QIODevice::WriteOnly);
-     screenMap.save(&file, "PNG");
-     close();
- }
+    QPixmap screenMap = QPixmap::grabWindow(s->winId(), compositeGeometry.x(), compositeGeometry.y(),
+                        compositeGeometry.width(), compositeGeometry.height());
+
+    if(!QDir(getAppSaveDirectory()).exists()){
+        QDir().mkpath(getAppSaveDirectory());
+    }
+
+    QFile file(getAppSaveDirectory() + "/cache_last_taken.png");
+    file.open(QIODevice::WriteOnly);
+    screenMap.save(&file, "PNG");
+    file.close();
+    close();
+}
 
  void ScreenWindow::takeScreenshot(int x, int y, int w, int h){
+     // Make the window invisible
      hide();
-     // TODO: Use screens() and iterate through for a list in the future to splice the pixmaps together
-     QPixmap screenMap = QGuiApplication::primaryScreen()->grabWindow(0, x, y, w, h);
+
+     // Calculate overall screen geometry (this is necessary for multi-monitor setups)
+     QDesktopWidget* s = QApplication::desktop();
+     QRect compositeGeometry; // This holds the geometry of all screens combined.
+     for(int i = 0; i < s->screenCount(); ++i){
+         QRect screenGeometry = s->screen(i)->geometry();
+         compositeGeometry = compositeGeometry.united(screenGeometry);
+     }
+     // Take screenshot
+     QPixmap screenMap = QPixmap::grabWindow(s->winId(), x, y, w, h);
      emit stillTaken(screenMap);
+     // Save image
      lastSaveLocation = getImagesDirectory() + "/" + getFilename(".png");
      QFile file(lastSaveLocation);
      file.open(QIODevice::WriteOnly);
      screenMap.save(&file, "PNG");
+     // Upload
      uploader->upload(false, lastSaveLocation);
+     // Remove window
      close();
  }
 

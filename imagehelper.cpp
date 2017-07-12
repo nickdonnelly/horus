@@ -1,8 +1,9 @@
 #include "imagehelper.h"
 #include <QPixmap>
 #include <QPainter>
+#include <QString>
 
-QPixmap ImageHelper::stitch_pixmap(QPixmap * images, int len){
+QPixmap ImageHelper::stitch_pixmap(QPixmap * images, int len, QString filename){
 
     int totalW = 0;
     int maxH = 0;
@@ -20,7 +21,7 @@ QPixmap ImageHelper::stitch_pixmap(QPixmap * images, int len){
         painter->drawPixmap(curX, 0, images[i].width(), images[i].height(), images[i]);
         curX += images[i].width();
     }
-    //result.save("abc123.png");
+    result.save(filename);
 
     return result;
 }
