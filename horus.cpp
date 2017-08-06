@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("1.3.1");
+const QString Horus::HORUS_VERSION = QString("1.3.2");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
@@ -75,6 +75,10 @@ void Horus::stillImageTaken(QPixmap still){
         QClipboard* board = QApplication::clipboard();
         board->setPixmap(still);
     }
+    // Hide all the windows until upload complete.
+    for(int i = 0; i < windows.size(); i++){
+        windows.at(i)->hide();
+    }
 }
 
 void Horus::recordingStart(){
@@ -103,26 +107,35 @@ void Horus::iconActivated(QSystemTrayIcon::ActivationReason reason){
 }
 
 void Horus::openScreenshotWindow(){
+    screens = QGuiApplication::screens();
+    windows = QList<QMainWindow*>();
+    for(int i = 0; i < screens.size(); i++){
+        QMainWindow * window = new ScreenWindow(screens.at(i), uploader, -1);
+        connect(window, SIGNAL(stillTaken(QPixmap)), this, SLOT(stillImageTaken(QPixmap)));
+        connect(window, SIGNAL(closing()), this, SLOT(screenWindowClosed()));
+        windows.push_back(window);
+        window->show();
+    }
+
     if(!firstTime){
         sw->close();
         sw->deleteLater();
     }
     firstTime = false;
-    sw = new ScreenWindow(uploader, -1);
-    connect(sw, SIGNAL(stillTaken(QPixmap)), this, SLOT(stillImageTaken(QPixmap)));
-    sw->show();
+    //sw = new ScreenWindow(QApplication::desktop()->screen(), uploader, -1);
+    //connect(sw, SIGNAL(stillTaken(QPixmap)), this, SLOT(stillImageTaken(QPixmap)));
+    //sw->show();
 }
 
 void Horus::openVideoWindow10(){
-    if(!firstTime){
-        sw->close();
-        sw->deleteLater();
+    screens = QGuiApplication::screens();
+    windows = QList<QMainWindow*>();
+    for(int i = 0; i < screens.size(); i++){
+        QMainWindow * window = new ScreenWindow(screens.at(i), uploader, 10);
+        connect(window, SIGNAL(closing()), this, SLOT(screenWindowClosed()));
+        windows.push_back(window);
+        window->show();
     }
-    firstTime = false;
-    sw = new ScreenWindow(uploader, 10);
-    connect(sw, SIGNAL(recordStarted()), this, SLOT(recordingStart()));
-    connect(sw, SIGNAL(recordEnded()), this, SLOT(recordingFinished()));
-    sw->show();
 }
 
 void Horus::openVideoWindowDur(){
@@ -134,15 +147,14 @@ void Horus::openVideoWindowDur(){
                                        QLineEdit::Normal, 3, 20, 1, &ok);
     dialog->deleteLater();
     if(ok){
-        if(!firstTime){
-            sw->close();
-            sw->deleteLater();
+        screens = QGuiApplication::screens();
+        windows = QList<QMainWindow*>();
+        for(int i = 0; i < screens.size(); i++){
+            QMainWindow * window = new ScreenWindow(screens.at(i), uploader, dur);
+            connect(window, SIGNAL(closing()), this, SLOT(screenWindowClosed()));
+            windows.push_back(window);
+            window->show();
         }
-        firstTime = false;
-        sw = new ScreenWindow(uploader, dur);
-        connect(sw, SIGNAL(recordStarted()), this, SLOT(recordingStart()));
-        connect(sw, SIGNAL(recordEnded()), this, SLOT(recordingFinished()));
-        sw->show();
     }
 }
 
@@ -230,5 +242,14 @@ void Horus::versionStringReturned(QString version){
             downloadDialog->setWindowIcon(main_icon);
             downloadDialog->show();
         }
+    }
+}
+
+void Horus::screenWindowClosed(){
+    while(windows.size() > 0){
+        QMainWindow * win = windows.front();
+        windows.pop_front();
+        win->close();
+        win->deleteLater();
     }
 }

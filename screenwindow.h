@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QScreen>
 #include <QProcess>
 #include <horusuploader.h>
 
@@ -15,7 +16,7 @@ class ScreenWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ScreenWindow(HorusUploader * u, int vidDuration = -1, QWidget *parent = 0);
+    explicit ScreenWindow(QScreen * screen, HorusUploader * u, int vidDuration = -1, QWidget *parent = 0);
     ~ScreenWindow();
     QString getLastSaveLocation();
     static QString getAppSaveDirectory();
@@ -26,9 +27,10 @@ private:
     Ui::ScreenWindow *ui;
     bool useVideo;
     HorusUploader * uploader;
-    QWidget * windowScreen;
+    QRect windowScreen;
+    QScreen * wScreen;
     QRegion full;
-    int originX, originY;
+    int originX, originY, originXRel, originYRel;
     int videoDuration;
     int iw, ih;
     int windowW, windowH;
@@ -47,6 +49,7 @@ public slots:
     void ffmpegFinished(int exitCode, QProcess::ExitStatus status);
 
 signals:
+    void closing();
     void recordStarted();
     void recordEnded();
     void stillTaken(QPixmap still);
@@ -57,6 +60,8 @@ protected:
     void mousePressEvent(QMouseEvent *evt);
     void mouseReleaseEvent(QMouseEvent *evt);
     void mouseMoveEvent(QMouseEvent *evt);
+
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // SCREENWINDOW_H

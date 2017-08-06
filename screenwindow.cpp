@@ -21,7 +21,7 @@
 #include <windows.h>
 #endif
 
-ScreenWindow::ScreenWindow(HorusUploader *u, int vidDuration, QWidget *parent) :
+ScreenWindow::ScreenWindow(QScreen* screen, HorusUploader *u, int vidDuration, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ScreenWindow),
     uploader(u),
@@ -33,13 +33,15 @@ ScreenWindow::ScreenWindow(HorusUploader *u, int vidDuration, QWidget *parent) :
     //this->windowHandle()->setScreen()
 
     QDesktopWidget * dtw = QApplication::desktop();
-    windowScreen = dtw->screen();
-    windowW = dtw->width();
-    windowH = dtw->height();
+    wScreen = screen;
+    windowScreen = screen->geometry();
+    windowW = windowScreen.width();
+    windowH = windowScreen.height();
+
     ui->lblInstructions->resize(windowW, ui->lblInstructions->height());
     full = QRegion(0, 0, windowW, windowH);
     setParent(0); // no parent widget
-    move(0, 0); // for windows...
+    move(windowScreen.x(), windowScreen.y()); // for windows...
     resize(windowW, windowH); // for windows...
     setAttribute(Qt::WA_TranslucentBackground);
     //setWindowState(Qt::WindowFullScreen);
@@ -69,7 +71,8 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
 
         startXRel = evt->x();
         startYRel = evt->y();
-    } }
+    }
+ }
 
  void ScreenWindow::mouseReleaseEvent(QMouseEvent *evt){
     if(evt->button() == Qt::LeftButton){
@@ -81,8 +84,10 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
 
         setMask(full);
         update(); // repaint instruction
-        originX = std::min(startXRel, endXRel);
-        originY = std::min(startYRel, endYRel);
+        originXRel = std::min(startXRel, endXRel);
+        originYRel = std::min(startYRel, endYRel);
+        originX = std::min(startX, endX);
+        originY = std::min(startY, endY);
         iw = std::abs(endXRel - startXRel);
         ih = std::abs(endYRel - startYRel);
 
@@ -107,12 +112,14 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
         endXRel = evt->x();
         endYRel = evt->y();
 
-        originX = std::min(startXRel, endXRel);
-        originY = std::min(startYRel, endYRel);
+        originXRel = std::min(startXRel, endXRel);
+        originYRel = std::min(startYRel, endYRel);
+        originX = std::min(startX, endX);
+        originY = std::min(startY, endY);
         iw = std::abs(endXRel - startXRel);
         ih = std::abs(endYRel - startYRel);
 
-        setMask(full - QRegion(originX, originY, iw, ih));
+        setMask(full - QRegion(originXRel, originYRel, iw, ih));
         update();
     }
 
@@ -123,7 +130,7 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
      if(mousePressed){
          QPainter painter(this);
          painter.setPen(QPen(Qt::blue));
-         painter.drawRect(originX-1, originY-1, iw+2, ih+2);
+         painter.drawRect(originXRel-1, originYRel-1, iw+2, ih+2);
      }
  }
 
@@ -162,7 +169,7 @@ void ScreenWindow::takeScreenshot(){
          compositeGeometry = compositeGeometry.united(screenGeometry);
      }
      // Take screenshot
-     QPixmap screenMap = QPixmap::grabWindow(s->winId(), x, y, w, h);
+     QPixmap screenMap = wScreen->grabWindow(0, x, y, w, h);
      emit stillTaken(screenMap);
      // Save image
      lastSaveLocation = getImagesDirectory() + "/" + getFilename(".png");
@@ -243,4 +250,8 @@ QString ScreenWindow::getFilename(const QString ext){
 ScreenWindow::~ScreenWindow()
 {
     delete ui;
+}
+
+void ScreenWindow::closeEvent(QCloseEvent *event){
+    emit closing();
 }

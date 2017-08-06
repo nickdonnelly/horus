@@ -33,10 +33,13 @@ private slots:
     void recordingStart();
     void recordingFinished();
     void versionStringReturned(QString version);
+    void screenWindowClosed();
 
 private:
     void createTrayIcon();
     bool firstTime;
+    QList<QScreen*> screens;
+    QList<QMainWindow*> windows;
     HorusUploader * uploader;
     FileDropper * fileDropper;
     ScreenWindow * sw;
