@@ -70,7 +70,7 @@ void UploadFilesWindow::fileUploadFailed(QString reason){
     startNextFile();
 }
 
-void UploadFilesWindow::selectedCompleteChanged(QListWidgetItem *current, QListWidgetItem *previous){
+void UploadFilesWindow::selectedCompleteChanged(QListWidgetItem *current, QListWidgetItem*){
     QClipboard *clip = QApplication::clipboard();
     clip->setText(current->text().trimmed());
     ui->sb->showMessage("Copied " +  current->text().trimmed() + " to clipboard");

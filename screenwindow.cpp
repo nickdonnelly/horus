@@ -32,7 +32,6 @@ ScreenWindow::ScreenWindow(QScreen* screen, HorusUploader *u, int vidDuration, Q
     useVideo = videoDuration != -1;
     //this->windowHandle()->setScreen()
 
-    QDesktopWidget * dtw = QApplication::desktop();
     wScreen = screen;
     windowScreen = screen->geometry();
     windowW = windowScreen.width();
@@ -217,10 +216,12 @@ void ScreenWindow::takeScreenshot(){
      process->start(processStr);
  }
 
- void ScreenWindow::ffmpegFinished(int exitCode, QProcess::ExitStatus status){
-     emit recordEnded();
+ void ScreenWindow::ffmpegFinished(int exitCode, QProcess::ExitStatus){
+     emit recordEnded(exitCode);
      QThread::msleep(500); // let the file handles close so exists() returns true.
-     uploader->upload(true, fileStr.replace("\"", ""));
+     if(exitCode == 0){
+        uploader->upload(true, fileStr.replace("\"", ""));
+     }
      close();
  }
 

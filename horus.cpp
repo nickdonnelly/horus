@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("1.3.2");
+const QString Horus::HORUS_VERSION = QString("1.3.3");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
@@ -85,8 +85,15 @@ void Horus::recordingStart(){
    trayIcon->setIcon(recording_icon);
 }
 
-void Horus::recordingFinished(){
-   trayIcon->setIcon(main_icon);
+void Horus::recordingFinished(int exitcode){
+    trayIcon->setIcon(main_icon);
+    if(exitcode != 0){
+        QMessageBox * confBox = new QMessageBox();
+        confBox->setWindowIcon(main_icon);
+        confBox->setWindowTitle("Video error");
+        confBox->setText("There was a problem with ffmpeg (exit status" + QString::number(exitcode));
+        confBox->show();
+    }
 }
 
 void Horus::messageClicked(){
@@ -116,15 +123,6 @@ void Horus::openScreenshotWindow(){
         windows.push_back(window);
         window->show();
     }
-
-    if(!firstTime){
-        sw->close();
-        sw->deleteLater();
-    }
-    firstTime = false;
-    //sw = new ScreenWindow(QApplication::desktop()->screen(), uploader, -1);
-    //connect(sw, SIGNAL(stillTaken(QPixmap)), this, SLOT(stillImageTaken(QPixmap)));
-    //sw->show();
 }
 
 void Horus::openVideoWindow10(){
@@ -132,6 +130,8 @@ void Horus::openVideoWindow10(){
     windows = QList<QMainWindow*>();
     for(int i = 0; i < screens.size(); i++){
         QMainWindow * window = new ScreenWindow(screens.at(i), uploader, 10);
+        connect(window, SIGNAL(recordStarted()), this, SLOT(recordingStart()));
+        connect(window, SIGNAL(recordEnded(int)), this, SLOT(recordingFinished(int)));
         connect(window, SIGNAL(closing()), this, SLOT(screenWindowClosed()));
         windows.push_back(window);
         window->show();
@@ -151,6 +151,8 @@ void Horus::openVideoWindowDur(){
         windows = QList<QMainWindow*>();
         for(int i = 0; i < screens.size(); i++){
             QMainWindow * window = new ScreenWindow(screens.at(i), uploader, dur);
+            connect(window, SIGNAL(recordStarted()), this, SLOT(recordingStart()));
+            connect(window, SIGNAL(recordEnded(int)), this, SLOT(recordingFinished(int)));
             connect(window, SIGNAL(closing()), this, SLOT(screenWindowClosed()));
             windows.push_back(window);
             window->show();

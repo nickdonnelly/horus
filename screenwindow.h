@@ -51,7 +51,7 @@ public slots:
 signals:
     void closing();
     void recordStarted();
-    void recordEnded();
+    void recordEnded(int exitCode);
     void stillTaken(QPixmap still);
 
 protected:

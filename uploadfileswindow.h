@@ -23,7 +23,7 @@ private slots:
     void fileUploaded(QString fileURL);
     void fileUploadFailed(QString reason);
     void updateProgressBar(qint64 sent, qint64 total);
-    void selectedCompleteChanged(QListWidgetItem *current, QListWidgetItem *previous);
+    void selectedCompleteChanged(QListWidgetItem *current, QListWidgetItem*);
 
 private:
     Ui::UploadFilesWindow *ui;

@@ -18,7 +18,7 @@ HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString auth
     SERVER_URL = serverURL;
     SERVER_PORT = serverPort;
     AUTH_TOKEN = authToken;
-    gmgr = new QNetworkAccessManager(this);
+    gmgr = new QNetworkAccessManager(this)3
     QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
 }
 
@@ -80,7 +80,7 @@ void HorusUploader::upload(bool isVideo, QString filename){
         if(statusCode == 201 && reply->error() == QNetworkReply::NoError){
             emit uploadCompleted(QString(reply->readAll()));
         }else{
-            emit uploadFailed("Server returned " + QString(reply->readAll()));
+            emit uploadFailed("Server returned status " + QString::number(statusCode));
         }
         reply->close();
         toUpload.close();

@@ -31,7 +31,7 @@ private slots:
     void uploadFailed(QString url);
     void stillImageTaken(QPixmap still);
     void recordingStart();
-    void recordingFinished();
+    void recordingFinished(int exitcode);
     void versionStringReturned(QString version);
     void screenWindowClosed();
 
