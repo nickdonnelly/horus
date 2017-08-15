@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>289</width>
-    <height>387</height>
+    <width>294</width>
+    <height>437</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>289</width>
-    <height>387</height>
+    <height>437</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>387</width>
-    <height>387</height>
+    <height>437</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -39,7 +39,7 @@
    <property name="geometry">
     <rect>
      <x>-60</x>
-     <y>350</y>
+     <y>390</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -57,7 +57,7 @@
      <x>10</x>
      <y>10</y>
      <width>141</width>
-     <height>171</height>
+     <height>151</height>
     </rect>
    </property>
    <property name="title">
@@ -93,7 +93,7 @@
      <x>160</x>
      <y>10</y>
      <width>121</width>
-     <height>171</height>
+     <height>151</height>
     </rect>
    </property>
    <property name="title">
@@ -127,7 +127,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
+     <y>230</y>
      <width>271</width>
      <height>151</height>
     </rect>
@@ -191,7 +191,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>350</y>
+     <y>390</y>
      <width>51</width>
      <height>32</height>
     </rect>
@@ -199,6 +199,38 @@
    <property name="text">
     <string>About</string>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="gbUploadBehavior">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>160</y>
+     <width>271</width>
+     <height>58</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select how you want Horus to behave when you drop more than one file from your clipboard. Do you want it to zip all the files, and upload them at one URL, or upload them each individually, to their own, standalone URLs?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="title">
+    <string>Multiple File Upload Behavior</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QRadioButton" name="rbUploadIndividual">
+      <property name="text">
+       <string>Upload Individually</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="rbUploadZip">
+      <property name="text">
+       <string>Upload as ZIP</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

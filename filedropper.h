@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSettings>
 #include <QClipboard>
+#include <QTemporaryDir>
 
 class FileDropper : public QObject
 {
@@ -15,11 +16,13 @@ signals:
 
 public slots:
     void fileDropped();
+    void cleanupTempDir();
 
 private:
     void runUpload(QString files);
 
     QSettings * settings;
+    QTemporaryDir * tempDir;
 };
 
 #endif // FILEDROPPER_H

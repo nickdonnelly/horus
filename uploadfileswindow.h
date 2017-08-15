@@ -19,6 +19,9 @@ public:
     explicit UploadFilesWindow(QStringList files, QSettings * sets, QWidget *parent = 0);
     ~UploadFilesWindow();
 
+signals:
+    void complete();
+
 private slots:
     void fileUploaded(QString fileURL);
     void fileUploadFailed(QString reason);

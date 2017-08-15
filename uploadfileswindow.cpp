@@ -92,5 +92,6 @@ void UploadFilesWindow::startNextFile(){
     }else{
         ui->lblCurrentFile->setText("No more files!");
         ui->sb->showMessage("Uploading complete. Click entries in the completed list to copy them to the clipboard.");
+        emit complete();
     }
 }

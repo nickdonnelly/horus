@@ -40,6 +40,13 @@ void SettingsDialog::updateUIFromSettings(QSettings * settings){
     }else{
         ui->rbNoCopy->setChecked(true);
     }
+
+    QString uploadMode = settings->value("uploadMode", "standalone").toString();
+    if(uploadMode == "zip"){
+        ui->rbUploadZip->setChecked(true);
+    }else{
+        ui->rbUploadIndividual->setChecked(true);
+    }
 }
 
 void SettingsDialog::saveSettings(QSettings * settings){
@@ -55,6 +62,12 @@ void SettingsDialog::saveSettings(QSettings * settings){
         settings->setValue("copyMode", "image");
     }else{
         settings->setValue("copyMode", "none");
+    }
+
+    if(ui->rbUploadIndividual->isChecked()){
+        settings->setValue("uploadMode", "standalone");
+    }else{
+        settings->setValue("uploadMode", "zip");
     }
 
     settings->setValue("serverURL", ui->tbServerURL->text());

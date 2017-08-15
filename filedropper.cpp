@@ -1,6 +1,9 @@
 #include "filedropper.h"
 #include <uploadfileswindow.h>
 #include <horusuploader.h>
+#include <QTemporaryDir>
+#include <QString>
+#include <QProcess>
 #include <QIcon>
 #include <QApplication>
 #include <QMimeData>
@@ -16,10 +19,41 @@ FileDropper::FileDropper(QSettings * sets, QObject *parent) : QObject(parent)
 
 void FileDropper::runUpload(QString files){
     QStringList eachfile = files.split("\n");
+
+    if(settings->value("uploadMode", "standalone").toString() == "zip"){
+        QString zipString = "";
+        tempDir = new QTemporaryDir();
+        tempDir->setAutoRemove(false);
+#ifdef Q_OS_WIN
+        zipString += "bin/zip";
+#else
+        zipString += "zip";
+#endif
+        zipString += " -r9 -j \"" + tempDir->path() + "/temp.zip\" ";
+
+        for(int i = 0; i < eachfile.size(); i++){
+            zipString += "\"" + eachfile.at(i).trimmed()  + "\" ";
+        }
+
+        int exitCode = QProcess::execute(zipString);
+
+        eachfile.clear();
+        eachfile.push_back(QString(tempDir->path() + "/temp.zip"));
+    }
     // invoke new window with eachfile
     UploadFilesWindow * win = new UploadFilesWindow(eachfile, settings);
     win->setWindowIcon(QIcon(":/res/dropfile.png"));
     win->show();
+    connect(win, SIGNAL(complete()), this, SLOT(cleanupTempDir()));
+}
+
+void FileDropper::cleanupTempDir(){
+    bool deleted = tempDir->remove();
+    if(!deleted){
+        QMessageBox *box = new QMessageBox();
+        box->setWindowIcon(QIcon(":/res/horus.png"));
+        box->setText("Could not remove temporary zip directory: " + tempDir->path());
+    }
 }
 
 // SIGNALS
@@ -34,7 +68,11 @@ void FileDropper::fileDropped(){
         box->setIconPixmap(QPixmap(":/res/filedrop.png"));
         box->addButton(QMessageBox::Yes);
         box->addButton(QMessageBox::No);
-        box->setText("Are you sure you want to upload the following files?\n" + actualData);
+        if(settings->value("uploadMode", "standalone").toString() == "zip"){
+            box->setText("Are you sure you want to zip and upload the following files?\n" + actualData);
+        }else{
+            box->setText("Are you sure you want to upload the following files?\n" + actualData);
+        }
         int result = box->exec();
 
         if(result == QMessageBox::Yes){
