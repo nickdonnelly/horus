@@ -81,8 +81,9 @@ void UpdateDownloadDialog::attemptExtract(){
 #ifdef Q_OS_WIN
     procStr += "\"" + qApp->applicationDirPath() + "/bin/unzip\" -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"";
 #elif defined Q_OS_LINUX
-    procStr += "unzip\" -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"";
+    procStr += "unzip -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"";
 #endif
+    QTextStream(stdout) << procStr << " end " << endl;
     int exitCode = proc.execute(procStr);
     if(exitCode == 0){
         // success
