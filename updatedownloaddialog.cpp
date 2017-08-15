@@ -12,8 +12,8 @@
 
 UpdateDownloadDialog::UpdateDownloadDialog(QString url, QWidget *parent) :
     QDialog(parent),
-    reqURL(url),
-    ui(new Ui::UpdateDownloadDialog)
+    ui(new Ui::UpdateDownloadDialog),
+    reqURL(url)
 {
     ui->setupUi(this);
     ui->btnRestart->setVisible(false);

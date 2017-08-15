@@ -61,7 +61,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *evt);
     void mouseMoveEvent(QMouseEvent *evt);
 
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent*);
 };
 
 #endif // SCREENWINDOW_H

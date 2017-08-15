@@ -27,8 +27,8 @@
 
 EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget *parent) :
     QMainWindow(parent),
-    uploader(upl),
     ui(new Ui::EditImageWindow),
+    uploader(upl),
     fileLoc(filename)
 {
     ui->setupUi(this);

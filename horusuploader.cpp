@@ -18,7 +18,7 @@ HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString auth
     SERVER_URL = serverURL;
     SERVER_PORT = serverPort;
     AUTH_TOKEN = authToken;
-    gmgr = new QNetworkAccessManager(this)3
+    gmgr = new QNetworkAccessManager(this);
     QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
 }
 
@@ -58,7 +58,6 @@ void HorusUploader::upload(bool isVideo, QString filename){
         }
 
         QByteArray imgData = toUpload.readAll();
-        int origSize = imgData.length();
 
         QByteArray postData;
         if(isVideo){

@@ -12,7 +12,7 @@
 #include <QColor>
 
 HorusGraphicsScene::HorusGraphicsScene(QObject *parent) : QGraphicsScene(parent),
-    dragging(false), isDrawingMode(false), poly(), path(), points(), pathItems()
+    poly(), path(), points(), pathItems(), dragging(false), isDrawingMode(false)
 {
     brush_color = Qt::red;
     brush_width = 15;

@@ -253,6 +253,6 @@ ScreenWindow::~ScreenWindow()
     delete ui;
 }
 
-void ScreenWindow::closeEvent(QCloseEvent *event){
+void ScreenWindow::closeEvent(QCloseEvent*){
     emit closing();
 }
