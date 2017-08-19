@@ -19,8 +19,9 @@ FileDropper::FileDropper(QSettings * sets, QObject *parent) : QObject(parent)
 
 void FileDropper::runUpload(QString files){
     QStringList eachfile = files.split("\n");
+    bool isZip = settings->value("uploadMode", "standalone").toString() == "zip";
 
-    if(settings->value("uploadMode", "standalone").toString() == "zip"){
+    if(isZip){
         QString zipString = "";
         tempDir = new QTemporaryDir();
         tempDir->setAutoRemove(false);
@@ -51,7 +52,7 @@ void FileDropper::runUpload(QString files){
     UploadFilesWindow * win = new UploadFilesWindow(eachfile, settings);
     win->setWindowIcon(QIcon(":/res/dropfile.png"));
     win->show();
-    connect(win, SIGNAL(complete()), this, SLOT(cleanupTempDir()));
+    if(isZip) connect(win, SIGNAL(complete()), this, SLOT(cleanupTempDir()));
 }
 
 void FileDropper::cleanupTempDir(){

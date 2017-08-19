@@ -149,7 +149,7 @@ void HorusUploader::fileUploadComplete(QNetworkReply *reply){
         emit uploadCompleted(QString(reply->readAll()));
     }else{
         QUrlQuery q(reply->request().url());
-        emit uploadFailed("Upload failed.");
+        emit uploadFailed("Upload failed. Check your license key!");
     }
     reply->close();
     reply->deleteLater();

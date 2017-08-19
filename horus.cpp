@@ -31,7 +31,7 @@ Horus::Horus(){
     textDropper = new TextDropper(sets);
 
     connect(textDropper, SIGNAL(complete(QString)), this, SLOT(uploadComplete(QString)));
-    connect(textDropper, SIGNAL(failed(QString)), this, SLOT(uploadFailed(QString)));
+    connect(textDropper, SIGNAL(failure(QString)), this, SLOT(uploadFailed(QString)));
     createTrayIcon();
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
