@@ -19,7 +19,7 @@ FileDropper::FileDropper(QSettings * sets, QObject *parent) : QObject(parent)
 
 void FileDropper::runUpload(QString files){
     QStringList eachfile = files.split("\n");
-    bool isZip = settings->value("uploadMode", "standalone").toString() == "zip";
+    bool isZip = (settings->value("uploadMode", "standalone").toString() == "zip") && eachfile.length() > 1;
 
     if(isZip){
         QString zipString = "";
