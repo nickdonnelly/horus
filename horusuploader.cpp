@@ -129,13 +129,26 @@ void HorusUploader::uploadFile(QString filename){
     }
 }
 
+void HorusUploader::sendText(QString text){
+    QNetworkRequest req;
+    QString reqURL = build_base_req_string().append("text/paste");
+    append_auth_str(&reqURL, true);
+    req.setUrl(QUrl(QString("").append(reqURL)));
+    QByteArray postData = text.toUtf8();
+    req.setHeader(QNetworkRequest::ContentLengthHeader, postData.length());
+
+    QNetworkReply *reply = gmgr->post(req, postData);
+    // It's only text, we may add this later but it shouldn't be necessary.
+    //QObject::connect(reply, SIGNAL(uploadProgress(qint64,qint64), this, SLOT(uploadProgressSlot(qint64,qint64)));
+}
+
 void HorusUploader::fileUploadComplete(QNetworkReply *reply){
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if(statusCode == 201){
         emit uploadCompleted(QString(reply->readAll()));
     }else{
         QUrlQuery q(reply->request().url());
-        emit uploadFailed("Failed on file: " + q.queryItemValue("filename"));
+        emit uploadFailed("Upload failed.");
     }
     reply->close();
     reply->deleteLater();

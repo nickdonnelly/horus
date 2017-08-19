@@ -28,6 +28,10 @@ Horus::Horus(){
     recording_icon = QIcon(":/res/horus_recording.png");
     sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
     fileDropper = new FileDropper(sets);
+    textDropper = new TextDropper(sets);
+
+    connect(textDropper, SIGNAL(complete(QString)), this, SLOT(uploadComplete(QString)));
+    connect(textDropper, SIGNAL(failed(QString)), this, SLOT(uploadFailed(QString)));
     createTrayIcon();
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
@@ -48,7 +52,7 @@ void Horus::uploadComplete(QString url){
         mb->setWindowIcon(main_icon);
         mb->setIcon(QMessageBox::Critical);
         mb->setWindowTitle("Upload failed");
-        mb->setText("The image upload failed: the license key you have provided is invalid.");
+        mb->setText("The upload failed: the license key you have provided is invalid.");
         mb->exec();
     }else{
         if(sets->value("openInBrowser", true).toBool()){
@@ -125,6 +129,7 @@ void Horus::openScreenshotWindow(){
     }
 }
 
+
 void Horus::openVideoWindow10(){
     screens = QGuiApplication::screens();
     windows = QList<QMainWindow*>();
@@ -177,7 +182,7 @@ void Horus::openEditLastWindow(){
 void Horus::createTrayIcon(){
     QAction *actionTakeScreenshot, *actionBoxVideo, *actionBoxVideoDur,
             *actionEditLast, *actionSettings, *actionQuit,
-            *actionDropFile;
+            *actionDropFile, *actionPaste;
     trayIconMenu = new QMenu(this);
     actionTakeScreenshot = trayIconMenu->addAction(tr("Take Screenshot"));
     actionTakeScreenshot->setIcon(QIcon(":/res/screenshot.png"));
@@ -194,6 +199,9 @@ void Horus::createTrayIcon(){
     actionDropFile = trayIconMenu->addAction(tr("Drop File(s) On Clipboard"));
     actionDropFile->setIcon(QIcon(":/res/dropfile.png"));
 
+    actionPaste = trayIconMenu->addAction(tr("Paste Clipboard Text"));
+    actionPaste->setIcon(QIcon(":/res/paste.png"));
+
     trayIconMenu->addSeparator();
 
     actionSettings = trayIconMenu->addAction(tr("Settings"));
@@ -209,6 +217,9 @@ void Horus::createTrayIcon(){
     connect(actionSettings, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(actionDropFile, SIGNAL(triggered()), fileDropper, SLOT(fileDropped()));
+
+    connect(actionPaste, SIGNAL(triggered()), textDropper, SLOT(textDropped()));
+    // CONNECT SUCCESS/FAIL!
 
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(main_icon);

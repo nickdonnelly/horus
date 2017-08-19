@@ -8,5 +8,6 @@
         <file>res/stop.png</file>
         <file>res/edit_last.png</file>
         <file>res/dropfile.png</file>
+        <file>res/paste.png</file>
     </qresource>
 </RCC>

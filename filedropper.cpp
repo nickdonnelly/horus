@@ -69,6 +69,7 @@ void FileDropper::fileDropped(){
     const QMimeData *data = clip->mimeData(QClipboard::Clipboard);
     QString actualData = QString(data->data("text/uri-list")).replace("%20", " ").trimmed();
     if(actualData.length() > 0 && actualData.startsWith("file://")){
+        actualData.remove("file:///"); // yay windows
         actualData.remove("file://");
         QMessageBox *box = new QMessageBox();
         box->setWindowIcon(QIcon(":/res/horus.png"));

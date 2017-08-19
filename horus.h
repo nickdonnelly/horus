@@ -3,10 +3,11 @@
 
 #include <screenwindow.h>
 #include <filedropper.h>
+#include <horusuploader.h>
+#include <textdropper.h>
 #include <QObject>
 #include <QSettings>
 #include <QCloseEvent>
-#include <horusuploader.h>
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 
@@ -40,14 +41,16 @@ private:
     bool firstTime;
     QList<QScreen*> screens;
     QList<QMainWindow*> windows;
-    HorusUploader * uploader;
-    FileDropper * fileDropper;
     ScreenWindow * sw;
     QSettings * sets;
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
     QIcon main_icon;
     QIcon recording_icon;
+
+    HorusUploader * uploader;
+    FileDropper * fileDropper;
+    TextDropper * textDropper;
 
 protected:
     void closeEvent(QCloseEvent * evt);

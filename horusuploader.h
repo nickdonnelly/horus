@@ -13,6 +13,7 @@ public:
 
     void upload(bool isVideo, QString filename);
     void uploadFile(QString filename);
+    void sendText(QString text);
     void checkLatestVersion();
     void resetCreds(QString serverURL, QString serverPort, QString authToken, bool useSSL);
 

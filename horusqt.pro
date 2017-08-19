@@ -36,7 +36,8 @@ SOURCES += \
     horusgraphicsscene.cpp \
     updatedownloaddialog.cpp \
     filedropper.cpp \
-    uploadfileswindow.cpp
+    uploadfileswindow.cpp \
+    textdropper.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -49,7 +50,8 @@ HEADERS += \
     horusgraphicsscene.h \
     updatedownloaddialog.h \
     filedropper.h \
-    uploadfileswindow.h
+    uploadfileswindow.h \
+    textdropper.h
 
 FORMS += \
         screenwindow.ui \
@@ -59,7 +61,8 @@ FORMS += \
     uploadfileswindow.ui
 
 DISTFILES += \
-    res/edit_last.png
+    res/edit_last.png \
+    res/paste.png
 
 RESOURCES += \
     horus-resources.qrc
