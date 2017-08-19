@@ -131,9 +131,10 @@ void HorusUploader::uploadFile(QString filename){
 
 void HorusUploader::sendText(QString text){
     QNetworkRequest req;
-    QString reqURL = build_base_req_string().append("text/paste");
+    QString reqURL = build_base_req_string().append("paste/new");
     append_auth_str(&reqURL, true);
     req.setUrl(QUrl(QString("").append(reqURL)));
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
     QByteArray postData = text.toUtf8();
     req.setHeader(QNetworkRequest::ContentLengthHeader, postData.length());
 

@@ -1,6 +1,8 @@
 #include "textdropper.h"
 #include <QClipboard>
 #include <QApplication>
+#include <QIcon>
+#include <QMessageBox>
 
 TextDropper::TextDropper(QSettings * sets, QObject *parent) : QObject(parent)
 {
@@ -23,7 +25,14 @@ void TextDropper::textDropped(){
     QClipboard *clip = QApplication::clipboard();
     QString text = clip->text();
 
-    uploader->sendText(text);
+    if(text.trimmed().isEmpty()){
+        QMessageBox *box = new QMessageBox();
+        box->setWindowIcon(QIcon(":/res/paste.png"));
+        box->setText("You have no text on your clipboard!");
+        box->show();
+    }else{
+        uploader->sendText(text);
+    }
 }
 
 // For manual use (if you don't want to use a signal for whatever reason)
