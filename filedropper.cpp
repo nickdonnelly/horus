@@ -38,7 +38,14 @@ void FileDropper::runUpload(QString files){
         int exitCode = QProcess::execute(zipString);
 
         eachfile.clear();
-        eachfile.push_back(QString(tempDir->path() + "/temp.zip"));
+        if(exitCode != 0){
+            QMessageBox *box = new QMessageBox();
+            box->setWindowIcon(QIcon(":/res/horus.png"));
+            box->setText(QString("Unable to zip files! zip exited with exit code") + QString::number(exitCode));
+            box->show();
+        }else{
+            eachfile.push_back(QString(tempDir->path() + "/temp.zip"));
+        }
     }
     // invoke new window with eachfile
     UploadFilesWindow * win = new UploadFilesWindow(eachfile, settings);
