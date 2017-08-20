@@ -4,6 +4,7 @@
 #include <QListWidgetItem>
 #include <QLabel>
 #include <QStatusBar>
+#include <QMimeData>
 #include <QProgressBar>
 #include <QClipboard>
 #include <QApplication>
@@ -13,6 +14,7 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, QSettings * sets, QWidge
     QMainWindow(parent),
     ui(new Ui::UploadFilesWindow)
 {
+    setAcceptDrops(true);
     ui->setupUi(this);
     ui->pbCurrentFile->setMinimum(0);
     ui->pbCurrentFile->setMaximum(100);
@@ -38,8 +40,8 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, QSettings * sets, QWidge
         ui->lvFiles->insertItem(i, newItem);
     }
     show();
-    ui->sb->showMessage("Ready");
-    startNextFile();
+    ui->sb->showMessage("Ready. Drag-and-drop files to upload (non-zipped).");
+    if(ui->lvFiles->count() > 0) startNextFile();
 }
 
 UploadFilesWindow::~UploadFilesWindow()
@@ -91,7 +93,35 @@ void UploadFilesWindow::startNextFile(){
         uploader->uploadFile(currentFile);
     }else{
         ui->lblCurrentFile->setText("No more files!");
-        ui->sb->showMessage("Uploading complete. Click entries in the completed list to copy them to the clipboard.");
+        ui->sb->showMessage("Uploads complete.");
         emit complete();
+    }
+}
+
+void UploadFilesWindow::dragEnterEvent(QDragEnterEvent *evt){
+    evt->acceptProposedAction();
+}
+
+void UploadFilesWindow::dragLeaveEvent(QDragLeaveEvent *evt){
+    evt->accept();
+}
+
+void UploadFilesWindow::dropEvent(QDropEvent *evt){
+    evt->accept();
+    const QMimeData* mimeData = evt->mimeData();
+    bool shouldRunStart = ui->lvFiles->count() == 0;
+
+    // if there's files
+    if(mimeData->hasUrls()){
+        QList<QUrl> urls = mimeData->urls();
+
+        for(int i = 0; i < urls.size(); i++){
+            QListWidgetItem *newItem = new QListWidgetItem;
+            newItem->setText(urls.at(i).toLocalFile());
+            ui->lvFiles->insertItem(i, newItem);
+        }
+
+        // If there are files in the lv, we don't want to cancel an upload.
+        if(shouldRunStart) startNextFile();
     }
 }

@@ -3,6 +3,9 @@
 
 #include <horusuploader.h>
 #include <QMainWindow>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
 #include <QStringList>
 #include <QListWidgetItem>
 #include <QSettings>
@@ -35,7 +38,13 @@ private:
     bool usessl;
     QSettings * settings;
     HorusUploader * uploader;
+
     void startNextFile();
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *evt);
+    void dragLeaveEvent(QDragLeaveEvent *evt);
+    void dropEvent(QDropEvent *evt);
 };
 
 #endif // UPLOADFILESWINDOW_H

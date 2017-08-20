@@ -78,7 +78,7 @@
     <item>
      <widget class="QLabel" name="lblCompleted">
       <property name="text">
-       <string>Completed</string>
+       <string>Completed (click entry to copy URL)</string>
       </property>
      </widget>
     </item>

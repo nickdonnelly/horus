@@ -88,11 +88,10 @@ void FileDropper::fileDropped(){
             runUpload(actualData);
         }
     }else{
-        QMessageBox *box = new QMessageBox();
-        box->setWindowIcon(QIcon(":/res/horus.png"));
-        box->setIconPixmap(QPixmap(":/res/filedrop.png"));
-        box->setText("Found nothing on clipboard to upload!");
-        box->exec();
+        QStringList dummyList;
+        UploadFilesWindow * win = new UploadFilesWindow(dummyList, settings);
+        win->setWindowIcon(QIcon(":/res/dropfile.png"));
+        win->show();
     }
 }
 

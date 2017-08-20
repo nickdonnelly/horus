@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("1.3.4");
+const QString Horus::HORUS_VERSION = QString("1.3.5");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
