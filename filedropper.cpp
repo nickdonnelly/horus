@@ -19,6 +19,7 @@ FileDropper::FileDropper(QSettings * sets, QObject *parent) : QObject(parent)
 
 void FileDropper::runUpload(QString files){
     QStringList eachfile = files.split("\n");
+    settings->sync();
     bool isZip = (settings->value("uploadMode", "standalone").toString() == "zip") && eachfile.length() > 1;
 
     if(isZip){
@@ -70,6 +71,7 @@ void FileDropper::fileDropped(){
     const QMimeData *data = clip->mimeData(QClipboard::Clipboard);
     QString actualData = QString(data->data("text/uri-list")).replace("%20", " ").trimmed();
     if(actualData.length() > 0 && actualData.startsWith("file://")){
+        settings->sync();
         actualData.remove("file:///"); // yay windows
         actualData.remove("file://");
         QMessageBox *box = new QMessageBox();

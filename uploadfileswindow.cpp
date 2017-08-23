@@ -22,6 +22,7 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, QSettings * sets, QWidge
     settings = sets;
     filelist = files;
 
+    settings->sync();
     url = settings->value("serverURL").toString();
     port = settings->value("serverPort").toString();
     token = settings->value("authToken").toString();

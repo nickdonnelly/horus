@@ -8,6 +8,7 @@ TextDropper::TextDropper(QSettings * sets, QObject *parent) : QObject(parent)
 {
     settings = sets;
 
+    settings->sync();
     url = settings->value("serverURL").toString();
     port = settings->value("serverPort").toString();
     token = settings->value("authToken").toString();

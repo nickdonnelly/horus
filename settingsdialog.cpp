@@ -15,6 +15,7 @@ SettingsDialog::SettingsDialog(QSettings * settings, QWidget *parent) :
     connect(ui->btnAbout, SIGNAL(pressed()), this, SLOT(aboutClick()));
     // Load the settings into the UI.
     sets = settings;
+    sets->sync();
     updateUIFromSettings(sets);
 }
 

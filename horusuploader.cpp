@@ -28,6 +28,7 @@ HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString auth
 
 HorusUploader::HorusUploader(QSettings * sets)
 {
+    sets->sync();
     sslOn = sets->value("useSSL", false).toBool();
     SERVER_URL = sets->value("serverURL", "").toString();
     SERVER_PORT = sets->value("serverPort", "").toString();

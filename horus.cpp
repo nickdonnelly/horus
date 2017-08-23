@@ -56,6 +56,7 @@ void Horus::uploadComplete(QString url){
         mb->setText("The upload failed: the license key you have provided is invalid.");
         mb->exec();
     }else{
+        sets->sync();
         if(sets->value("openInBrowser", true).toBool()){
             QDesktopServices::openUrl(url);
         }
@@ -76,6 +77,7 @@ void Horus::uploadFailed(QString failure){
 }
 
 void Horus::stillImageTaken(QPixmap still){
+    sets->sync();
     if(sets->value("copyMode", "none").toString() == "image"){
         QClipboard* board = QApplication::clipboard();
         board->setPixmap(still);
@@ -252,6 +254,7 @@ void Horus::versionStringReturned(QString version){
         int res = confBox->exec();
 
         if(res == QMessageBox::Yes){
+            sets->sync();
             UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog("https://horus.donnelly.cc/getlatestversion/?license_key=" + sets->value("authToken", "").toString() + "&platform=" + platformString);
             downloadDialog->setWindowIcon(main_icon);
             downloadDialog->show();
