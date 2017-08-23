@@ -4,12 +4,14 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QSettings>
 
 class HorusUploader : public QObject
 {
     Q_OBJECT
 public:
     HorusUploader(QString serverURL, QString serverPort, QString authToken, bool useSSL);
+    HorusUploader(QSettings * sets);
 
     void upload(bool isVideo, QString filename);
     void uploadFile(QString filename);
@@ -18,6 +20,7 @@ public:
     void resetCreds(QString serverURL, QString serverPort, QString authToken, bool useSSL);
 
 private:
+    bool ASK_TITLE;
     QString SERVER_URL, SERVER_PORT, AUTH_TOKEN;
     QString build_base_req_string();
     QNetworkAccessManager * gmgr;

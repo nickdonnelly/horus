@@ -27,7 +27,7 @@ SettingsDialog::~SettingsDialog()
 void SettingsDialog::updateUIFromSettings(QSettings * settings){
     ui->cbOpenInBrowser->setChecked(settings->value("openInBrowser", true).toBool());
     ui->cbUpload->setChecked(settings->value("uploadImages", true).toBool());
-    ui->cbUploadGif->setChecked(settings->value("uploadGIFs", true).toBool());
+    ui->cbAskTitle->setChecked(settings->value("askTitle", true).toBool());
     ui->tbServerURL->setText(settings->value("serverURL", "").toString());
     ui->tbServerPort->setText(settings->value("serverPort", "").toString());
     ui->tbAuthToken->setText(settings->value("authToken", "").toString());
@@ -52,7 +52,7 @@ void SettingsDialog::updateUIFromSettings(QSettings * settings){
 void SettingsDialog::saveSettings(QSettings * settings){
     settings->setValue("openInBrowser", ui->cbOpenInBrowser->isChecked());
     settings->setValue("uploadImages", ui->cbUpload->isChecked());
-    settings->setValue("uploadGIFs", ui->cbUploadGif->isChecked());
+    settings->setValue("askTitle", ui->cbAskTitle->isChecked());
 
     if(ui->rbNoCopy->isChecked()){
         settings->setValue("copyMode", "none");

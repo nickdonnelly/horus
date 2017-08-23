@@ -39,7 +39,8 @@ Horus::Horus(){
     setWindowIcon(main_icon);
     trayIcon->show();
 
-    uploader = new HorusUploader(sets->value("serverURL", "").toString(), sets->value("serverPort", "80").toString(), sets->value("authToken", "").toString(), sets->value("useSSL", false).toBool());
+    //uploader = new HorusUploader(sets->value("serverURL", "").toString(), sets->value("serverPort", "80").toString(), sets->value("authToken", "").toString(), sets->value("useSSL", false).toBool());
+    uploader = new HorusUploader(sets);
     connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
     connect(uploader, SIGNAL(uploadFailed(QString)), this, SLOT(uploadFailed(QString)));
     connect(uploader, SIGNAL(version(QString)), this, SLOT(versionStringReturned(QString)));

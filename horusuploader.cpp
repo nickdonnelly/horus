@@ -4,6 +4,9 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QInputDialog>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
@@ -18,6 +21,18 @@ HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString auth
     SERVER_URL = serverURL;
     SERVER_PORT = serverPort;
     AUTH_TOKEN = authToken;
+    ASK_TITLE = false;
+    gmgr = new QNetworkAccessManager(this);
+    QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
+}
+
+HorusUploader::HorusUploader(QSettings * sets)
+{
+    sslOn = sets->value("useSSL", false).toBool();
+    SERVER_URL = sets->value("serverURL", "").toString();
+    SERVER_PORT = sets->value("serverPort", "").toString();
+    AUTH_TOKEN = sets->value("authToken", "").toString();
+    ASK_TITLE = sets->value("askTitle", false).toBool();
     gmgr = new QNetworkAccessManager(this);
     QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
 }
@@ -50,6 +65,14 @@ void HorusUploader::upload(bool isVideo, QString filename){
 
         QString reqURL = build_base_req_string().append("image/upload");
         append_auth_str(&reqURL, true);
+        if(ASK_TITLE) {
+            bool ok;
+            QInputDialog * dialog = new QInputDialog();
+            dialog->move(QApplication::desktop()->screenGeometry().center() - dialog->pos()/2); // center it
+            QString _title = dialog->getText(NULL, "Image Title", "Enter a title for the image.", QLineEdit::Normal, "Horus Screenshot", &ok);
+            dialog->deleteLater();
+            reqURL = reqURL.append("&title=" + _title);
+        }
         QNetworkRequest req(QUrl(QString("").append(reqURL)));
         if(isVideo){
             req.setHeader(QNetworkRequest::ContentTypeHeader, "video/webm");
