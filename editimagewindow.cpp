@@ -63,6 +63,7 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
     connect(ui->btnBoxConfirm, SIGNAL(rejected()), this, SLOT(confirmCancelled()));
     connect(ui->btnDrawMode, SIGNAL(pressed()), this, SLOT(drawingModeToggled()));
     connect(ui->btnClear, SIGNAL(pressed()), this, SLOT(clearPressed()));
+    connect(ui->btnAddText, SIGNAL(pressed()), this, SLOT(addTextPressed()));
 
     // color buttons
     connect(ui->btnBlack, SIGNAL(pressed()), this, SLOT(colorBlack()));
@@ -249,6 +250,7 @@ void EditImageWindow::drawingModeToggled(){
 
         rectangleItem->setVisible(true);
         outlineItem->setVisible(true);
+
         ui->btnDrawMode->setText("Enter Drawing Mode");
     }else{
         inDrawingMode = true;
@@ -264,7 +266,7 @@ void EditImageWindow::drawingModeToggled(){
         ui->frameColors->setVisible(true);
 
         rectangleItem->setVisible(false);
-        outlineItem->setVisible(false);
+        //outlineItem->setVisible(false);
         ui->btnDrawMode->setText("Exit Drawing Mode");
     }
     scene->setDrawingMode(inDrawingMode);
@@ -277,4 +279,16 @@ void EditImageWindow::brushWidthChanged(int value){
 
 void EditImageWindow::clearPressed(){
     scene->clearDrawing();
+}
+
+void EditImageWindow::addTextPressed(){
+    scene->addNewText("New Text. Click to edit.", QPointF(0, 0));
+}
+
+void EditImageWindow::textEditMode(){
+
+}
+
+void EditImageWindow::exitTextEditMode(){
+
 }

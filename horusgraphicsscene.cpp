@@ -1,4 +1,5 @@
 #include "horusgraphicsscene.h"
+#include <horustextitem.h>
 #include <QGraphicsScene>
 #include <QGraphicsPathItem>
 #include <QGraphicsLineItem>
@@ -12,7 +13,7 @@
 #include <QColor>
 
 HorusGraphicsScene::HorusGraphicsScene(QObject *parent) : QGraphicsScene(parent),
-    poly(), path(), points(), pathItems(), dragging(false), isDrawingMode(false)
+    poly(), path(), points(), text(), pathItems(), dragging(false), isDrawingMode(false)
 {
     brush_color = Qt::red;
     brush_width = 15;
@@ -33,6 +34,28 @@ void HorusGraphicsScene::setDrawingMode(bool mode){
     }else{
         indicatorPoint->setVisible(false);
     }
+}
+
+
+void HorusGraphicsScene::addNewText(QString content, QPointF loc){
+    HorusTextItem *ti = new HorusTextItem();
+    ti->setPlainText(content);
+    ti->setScale(5.0);
+    ti->setPos(loc);
+    ti->setTextInteractionFlags(Qt::TextEditable);
+    ti->setDefaultTextColor(brush_color);
+    //connect(ti, SIGNAL(mouseDown()), this, SLOT(textEdit()));
+    //connect(ti, SIGNAL(mouseUp()), this, SLOT(stopTextEdit());
+    addItem(ti);
+    text << ti;
+}
+
+void HorusGraphicsScene::textEdit(){
+    emit enterTextEdit();
+}
+
+void HorusGraphicsScene::stopTextEdit(){
+    emit exitTextEdit();
 }
 
 void HorusGraphicsScene::setBrushSize(int brushSize){

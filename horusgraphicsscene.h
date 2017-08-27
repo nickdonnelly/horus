@@ -20,11 +20,16 @@ public:
     void setBrushColor(QColor color);
     void clearDrawing();
     void setImgRef(QGraphicsItem *ref);
+    void addNewText(QString content, QPointF loc);
 
 signals:
+    void enterTextEdit();
+    void exitTextEdit();
 
 
-public slots:
+private slots:
+    void textEdit();
+    void stopTextEdit();
 
 
 private:
@@ -35,6 +40,7 @@ private:
     QGraphicsLineItem *indicatorPoint;
 
     QList<QGraphicsItem*> points, pathItems;
+    QList<QGraphicsTextItem*> text;
 
     bool dragging;
     bool isDrawingMode;

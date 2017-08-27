@@ -37,7 +37,8 @@ SOURCES += \
     updatedownloaddialog.cpp \
     filedropper.cpp \
     uploadfileswindow.cpp \
-    textdropper.cpp
+    textdropper.cpp \
+    horustextitem.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -51,7 +52,8 @@ HEADERS += \
     updatedownloaddialog.h \
     filedropper.h \
     uploadfileswindow.h \
-    textdropper.h
+    textdropper.h \
+    horustextitem.h
 
 FORMS += \
         screenwindow.ui \

@@ -1,6 +1,8 @@
 #include "settingsdialog.h"
 #include <horus.h>
 #include "ui_settingsdialog.h"
+#include <QDialogButtonBox>
+#include <QDesktopServices>
 #include <QSettings>
 #include <QMessageBox>
 
@@ -96,5 +98,11 @@ void SettingsDialog::aboutClick(){
     aboutBox->setText("Horus © 2017.\n"
                       "Version number: " + Horus::HORUS_VERSION
                       + "\nContext menu icons courtesy of EmojiOne.");
+    aboutBox->addButton("OK", QMessageBox::AcceptRole);
+    QAbstractButton * changelogBtn = aboutBox->addButton("View Changelogs", QMessageBox::HelpRole);
     aboutBox->exec();
+
+    if(aboutBox->clickedButton()== changelogBtn) {
+        QDesktopServices::openUrl(QString("https://horus.donnelly.cc/changelogs"));
+    }
 }

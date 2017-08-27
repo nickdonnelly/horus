@@ -40,6 +40,7 @@ private slots:
     void okPressed();
     void confirmConfirmed();
     void confirmCancelled();
+    void addTextPressed();
 
     void clearPressed();
     void brushWidthChanged(int value);
@@ -50,6 +51,9 @@ private slots:
     void colorBlue(){ scene->setBrushColor(QColor(0, 0, 255, 255)); }
     void colorGreen(){ scene->setBrushColor(QColor(0, 255, 0, 255)); }
     void colorPink(){ scene->setBrushColor(QColor(255, 0, 255, 255)); }
+
+    void textEditMode();
+    void exitTextEditMode();
 
 
 private:
