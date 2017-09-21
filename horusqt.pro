@@ -64,7 +64,8 @@ FORMS += \
 
 DISTFILES += \
     res/edit_last.png \
-    res/paste.png
+    res/paste.png \
+    res/manage.png
 
 RESOURCES += \
     horus-resources.qrc

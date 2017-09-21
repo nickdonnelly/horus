@@ -18,11 +18,12 @@ public:
     void sendText(QString text);
     void checkLatestVersion();
     void resetCreds(QString serverURL, QString serverPort, QString authToken, bool useSSL);
+    QString build_base_req_string();
+    QString get_auth_str();
 
 private:
     bool ASK_TITLE;
     QString SERVER_URL, SERVER_PORT, AUTH_TOKEN;
-    QString build_base_req_string();
     QNetworkAccessManager * gmgr;
     void append_auth_str(QString * req, bool firstParam);
     bool sslOn;

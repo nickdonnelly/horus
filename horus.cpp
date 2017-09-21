@@ -21,7 +21,7 @@
 #include <QClipboard>
 
 
-const QString Horus::HORUS_VERSION = QString("1.3.5");
+const QString Horus::HORUS_VERSION = QString("2.0.0");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
@@ -58,6 +58,7 @@ void Horus::uploadComplete(QString url){
     }else{
         sets->sync();
         if(sets->value("openInBrowser", true).toBool()){
+            QTextStream(stdout) << url << endl;
             QDesktopServices::openUrl(url);
         }
         if(sets->value("copyMode", "url").toString() == "url"){
@@ -65,6 +66,11 @@ void Horus::uploadComplete(QString url){
             board->setText(url);
         }
     }
+}
+
+void Horus::openManage() {
+    QString authstr = uploader->get_auth_str();
+    QDesktopServices::openUrl(authstr);
 }
 
 void Horus::uploadFailed(QString failure){
@@ -185,7 +191,7 @@ void Horus::openEditLastWindow(){
 void Horus::createTrayIcon(){
     QAction *actionTakeScreenshot, *actionBoxVideo, *actionBoxVideoDur,
             *actionEditLast, *actionSettings, *actionQuit,
-            *actionDropFile, *actionPaste;
+            *actionDropFile, *actionPaste, *actionManage;
     trayIconMenu = new QMenu(this);
     actionTakeScreenshot = trayIconMenu->addAction(tr("Take Screenshot"));
     actionTakeScreenshot->setIcon(QIcon(":/res/screenshot.png"));
@@ -207,6 +213,9 @@ void Horus::createTrayIcon(){
 
     trayIconMenu->addSeparator();
 
+    actionManage = trayIconMenu->addAction(tr("Manage Uploads"));
+    actionManage->setIcon(QIcon(":/res/manage.png"));
+
     actionSettings = trayIconMenu->addAction(tr("Settings"));
     actionSettings->setIcon(QIcon(":/res/settings.png"));
 
@@ -217,9 +226,11 @@ void Horus::createTrayIcon(){
     connect(actionBoxVideo, SIGNAL(triggered()), this, SLOT(openVideoWindow10()));
     connect(actionBoxVideoDur, SIGNAL(triggered()), this, SLOT(openVideoWindowDur()));
     connect(actionEditLast, SIGNAL(triggered()), this, SLOT(openEditLastWindow()));
+    connect(actionDropFile, SIGNAL(triggered()), fileDropper, SLOT(fileDropped()));
+
+    connect(actionManage, SIGNAL(triggered()), this, SLOT(openManage()));
     connect(actionSettings, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
-    connect(actionDropFile, SIGNAL(triggered()), fileDropper, SLOT(fileDropped()));
 
     connect(actionPaste, SIGNAL(triggered()), textDropper, SLOT(textDropped()));
     // CONNECT SUCCESS/FAIL!

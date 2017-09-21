@@ -42,7 +42,7 @@ QString HorusUploader::build_base_req_string(){
     QString reqURL("");
     reqURL += "http";
     if(sslOn){ reqURL += "s"; }
-    reqURL += "://" + SERVER_URL + ":" + SERVER_PORT + "/";
+    reqURL += "://" + SERVER_URL + ":" + SERVER_PORT;
     return reqURL;
 }
 
@@ -64,29 +64,34 @@ void HorusUploader::upload(bool isVideo, QString filename){
         QObject::connect(&nMgr, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
 
 
-        QString reqURL = build_base_req_string().append("image/upload");
-        append_auth_str(&reqURL, true);
+        QString reqURL, title;
+        if(isVideo) {
+            reqURL = build_base_req_string().append("/video/new");
+        }else{
+            reqURL = build_base_req_string().append("/image/new");
+        }
+
+        //append_auth_str(&reqURL, true);
         if(ASK_TITLE) {
             bool ok;
             QInputDialog * dialog = new QInputDialog();
             dialog->move(QApplication::desktop()->screenGeometry().center() - dialog->pos()/2); // center it
             QString _title = dialog->getText(NULL, "Image Title", "Enter a title for the image.", QLineEdit::Normal, "Horus Screenshot", &ok);
             dialog->deleteLater();
-            reqURL = reqURL.append("&title=" + _title);
+            title = _title;
+        } else {
+            title = "";
         }
         QNetworkRequest req(QUrl(QString("").append(reqURL)));
+        QByteArray imgData = toUpload.readAll();
+        QByteArray postData;
+        req.setRawHeader(QString("x-api-key").toUtf8(), AUTH_TOKEN.toUtf8());
+
         if(isVideo){
             req.setHeader(QNetworkRequest::ContentTypeHeader, "video/webm");
-        }else{
-            req.setHeader(QNetworkRequest::ContentTypeHeader, "image/png");
-        }
-
-        QByteArray imgData = toUpload.readAll();
-
-        QByteArray postData;
-        if(isVideo){
             postData.append("data:video/webm;base64,");
         }else{
+            req.setHeader(QNetworkRequest::ContentTypeHeader, "image/png");
             postData.append("data:image/png;base64,");
         }
 
@@ -101,7 +106,8 @@ void HorusUploader::upload(bool isVideo, QString filename){
 
         // 201 == created, 200 == ok
         if(statusCode == 201 && reply->error() == QNetworkReply::NoError){
-            emit uploadCompleted(QString(reply->readAll()));
+            QString resStr = build_base_req_string().append(reply->rawHeader("Location"));
+            emit uploadCompleted(resStr);
         }else{
             emit uploadFailed("Server returned status " + QString::number(statusCode));
         }
@@ -130,7 +136,7 @@ void HorusUploader::uploadFile(QString filename){
         }
         QNetworkRequest req;
 
-        QString reqURL = build_base_req_string().append("file/upload/");
+        QString reqURL = build_base_req_string().append("/file/upload/");
         if(filename.endsWith(".txt")){
             reqURL += "text";
             req.setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
@@ -155,7 +161,7 @@ void HorusUploader::uploadFile(QString filename){
 
 void HorusUploader::sendText(QString text){
     QNetworkRequest req;
-    QString reqURL = build_base_req_string().append("paste/new");
+    QString reqURL = build_base_req_string().append("/paste/new");
     append_auth_str(&reqURL, true);
     req.setUrl(QUrl(QString("").append(reqURL)));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
@@ -170,6 +176,14 @@ void HorusUploader::sendText(QString text){
 void HorusUploader::fileUploadComplete(QNetworkReply *reply){
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if(statusCode == 201){
+        QString location("http");
+        if(sslOn){ location += "s"; }
+        location += "://";
+        location += SERVER_URL;
+        location += ":";
+        location += SERVER_PORT;
+        location += QString(reply->rawHeader(QByteArray("Location")));
+
         emit uploadCompleted(QString(reply->readAll()));
     }else{
         QUrlQuery q(reply->request().url());
@@ -183,9 +197,25 @@ void HorusUploader::uploadProgressSlot(qint64 bytesSent, qint64 bytesTotal){
     emit uploadProgress(bytesSent, bytesTotal);
 }
 
+QString HorusUploader::get_auth_str() {
+    QString reqURL = build_base_req_string().append("/manage/request_auth_url");
+    QEventLoop el;
+    QNetworkAccessManager manager;
+    QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
+    QNetworkRequest req(QUrl(QString("").append(reqURL)));
+    req.setRawHeader(QString("x-api-key").toUtf8(), AUTH_TOKEN.toUtf8());
+    QNetworkReply * reply = manager.get(req);
+    el.exec();
+
+    QString url = build_base_req_string();
+    url += QString(reply->readAll());
+    reply->close();
+    delete reply;
+    return url;
+}
 
 void HorusUploader::checkLatestVersion(){
-    QString reqURL = build_base_req_string().append("version/");
+    QString reqURL = build_base_req_string().append("/version/");
     QEventLoop el;
     QNetworkAccessManager manager;
     QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
@@ -194,7 +224,6 @@ void HorusUploader::checkLatestVersion(){
 
     el.exec();
 
-    reply->open(QIODevice::ReadOnly);
     if(reply->error()){
         emit version(Horus::HORUS_VERSION);
     }else{
