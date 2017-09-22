@@ -38,7 +38,8 @@ SOURCES += \
     filedropper.cpp \
     uploadfileswindow.cpp \
     textdropper.cpp \
-    horustextitem.cpp
+    horustextitem.cpp \
+    modelserialize.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -53,7 +54,8 @@ HEADERS += \
     filedropper.h \
     uploadfileswindow.h \
     textdropper.h \
-    horustextitem.h
+    horustextitem.h \
+    modelserialize.h
 
 FORMS += \
         screenwindow.ui \

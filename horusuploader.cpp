@@ -1,5 +1,6 @@
 #include "horus.h"
 #include "horusuploader.h"
+#include "modelserialize.h"
 #include <QString>
 #include <QFile>
 #include <QFileInfo>
@@ -135,56 +136,50 @@ void HorusUploader::uploadFile(QString filename){
             return;
         }
         QNetworkRequest req;
-
-        QString reqURL = build_base_req_string().append("/file/upload/");
-        if(filename.endsWith(".txt")){
-            reqURL += "text";
-            req.setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
-        }else{
-            reqURL += "binary";
-            req.setHeader(QNetworkRequest::ContentTypeHeader, "application/octet-stream");
-        }
-        append_auth_str(&reqURL, true);
-        reqURL += "&filename=" + toUploadInfo.fileName().replace(" ", "").replace("%20", ""); // just the raw filename without path
+        QString reqURL = build_base_req_string().append("/file/new/");
         req.setUrl(QUrl(QString("").append(reqURL)));
+
+        req.setRawHeader(QString("x-api-key").toUtf8(), AUTH_TOKEN.toUtf8());
+        req.setHeader(QNetworkRequest::ContentTypeHeader, "application/octet-stream");
+        req.setHeader(QNetworkRequest::ContentDispositionHeader, toUploadInfo.fileName().replace(" ", "").replace("%20", ""));
 
         // Add data, determine length
         QByteArray postData = toUpload.readAll();
-        req.setHeader(QNetworkRequest::ContentLengthHeader, postData.length());
         toUpload.close();
 
         // Fire request and wait for completion
+        QTextStream(stdout) << " Making request to " << reqURL << endl;
+        QTextStream(stdout) << " HEADER " << req.header(QNetworkRequest::ContentDispositionHeader).toString() << endl;
+
         QNetworkReply *reply = gmgr->post(req, postData);
         QObject::connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(uploadProgressSlot(qint64,qint64)));
     }
 }
 
 void HorusUploader::sendText(QString text){
+    QEventLoop el;
+    QNetworkAccessManager nMgr;
+    QObject::connect(&nMgr, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
     QNetworkRequest req;
     QString reqURL = build_base_req_string().append("/paste/new");
-    append_auth_str(&reqURL, true);
     req.setUrl(QUrl(QString("").append(reqURL)));
-    req.setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
-    QByteArray postData = text.toUtf8();
-    req.setHeader(QNetworkRequest::ContentLengthHeader, postData.length());
+    req.setRawHeader(QString("x-api-key").toUtf8(), AUTH_TOKEN.toUtf8());
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonDocument doc = ModelSerialize::get_paste_form("Horus Paste", text);
+    QByteArray postData = doc.toJson(QJsonDocument::Compact);
 
     QNetworkReply *reply = gmgr->post(req, postData);
-    // It's only text, we may add this later but it shouldn't be necessary.
-    //QObject::connect(reply, SIGNAL(uploadProgress(qint64,qint64), this, SLOT(uploadProgressSlot(qint64,qint64)));
 }
 
 void HorusUploader::fileUploadComplete(QNetworkReply *reply){
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if(statusCode == 201){
-        QString location("http");
-        if(sslOn){ location += "s"; }
-        location += "://";
-        location += SERVER_URL;
-        location += ":";
-        location += SERVER_PORT;
-        location += QString(reply->rawHeader(QByteArray("Location")));
+        QString location = build_base_req_string();
+        QTextStream(stdout) << "REPLY " << reply->readAll() << endl;
+        location += QString(reply->rawHeader("Location"));
+        emit uploadCompleted(location);
 
-        emit uploadCompleted(QString(reply->readAll()));
     }else{
         QUrlQuery q(reply->request().url());
         emit uploadFailed("Upload failed. Check your license key!");
@@ -215,7 +210,7 @@ QString HorusUploader::get_auth_str() {
 }
 
 void HorusUploader::checkLatestVersion(){
-    QString reqURL = build_base_req_string().append("/version/");
+    QString reqURL = build_base_req_string().append("/meta/version");
     QEventLoop el;
     QNetworkAccessManager manager;
     QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));

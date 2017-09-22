@@ -10,10 +10,11 @@
 #include <QLabel>
 #include <QStringList>
 
-UpdateDownloadDialog::UpdateDownloadDialog(QString url, QWidget *parent) :
+UpdateDownloadDialog::UpdateDownloadDialog(QString url, QString authtoken, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::UpdateDownloadDialog),
-    reqURL(url)
+    reqURL(url),
+    AUTH_TOKEN(authtoken)
 {
     ui->setupUi(this);
     ui->btnRestart->setVisible(false);
@@ -53,6 +54,7 @@ void UpdateDownloadDialog::progressUpdate(qint64 bytesReceived, qint64 bytesTota
 
 void UpdateDownloadDialog::downloadUpdate(){
     QNetworkRequest req(QUrl(QString("").append(reqURL)));
+    req.setRawHeader(QString("x-api-key").toUtf8(), AUTH_TOKEN.toUtf8());
     QNetworkReply *reply = manager->get(req);
     reply->setParent(this);
     connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(progressUpdate(qint64, qint64)));

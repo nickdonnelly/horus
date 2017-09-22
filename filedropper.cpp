@@ -72,8 +72,13 @@ void FileDropper::fileDropped(){
     QString actualData = QString(data->data("text/uri-list")).replace("%20", " ").trimmed();
     if(actualData.length() > 0 && actualData.startsWith("file://")){
         settings->sync();
+        QTextStream(stdout) << "FILE " << actualData << endl;
+#ifdef Q_OS_WIN
         actualData.remove("file:///"); // yay windows
-        actualData.remove("file://");
+#else
+        actualData.remove("file://"); // Keep the first slash so keep the path from root.
+#endif
+
         QMessageBox *box = new QMessageBox();
         box->setWindowIcon(QIcon(":/res/horus.png"));
         box->setIconPixmap(QPixmap(":/res/filedrop.png"));

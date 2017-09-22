@@ -266,7 +266,11 @@ void Horus::versionStringReturned(QString version){
 
         if(res == QMessageBox::Yes){
             sets->sync();
-            UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog("https://horus.donnelly.cc/getlatestversion/?license_key=" + sets->value("authToken", "").toString() + "&platform=" + platformString);
+            QString reqStr = uploader->build_base_req_string();
+            reqStr += "/meta/get_latest";
+            reqStr += platformString;
+            UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog(
+                        reqStr, sets->value("authToken", "").toString());
             downloadDialog->setWindowIcon(main_icon);
             downloadDialog->show();
         }

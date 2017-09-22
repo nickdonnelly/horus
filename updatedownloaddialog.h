@@ -13,7 +13,7 @@ class UpdateDownloadDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit UpdateDownloadDialog(QString url, QWidget *parent = 0);
+    explicit UpdateDownloadDialog(QString url, QString authtoken, QWidget *parent = 0);
     ~UpdateDownloadDialog();
 
 signals:
@@ -30,6 +30,7 @@ private:
     QByteArray downloadedData;
     QString reqURL;
     QString update_dir_str;
+    QString AUTH_TOKEN;
 
     void downloadUpdate();
 
