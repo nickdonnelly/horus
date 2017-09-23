@@ -129,8 +129,8 @@ void HorusUploader::uploadFile(QString filename){
         toUpload.open(QIODevice::ReadOnly);
 
         if(toUpload.size() > 10485760){ // 10mb
-            emit uploadFailed("File: " + filename + " larger than 10MB! Upload aborted.");
-            return;
+            //emit uploadFailed("File: " + filename + " larger than 10MB! Upload aborted.");
+            //return;
         }else if(toUploadInfo.isDir()){
             emit uploadFailed("File: " + filename + " is a directory! Upload aborted.");
             return;

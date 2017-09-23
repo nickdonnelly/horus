@@ -39,6 +39,7 @@ private slots:
 
 private:
     void createTrayIcon();
+    void showChangelogs();
     bool firstTime;
     QList<QScreen*> screens;
     QList<QMainWindow*> windows;

@@ -30,6 +30,11 @@ Horus::Horus(){
     fileDropper = new FileDropper(sets);
     textDropper = new TextDropper(sets);
 
+    if(sets->value("firstLaunchPostUpdate", false).toBool()){
+        showChangelogs();
+        sets->setValue("firstLaunchPostUpdate", true);
+    }
+
     connect(textDropper, SIGNAL(complete(QString)), this, SLOT(uploadComplete(QString)));
     connect(textDropper, SIGNAL(failure(QString)), this, SLOT(uploadFailed(QString)));
     createTrayIcon();
@@ -275,6 +280,12 @@ void Horus::versionStringReturned(QString version){
             downloadDialog->show();
         }
     }
+}
+
+void Horus::showChangelogs(){
+    QString url_base = uploader->build_base_req_string();
+    url_base += "/meta/changelogs";
+    QDesktopServices::openUrl(url_base);
 }
 
 void Horus::screenWindowClosed(){

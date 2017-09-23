@@ -1,6 +1,7 @@
 #include "updatedownloaddialog.h"
 #include "ui_updatedownloaddialog.h"
 #include <QNetworkRequest>
+#include <QSettings>
 #include <QNetworkAccessManager>
 #include <QCoreApplication>
 #include <QNetworkReply>
@@ -88,6 +89,9 @@ void UpdateDownloadDialog::attemptExtract(){
     QTextStream(stdout) << procStr << " end " << endl;
     int exitCode = proc.execute(procStr);
     if(exitCode == 0){
+        QSettings * sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
+        sets->setValue("firstLaunchPostUpdate", true);
+        sets->sync();
         // success
         ui->lblDownload->setText("Restart Horus for the update to take effect.");
         ui->btnRestart->setVisible(true);
