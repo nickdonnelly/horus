@@ -281,6 +281,7 @@ void EditImageWindow::clearPressed(){
     scene->clearDrawing();
 }
 
+// TODO: Make this font/color editable so that it isnt always ugly and red.
 void EditImageWindow::addTextPressed(){
     scene->addNewText("New Text. Click to edit.", QPointF(0, 0));
 }

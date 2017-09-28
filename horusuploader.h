@@ -19,6 +19,7 @@ public:
     void checkLatestVersion();
     void resetCreds(QString serverURL, QString serverPort, QString authToken, bool useSSL);
     QString build_base_req_string();
+    QString build_base_browser_string();
     QString get_auth_str();
 
 private:

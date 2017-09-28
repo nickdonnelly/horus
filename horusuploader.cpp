@@ -39,6 +39,8 @@ HorusUploader::HorusUploader(QSettings * sets)
     QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
 }
 
+/// Generates the base URL string (without a trailing slash) for the object's server for use in building
+/// API endpoints.
 QString HorusUploader::build_base_req_string(){
     QString reqURL("");
     reqURL += "http";
@@ -47,6 +49,17 @@ QString HorusUploader::build_base_req_string(){
     return reqURL;
 }
 
+/// Does the same thing as build_base_req_string but abstracts away the
+/// port number as it shouldn't be required to open the URL in the browser.
+QString build_base_browser_string(){
+    QString reqURL("");
+    reqURL += "http";
+    if(sslOn){ reqURL += "s"; }
+    reqURL += "://" + SERVER_URL;
+    return reqURL;
+}
+
+/// [DEPRECATED] Appends the authentication string required by the server for versions below 1.3.1. Do not use.
 void HorusUploader::append_auth_str(QString * req, bool firstParam){
     if(firstParam){
         req->append("?license_key=" + AUTH_TOKEN);
@@ -55,6 +68,8 @@ void HorusUploader::append_auth_str(QString * req, bool firstParam){
     }
 }
 
+/// Catch all for uploading images and videos. Internal use only (only called by member functions that the client
+/// class invokes to upload each individual media type).
 void HorusUploader::upload(bool isVideo, QString filename){
     filename = filename.trimmed();
     QFile toUpload(filename);
@@ -120,6 +135,9 @@ void HorusUploader::upload(bool isVideo, QString filename){
     }
 }
 
+
+/// Uploads a single file to the server (which in turn stores it on s3) after cleaning the URL.
+/// Internal use for the same reasons as previous.
 void HorusUploader::uploadFile(QString filename){
     filename = filename.trimmed();
     QFile toUpload(filename);
@@ -147,15 +165,13 @@ void HorusUploader::uploadFile(QString filename){
         QByteArray postData = toUpload.readAll();
         toUpload.close();
 
-        // Fire request and wait for completion
-        QTextStream(stdout) << " Making request to " << reqURL << endl;
-        QTextStream(stdout) << " HEADER " << req.header(QNetworkRequest::ContentDispositionHeader).toString() << endl;
-
         QNetworkReply *reply = gmgr->post(req, postData);
         QObject::connect(reply, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(uploadProgressSlot(qint64,qint64)));
     }
 }
 
+/// Uploads pastes. Generic escaping is processed before the request is sent and the server will HTML escape any pastes
+/// that contain browser-executable code like javascript.
 void HorusUploader::sendText(QString text){
     QEventLoop el;
     QNetworkAccessManager nMgr;
@@ -176,7 +192,6 @@ void HorusUploader::fileUploadComplete(QNetworkReply *reply){
     int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if(statusCode == 201){
         QString location = build_base_req_string();
-        QTextStream(stdout) << "REPLY " << reply->readAll() << endl;
         location += QString(reply->rawHeader("Location"));
         emit uploadCompleted(location);
 
@@ -209,6 +224,7 @@ QString HorusUploader::get_auth_str() {
     return url;
 }
 
+// TODO: get rid of the event loop here, this is way too much overhead for a version string request
 void HorusUploader::checkLatestVersion(){
     QString reqURL = build_base_req_string().append("/meta/version");
     QEventLoop el;

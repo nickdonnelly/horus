@@ -32,7 +32,7 @@ Horus::Horus(){
 
     if(sets->value("firstLaunchPostUpdate", false).toBool()){
         showChangelogs();
-        sets->setValue("firstLaunchPostUpdate", true);
+        sets->setValue("firstLaunchPostUpdate", false);
     }
 
     connect(textDropper, SIGNAL(complete(QString)), this, SLOT(uploadComplete(QString)));
