@@ -51,7 +51,7 @@ QString HorusUploader::build_base_req_string(){
 
 /// Does the same thing as build_base_req_string but abstracts away the
 /// port number as it shouldn't be required to open the URL in the browser.
-QString build_base_browser_string(){
+QString HorusUploader::build_base_browser_string(){
     QString reqURL("");
     reqURL += "http";
     if(sslOn){ reqURL += "s"; }

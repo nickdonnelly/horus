@@ -39,7 +39,11 @@ SOURCES += \
     uploadfileswindow.cpp \
     textdropper.cpp \
     horustextitem.cpp \
-    modelserialize.cpp
+    modelserialize.cpp \
+    expirationselectiondialog.cpp \
+    horusstyle.cpp \
+    horussettings.cpp \
+    editsettingswindow.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -55,19 +59,26 @@ HEADERS += \
     uploadfileswindow.h \
     textdropper.h \
     horustextitem.h \
-    modelserialize.h
+    modelserialize.h \
+    expirationselectiondialog.h \
+    horusstyle.h \
+    horussettings.h \
+    editsettingswindow.h
 
 FORMS += \
         screenwindow.ui \
     settingsdialog.ui \
     editimagewindow.ui \
     updatedownloaddialog.ui \
-    uploadfileswindow.ui
+    uploadfileswindow.ui \
+    expirationselectiondialog.ui \
+    editsettingswindow.ui
 
 DISTFILES += \
     res/edit_last.png \
     res/paste.png \
-    res/manage.png
+    res/manage.png \
+    master.qss
 
 RESOURCES += \
     horus-resources.qrc

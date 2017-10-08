@@ -3,7 +3,9 @@
 #include <updatedownloaddialog.h>
 #include <screenwindow.h>
 #include <editimagewindow.h>
+#include <editsettingswindow.h>
 #include <horusuploader.h>
+#include <horussettings.h>
 #include <QInputDialog>
 #include <QApplication>
 #include <QMessageBox>
@@ -20,13 +22,14 @@
 #include <QIcon>
 #include <QClipboard>
 
-
-const QString Horus::HORUS_VERSION = QString("2.0.0");
+const QString Horus::HORUS_VERSION = QString("2.0.1");
 
 Horus::Horus(){
+    EditSettingsWindow *test = new EditSettingsWindow();
+    test->show();
     main_icon = QIcon(":/res/horus.png");
     recording_icon = QIcon(":/res/horus_recording.png");
-    sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
+    sets = new HorusSettings();
     fileDropper = new FileDropper(sets);
     textDropper = new TextDropper(sets);
 

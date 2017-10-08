@@ -10,5 +10,6 @@
         <file>res/dropfile.png</file>
         <file>res/paste.png</file>
         <file>res/manage.png</file>
+        <file>res/master.qss</file>
     </qresource>
 </RCC>

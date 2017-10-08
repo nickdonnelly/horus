@@ -79,6 +79,7 @@ void SettingsDialog::saveSettings(QSettings * settings){
     settings->setValue("useSSL", ui->cbSSL->isChecked());
 
     settings->sync();
+
 }
 
 void SettingsDialog::on_buttonBox_clicked(QAbstractButton *button)
