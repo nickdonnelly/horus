@@ -20,6 +20,7 @@ private slots:
     void switchPageLocal();
     void switchPageServer();
     void switchPageAbout();
+    void selectLocalFolder();
 private:
 
     Ui::EditSettingsWindow *ui;
