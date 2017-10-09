@@ -2,6 +2,7 @@
 #define EDITSETTINGSWINDOW_H
 
 #include <QMainWindow>
+#include <QSettings>
 
 namespace Ui {
 class EditSettingsWindow;
@@ -12,8 +13,11 @@ class EditSettingsWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit EditSettingsWindow(QWidget *parent = 0);
+    explicit EditSettingsWindow(QSettings *settings, QWidget *parent = 0);
     ~EditSettingsWindow();
+
+private:
+    void setUIElementValues();
 
 private slots:
     void switchPageUpload();
@@ -22,6 +26,7 @@ private slots:
     void switchPageAbout();
     void selectLocalFolder();
 private:
+    QSettings * sets;
 
     Ui::EditSettingsWindow *ui;
 };

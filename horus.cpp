@@ -25,11 +25,13 @@
 const QString Horus::HORUS_VERSION = QString("2.0.1");
 
 Horus::Horus(){
-    EditSettingsWindow *test = new EditSettingsWindow();
-    test->show();
     main_icon = QIcon(":/res/horus.png");
     recording_icon = QIcon(":/res/horus_recording.png");
     sets = new HorusSettings();
+
+    EditSettingsWindow *test = new EditSettingsWindow(sets);
+    test->show();
+
     fileDropper = new FileDropper(sets);
     textDropper = new TextDropper(sets);
 
