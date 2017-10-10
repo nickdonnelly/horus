@@ -16,6 +16,9 @@ public:
     explicit EditSettingsWindow(QSettings *settings, QWidget *parent = 0);
     ~EditSettingsWindow();
 
+signals:
+    void notifyUpdated();
+
 private:
     void setUIElementValues();
 
@@ -25,6 +28,7 @@ private slots:
     void switchPageServer();
     void switchPageAbout();
     void selectLocalFolder();
+    void saveAllAndClose();
 private:
     QSettings * sets;
 
