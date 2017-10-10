@@ -38,6 +38,7 @@ void EditSettingsWindow::saveAllAndClose() {
     QString saveDirectory, serverURL, serverPort, lkey;
     bool uploadImages, uploadVideos, uploadZIP;
     bool askTitleImg, askTitleVid, askTitleFile;
+    bool askExpImg, askExpVid, askExpFile;
 
     if(ui->rbCopyURL->isChecked()){
         copyMode = "url";
@@ -56,7 +57,9 @@ void EditSettingsWindow::saveAllAndClose() {
     askTitleVid = ui->rbTitleVid->isChecked();
     askTitleFile = ui->rbTitleFile->isChecked();
 
-    saveDirectory = ui->leSaveFolder->text();
+    askExpImg = ui->rbExpImg->isChecked();
+    askExpVid = ui->rbExpVid->isChecked();
+    askExpFile = ui->rbExpFile->isChecked();
 
     serverURL = ui->leServerAddr->text();
     serverPort = ui->leServerPort->text();
@@ -69,11 +72,14 @@ void EditSettingsWindow::saveAllAndClose() {
 
     sets->setValue("image/upload", uploadImages);
     sets->setValue("image/askTitle", askTitleImg);
+    sets->setValue("image/askExp", askExpImg);
 
     sets->setValue("video/upload", uploadVideos);
     sets->setValue("video/askTitle", askTitleVid);
+    sets->setValue("video/askExp", askExpVid);
 
     sets->setValue("file/askTitle", askTitleFile);
+    sets->setValue("file/askExp", askExpFile);
 
     if(uploadZIP)
         sets->setValue("file/multipleUpload", "zip");
@@ -106,6 +112,10 @@ void EditSettingsWindow::setUIElementValues() {
     bool askTitleVid = sets->value("video/askTitle", false).toBool();
     bool askTitleFile = sets->value("file/askTitle", false).toBool();
 
+    bool askExpImg = sets->value("image/askExp", false).toBool();
+    bool askExpVid = sets->value("video/askExp", false).toBool();
+    bool askExpFile = sets->value("file/askExp", false).toBool();
+
     bool uploadZIP = sets->value("file/multipleUpload", "nozip").toString().toLower() == "zip";
 
     QString serverURL = sets->value("auth/serverURL", "").toString();
@@ -119,6 +129,10 @@ void EditSettingsWindow::setUIElementValues() {
     if(askTitleImg) ui->rbTitleImg->setChecked(true);
     if(askTitleVid) ui->rbTitleVid->setChecked(true);
     if(askTitleFile) ui->rbTitleFile->setChecked(true);
+
+    if(askExpImg) ui->rbExpImg->setChecked(true);
+    if(askExpVid) ui->rbExpVid->setChecked(true);
+    if(askExpFile) ui->rbExpFile->setChecked(true);
 
     if(copyMode == "url"){
         ui->rbCopyURL->setChecked(true);

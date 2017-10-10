@@ -304,7 +304,7 @@ QScrollBar::handle:vertical {
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-74</y>
+               <y>0</y>
                <width>431</width>
                <height>656</height>
               </rect>
@@ -435,7 +435,7 @@ QScrollBar::handle:vertical {
                        <string>Auto Upload Images</string>
                       </property>
                       <property name="checked">
-                       <bool>true</bool>
+                       <bool>false</bool>
                       </property>
                       <property name="autoExclusive">
                        <bool>false</bool>
@@ -538,9 +538,6 @@ QScrollBar::handle:vertical {
                         <widget class="QRadioButton" name="rbTitleImg">
                          <property name="text">
                           <string>Images</string>
-                         </property>
-                         <property name="checked">
-                          <bool>true</bool>
                          </property>
                          <property name="autoExclusive">
                           <bool>false</bool>
@@ -656,9 +653,6 @@ QScrollBar::handle:vertical {
                         <widget class="QRadioButton" name="rbExpImg">
                          <property name="text">
                           <string>Images</string>
-                         </property>
-                         <property name="checked">
-                          <bool>true</bool>
                          </property>
                          <property name="autoExclusive">
                           <bool>false</bool>
