@@ -214,11 +214,7 @@ void HorusUploader::sendText(QString text){
     QJsonDocument doc = get_paste_form(title, text);
     QByteArray postData = doc.toJson(QJsonDocument::Compact);
 
-    QNetworkReply *reply = gmgr->post(req, postData);
-    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    if(status != 201){
-        emit uploadFailed("Could not upload paste, server returned status " + status);
-    }
+    gmgr->post(req, postData);
 }
 
 void HorusUploader::fileUploadComplete(QNetworkReply *reply){
