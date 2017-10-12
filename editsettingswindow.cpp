@@ -156,8 +156,8 @@ void EditSettingsWindow::setUIElementValues() {
 void EditSettingsWindow::selectLocalFolder()
 {
     QFileDialog d(this);
-    QString directory = d.getExistingDirectory(this, QString(""), QString("/"));
-    QTextStream(stdout) << directory << endl;
+    QString directory = d.getExistingDirectory(this, QString("Select A Folder..."));
+    ui->leSaveFolder->setText(directory);
 }
 
 void EditSettingsWindow::switchPageUpload()

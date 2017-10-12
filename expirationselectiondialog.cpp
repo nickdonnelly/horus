@@ -81,7 +81,7 @@ void ExpirationSelectionDialog::confirmCurrent()
     accept();
 }
 
-ExpirationSelectionDialog::ExpirationDuration ExpirationSelectionDialog::GetResult() {
+ExpirationDuration ExpirationSelectionDialog::GetResult() {
     ExpirationDuration d;
     d.dur = sel;
     d.multiplier = ui->slider->value();

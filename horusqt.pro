@@ -39,11 +39,11 @@ SOURCES += \
     uploadfileswindow.cpp \
     textdropper.cpp \
     horustextitem.cpp \
-    modelserialize.cpp \
     expirationselectiondialog.cpp \
     horusstyle.cpp \
     horussettings.cpp \
-    editsettingswindow.cpp
+    editsettingswindow.cpp \
+    models.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -59,11 +59,11 @@ HEADERS += \
     uploadfileswindow.h \
     textdropper.h \
     horustextitem.h \
-    modelserialize.h \
     expirationselectiondialog.h \
     horusstyle.h \
     horussettings.h \
-    editsettingswindow.h
+    editsettingswindow.h \
+    models.h
 
 FORMS += \
         screenwindow.ui \

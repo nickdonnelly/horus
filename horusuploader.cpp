@@ -1,6 +1,6 @@
 #include "horus.h"
 #include "horusuploader.h"
-#include "modelserialize.h"
+#include "models.h"
 #include <QString>
 #include <QFile>
 #include <QFileInfo>
@@ -22,21 +22,26 @@ HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString auth
     SERVER_URL = serverURL;
     SERVER_PORT = serverPort;
     AUTH_TOKEN = authToken;
-    ASK_TITLE = false;
     gmgr = new QNetworkAccessManager(this);
     QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
 }
 
-HorusUploader::HorusUploader(QSettings * sets)
+HorusUploader::HorusUploader(QSettings * settings)
 {
+    sets = settings;
     sets->sync();
     sslOn = sets->value("useSSL", false).toBool();
     SERVER_URL = sets->value("serverURL", "").toString();
     SERVER_PORT = sets->value("serverPort", "").toString();
     AUTH_TOKEN = sets->value("authToken", "").toString();
-    ASK_TITLE = sets->value("askTitle", false).toBool();
+
+    ask_title_image = sets->value("image/askTitle", false).toBool();
+    ask_title_video = sets->value("video/askTitle", false).toBool();
+    ask_title_paste = sets->value("paste/askTitle", false).toBool();
+
     gmgr = new QNetworkAccessManager(this);
     QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
+    QObject::connect(sets, SIGNAL(notifyUpdated()), this, SLOT(settingsUpdated()));
 }
 
 /// Generates the base URL string (without a trailing slash) for the object's server for use in building
@@ -87,11 +92,11 @@ void HorusUploader::upload(bool isVideo, QString filename){
             reqURL = build_base_req_string().append("/image/new");
         }
 
-        //append_auth_str(&reqURL, true);
-        if(ASK_TITLE) {
+        if(isVideo && ask_title_video || (!isVideo && ask_title_image)) {
             bool ok;
             QInputDialog * dialog = new QInputDialog();
             dialog->move(QApplication::desktop()->screenGeometry().center() - dialog->pos()/2); // center it
+
             QString _title = dialog->getText(NULL, "Image Title", "Enter a title for the image.", QLineEdit::Normal, "Horus Screenshot", &ok);
             dialog->deleteLater();
             title = _title;
@@ -182,7 +187,16 @@ void HorusUploader::sendText(QString text){
     req.setRawHeader(QString("x-api-key").toUtf8(), AUTH_TOKEN.toUtf8());
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    QJsonDocument doc = ModelSerialize::get_paste_form("Horus Paste", text);
+    QString title = "Horus Screenshot";
+    if(ask_title_paste){
+        bool ok;
+        QInputDialog * dialog = new QInputDialog();
+        dialog->move(QApplication::desktop()->screenGeometry().center() - dialog->pos()/2); // center it
+        QString _title = dialog->getText(NULL, "Image Title", "Enter a title for the image.", QLineEdit::Normal, "Horus Screenshot", &ok);
+        dialog->deleteLater();
+        title = _title;
+    }
+    QJsonDocument doc = get_paste_form("Horus Paste", text);
     QByteArray postData = doc.toJson(QJsonDocument::Compact);
 
     QNetworkReply *reply = gmgr->post(req, postData);
@@ -249,4 +263,19 @@ void HorusUploader::resetCreds(QString serverURL, QString serverPort, QString au
     SERVER_URL = serverURL;
     SERVER_PORT = serverPort;
     AUTH_TOKEN = authToken;
+}
+
+/// Just reinitializes everything done in the constructor to prevent the need to reinstantiate.
+void HorusUploader::settingsUpdated()
+{
+    sets->sync();
+    sslOn = sets->value("useSSL", false).toBool();
+    SERVER_URL = sets->value("serverURL", "").toString();
+    SERVER_PORT = sets->value("serverPort", "").toString();
+    AUTH_TOKEN = sets->value("authToken", "").toString();
+
+    ask_title_image = sets->value("image/askTitle", false).toBool();
+    ask_title_video = sets->value("video/askTitle", false).toBool();
+    ask_title_paste = sets->value("paste/askTitle", false).toBool();
+
 }

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QDateTime>
+#include <models.h>
 
 namespace Ui {
 class ExpirationSelectionDialog;
@@ -15,16 +16,7 @@ class ExpirationSelectionDialog : public QDialog
 public:
     explicit ExpirationSelectionDialog(QWidget *parent = 0);
     ~ExpirationSelectionDialog();
-    enum Duration {
-        Minute,
-        Hour,
-        Day
-    };
-    struct ExpirationDuration {
-        Duration dur;
-        int multiplier;
-    };
-    ExpirationDuration GetResult();
+        ExpirationDuration GetResult();
 
 public slots:
     void minPressed(bool);
