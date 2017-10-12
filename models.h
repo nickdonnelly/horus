@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+// Ignore the warnings from this. It's used in HorusUploader.
 static QJsonDocument get_paste_form(QString title, QString paste_data){
     QJsonObject serialized;
     serialized.insert("title", title);

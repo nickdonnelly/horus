@@ -29,8 +29,11 @@ Horus::Horus(){
     recording_icon = QIcon(":/res/horus_recording.png");
     sets = new HorusSettings();
 
-    EditSettingsWindow *test = new EditSettingsWindow(sets);
-    test->show();
+
+    // TEST
+        EditSettingsWindow *test = new EditSettingsWindow(sets);
+        test->show();
+    // /TEST
 
     fileDropper = new FileDropper(sets);
     textDropper = new TextDropper(sets);
@@ -40,6 +43,7 @@ Horus::Horus(){
         sets->setValue("firstLaunchPostUpdate", false);
     }
 
+    connect(sets, SIGNAL(notifyUpdated()), this, SLOT(setsUpdated()));
     connect(textDropper, SIGNAL(complete(QString)), this, SLOT(uploadComplete(QString)));
     connect(textDropper, SIGNAL(failure(QString)), this, SLOT(uploadFailed(QString)));
     createTrayIcon();
@@ -49,7 +53,6 @@ Horus::Horus(){
     setWindowIcon(main_icon);
     trayIcon->show();
 
-    //uploader = new HorusUploader(sets->value("serverURL", "").toString(), sets->value("serverPort", "80").toString(), sets->value("authToken", "").toString(), sets->value("useSSL", false).toBool());
     uploader = new HorusUploader(sets);
     connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
     connect(uploader, SIGNAL(uploadFailed(QString)), this, SLOT(uploadFailed(QString)));
@@ -300,4 +303,8 @@ void Horus::screenWindowClosed(){
         win->close();
         win->deleteLater();
     }
+}
+
+void Horus::setsUpdated(){
+    // TODO
 }

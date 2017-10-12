@@ -30,9 +30,8 @@ private slots:
     void selectLocalFolder();
     void saveAllAndClose();
 private:
-    QSettings * sets;
-
     Ui::EditSettingsWindow *ui;
+    QSettings * sets;
 };
 
 #endif // EDITSETTINGSWINDOW_H

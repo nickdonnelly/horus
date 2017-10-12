@@ -36,6 +36,7 @@ private slots:
     void recordingFinished(int exitcode);
     void versionStringReturned(QString version);
     void screenWindowClosed();
+    void setsUpdated();
 
 private:
     void createTrayIcon();

@@ -1,8 +1,8 @@
-#include "screenwindow.h"
+#include <screenwindow.h>
+#include <horus.h>
 #include <horusuploader.h>
 #include <imagehelper.h>
-#include "ui_screenwindow.h"
-#include "qdesktopwidget.h"
+#include <ui_screenwindow.h>
 #include "qtextstream.h"
 #include <QInputDialog>
 #include <QDesktopWidget>
@@ -14,6 +14,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QScreen>
+#include <QSettings>
 #include <QDateTime>
 #include <QStandardPaths>
 #include <QThread>
@@ -232,10 +233,21 @@ void ScreenWindow::takeScreenshot(){
 
 
 QString ScreenWindow::getImagesDirectory(){
-    if(!QDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus").exists()){
-        QDir().mkdir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus");
+    QSettings sets("horus-settings.ini", QSettings::IniFormat);
+    QString setDir = sets.value("saveDirectory", "").toString();
+
+    if(!QDir(setDir).exists()){
+        if(!QDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus")
+                .exists()){
+
+            QDir().mkdir(
+                  QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus");
+        }
+        return QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus";
+    }else{
+        return setDir;
     }
-    return QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus";
+
 }
 
 QString ScreenWindow::getAppSaveDirectory(){
