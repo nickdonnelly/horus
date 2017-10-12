@@ -1,6 +1,7 @@
 #ifndef HORUSUPLOADER_H
 #define HORUSUPLOADER_H
 
+#include "models.h"
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -24,10 +25,12 @@ public:
 
 private:
     bool ask_title_image, ask_title_video, ask_title_paste;
+    bool ask_exp_image, ask_exp_video, ask_exp_paste;
     QString SERVER_URL, SERVER_PORT, AUTH_TOKEN;
     QNetworkAccessManager * gmgr;
     QSettings * sets;
     void append_auth_str(QString * req, bool firstParam);
+    ExpirationDuration getExpirationDuration();
     bool sslOn;
 
 public slots:

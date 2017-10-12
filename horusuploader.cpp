@@ -1,5 +1,6 @@
 #include "horus.h"
 #include "horusuploader.h"
+#include "expirationselectiondialog.h"
 #include "models.h"
 #include <QString>
 #include <QFile>
@@ -38,6 +39,10 @@ HorusUploader::HorusUploader(QSettings * settings)
     ask_title_image = sets->value("image/askTitle", false).toBool();
     ask_title_video = sets->value("video/askTitle", false).toBool();
     ask_title_paste = sets->value("paste/askTitle", false).toBool();
+
+    ask_exp_image = sets->value("image/askExp", false).toBool();
+    ask_exp_video = sets->value("video/askExp", false).toBool();
+    ask_exp_paste = sets->value("paste/askExp", false).toBool();
 
     gmgr = new QNetworkAccessManager(this);
     QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
@@ -85,23 +90,28 @@ void HorusUploader::upload(bool isVideo, QString filename){
         QObject::connect(&nMgr, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
 
 
-        QString reqURL, title;
+        QString reqURL;
+        ExpirationDuration dur;
         if(isVideo) {
             reqURL = build_base_req_string().append("/video/new");
         }else{
             reqURL = build_base_req_string().append("/image/new");
         }
 
-        if(isVideo && ask_title_video || (!isVideo && ask_title_image)) {
+
+        if((isVideo && ask_exp_video) || (!isVideo && ask_exp_image)) {
+            dur = getExpirationDuration();
+        }
+
+        if((isVideo && ask_title_video) || (!isVideo && ask_title_image)) {
             bool ok;
             QInputDialog * dialog = new QInputDialog();
             dialog->move(QApplication::desktop()->screenGeometry().center() - dialog->pos()/2); // center it
 
-            QString _title = dialog->getText(NULL, "Image Title", "Enter a title for the image.", QLineEdit::Normal, "Horus Screenshot", &ok);
+            QString _title = dialog->getText(NULL, "Resource Title", "Enter a title for the resource.", QLineEdit::Normal, "Horus Upload", &ok);
             dialog->deleteLater();
-            title = _title;
-        } else {
-            title = "";
+            reqURL.append("/");
+            reqURL.append(_title.toLatin1());
         }
         QNetworkRequest req(QUrl(QString("").append(reqURL)));
         QByteArray imgData = toUpload.readAll();
@@ -183,23 +193,32 @@ void HorusUploader::sendText(QString text){
     QObject::connect(&nMgr, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
     QNetworkRequest req;
     QString reqURL = build_base_req_string().append("/paste/new");
-    req.setUrl(QUrl(QString("").append(reqURL)));
     req.setRawHeader(QString("x-api-key").toUtf8(), AUTH_TOKEN.toUtf8());
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    QString title = "Horus Screenshot";
+    QString title = "Horus Paste";
     if(ask_title_paste){
         bool ok;
         QInputDialog * dialog = new QInputDialog();
         dialog->move(QApplication::desktop()->screenGeometry().center() - dialog->pos()/2); // center it
-        QString _title = dialog->getText(NULL, "Image Title", "Enter a title for the image.", QLineEdit::Normal, "Horus Screenshot", &ok);
+        QString _title = dialog->getText(NULL, "Paste Title", "Enter a title for the image.", QLineEdit::Normal, "Horus Paste", &ok);
         dialog->deleteLater();
         title = _title;
     }
-    QJsonDocument doc = get_paste_form("Horus Paste", text);
+    ExpirationDuration dur;
+    if(ask_exp_paste) {
+        dur = getExpirationDuration();
+    }
+
+    req.setUrl(QUrl(QString("").append(reqURL)));
+    QJsonDocument doc = get_paste_form(title, text);
     QByteArray postData = doc.toJson(QJsonDocument::Compact);
 
     QNetworkReply *reply = gmgr->post(req, postData);
+    int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    if(status != 201){
+        emit uploadFailed("Could not upload paste, server returned status " + status);
+    }
 }
 
 void HorusUploader::fileUploadComplete(QNetworkReply *reply){
@@ -265,6 +284,14 @@ void HorusUploader::resetCreds(QString serverURL, QString serverPort, QString au
     AUTH_TOKEN = authToken;
 }
 
+/// Need to add error handling for this.
+ExpirationDuration HorusUploader::getExpirationDuration()
+{
+    ExpirationSelectionDialog diag;
+    diag.exec();
+    return diag.GetResult(); // this will fail if they just exit the window
+}
+
 /// Just reinitializes everything done in the constructor to prevent the need to reinstantiate.
 void HorusUploader::settingsUpdated()
 {
@@ -278,4 +305,7 @@ void HorusUploader::settingsUpdated()
     ask_title_video = sets->value("video/askTitle", false).toBool();
     ask_title_paste = sets->value("paste/askTitle", false).toBool();
 
+    ask_exp_image = sets->value("image/askExp", false).toBool();
+    ask_exp_video = sets->value("video/askExp", false).toBool();
+    ask_exp_paste = sets->value("paste/askExp", false).toBool();
 }
