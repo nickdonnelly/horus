@@ -28,7 +28,6 @@ SOURCES += \
         main.cpp \
         screenwindow.cpp \
     horus.cpp \
-    settingsdialog.cpp \
     horusuploader.cpp \
     imagehelper.cpp \
     editimagewindow.cpp \
@@ -48,7 +47,6 @@ SOURCES += \
 HEADERS += \
         screenwindow.h \
     horus.h \
-    settingsdialog.h \
     horusuploader.h \
     imagehelper.h \
     editimagewindow.h \
@@ -67,7 +65,6 @@ HEADERS += \
 
 FORMS += \
         screenwindow.ui \
-    settingsdialog.ui \
     editimagewindow.ui \
     updatedownloaddialog.ui \
     uploadfileswindow.ui \

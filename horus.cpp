@@ -29,18 +29,12 @@ Horus::Horus(){
     recording_icon = QIcon(":/res/horus_recording.png");
     sets = new HorusSettings();
 
-
-    // TEST
-        EditSettingsWindow *test = new EditSettingsWindow(sets);
-        test->show();
-    // /TEST
-
     fileDropper = new FileDropper(sets);
     textDropper = new TextDropper(sets);
 
-    if(sets->value("firstLaunchPostUpdate", false).toBool()){
+    if(sets->value("other/firstLaunchPostUpdate", false).toBool()){
         showChangelogs();
-        sets->setValue("firstLaunchPostUpdate", false);
+        sets->setValue("other/firstLaunchPostUpdate", false);
     }
 
     connect(sets, SIGNAL(notifyUpdated()), this, SLOT(setsUpdated()));
@@ -188,7 +182,7 @@ void Horus::openVideoWindowDur(){
 }
 
 void Horus::openSettingsWindow(){
-    SettingsDialog *sd = new SettingsDialog(sets);
+    EditSettingsWindow *sd = new EditSettingsWindow(sets);
     sd->setWindowIcon(main_icon);
     sd->show();
 }
