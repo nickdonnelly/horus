@@ -1,10 +1,12 @@
 #include "editsettingswindow.h"
 #include "screenwindow.h"
 #include "ui_editsettingswindow.h"
-#include <QFileDialog>
 #include <QIntValidator>
 #include <QSettings>
+#include <QStandardPaths>
+
 #include <QStackedWidget>
+#include <QFileDialog>
 #include <QLineEdit>
 #include <QRadioButton>
 
@@ -48,6 +50,8 @@ void EditSettingsWindow::saveAllAndClose() {
         copyMode = "none";
     }
 
+    saveDirectory = ui->leSaveFolder->text();
+
     uploadImages = ui->rbUplImg->isChecked();
     uploadVideos = ui->rbUplVid->isChecked();
 
@@ -67,8 +71,8 @@ void EditSettingsWindow::saveAllAndClose() {
 
 
     // *** SAVE SETTINGS ***
-    sets->setValue("general/copyMode", copyMode);
-    sets->setValue("general/saveDirectory", saveDirectory);
+    sets->setValue("other/copyMode", copyMode);
+    sets->setValue("other/saveDirectory", saveDirectory);
 
     sets->setValue("image/upload", uploadImages);
     sets->setValue("image/askTitle", askTitleImg);
@@ -100,8 +104,8 @@ void EditSettingsWindow::saveAllAndClose() {
 }
 
 void EditSettingsWindow::setUIElementValues() {
-    QString copyMode = sets->value("general/copyMode", "url").toString().toLower();
-    QString saveDirectory = sets->value("general/saveDirectory", ScreenWindow::getImagesDirectory()).toString();
+    QString copyMode = sets->value("other/copyMode", "url").toString().toLower();
+    QString saveDirectory = sets->value("other/saveDirectory", getSystemImagesFolder()).toString();
 
     // Auto Upload
     bool uploadImages = sets->value("image/upload", true).toBool();
@@ -178,4 +182,13 @@ void EditSettingsWindow::switchPageServer()
 void EditSettingsWindow::switchPageAbout()
 {
     ui->stackedWidget->setCurrentIndex(3);
+}
+
+QString EditSettingsWindow::getSystemImagesFolder() {
+    QString picPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus";
+    if(!QDir(picPath).exists()){
+        QDir().mkpath(picPath);
+    }
+
+    return picPath;
 }

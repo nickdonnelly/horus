@@ -21,6 +21,7 @@ signals:
 
 private:
     void setUIElementValues();
+    QString getSystemImagesFolder();
 
 private slots:
     void switchPageUpload();

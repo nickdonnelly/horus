@@ -21,7 +21,6 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
-
 ScreenWindow::ScreenWindow(QScreen* screen, HorusUploader *u, int vidDuration, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ScreenWindow),
@@ -234,20 +233,13 @@ void ScreenWindow::takeScreenshot(){
 
 QString ScreenWindow::getImagesDirectory(){
     QSettings sets("horus-settings.ini", QSettings::IniFormat);
-    QString setDir = sets.value("saveDirectory", "").toString();
+    QString picPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus";
+    QString setDir = sets.value("other/saveDirectory", picPath).toString();
 
     if(!QDir(setDir).exists()){
-        if(!QDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus")
-                .exists()){
-
-            QDir().mkdir(
-                  QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus");
-        }
-        return QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus";
-    }else{
-        return setDir;
+        QDir().mkdir(setDir);
     }
-
+    return setDir;
 }
 
 QString ScreenWindow::getAppSaveDirectory(){
