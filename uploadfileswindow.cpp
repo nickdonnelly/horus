@@ -2,6 +2,7 @@
 #include "ui_uploadfileswindow.h"
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QKeyEvent>
 #include <QLabel>
 #include <QStatusBar>
 #include <QMimeData>
@@ -12,7 +13,8 @@
 
 UploadFilesWindow::UploadFilesWindow(QStringList files, QSettings * sets, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::UploadFilesWindow)
+    ui(new Ui::UploadFilesWindow),
+    ctrlHeld(false)
 {
     setAcceptDrops(true);
     ui->setupUi(this);
@@ -110,10 +112,27 @@ void UploadFilesWindow::dragLeaveEvent(QDragLeaveEvent *evt){
 void UploadFilesWindow::dropEvent(QDropEvent *evt){
     evt->accept();
     const QMimeData* mimeData = evt->mimeData();
-    bool shouldRunStart = ui->lvFiles->count() == 0;
 
-    // if there's files
+    processMimeData(mimeData);
+}
+
+void UploadFilesWindow::keyPressEvent(QKeyEvent *evt){
+    if(evt->key() == Qt::Key_Control && evt->type() == QEvent::KeyPress) {
+        ctrlHeld = true;
+    }else if(evt->key() == Qt::Key_Control && evt->type() == QEvent::KeyRelease) {
+        ctrlHeld = false;
+    }else if(ctrlHeld && evt->key() == Qt::Key_V) {
+        QClipboard *clip = QApplication::clipboard();
+        const QMimeData *data = clip->mimeData();
+        processMimeData(data);
+    }
+    evt->accept();
+}
+
+
+void UploadFilesWindow::processMimeData(const QMimeData* mimeData){
     if(mimeData->hasUrls()){
+        bool startNext = ui->lvFiles->count() == 0;
         QList<QUrl> urls = mimeData->urls();
 
         for(int i = 0; i < urls.size(); i++){
@@ -123,6 +142,6 @@ void UploadFilesWindow::dropEvent(QDropEvent *evt){
         }
 
         // If there are files in the lv, we don't want to cancel an upload.
-        if(shouldRunStart) startNextFile();
+        if(startNext) startNextFile();
     }
 }

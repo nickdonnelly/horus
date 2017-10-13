@@ -4,6 +4,7 @@
 #include <horusuploader.h>
 #include <QMainWindow>
 #include <QDragEnterEvent>
+#include <QKeyEvent>
 #include <QDragLeaveEvent>
 #include <QDropEvent>
 #include <QStringList>
@@ -36,15 +37,18 @@ private:
     QStringList filelist;
     QString url, port, token;
     bool usessl;
+    bool ctrlHeld;
     QSettings * settings;
     HorusUploader * uploader;
 
     void startNextFile();
+    void processMimeData(const QMimeData *mimeData);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *evt);
     void dragLeaveEvent(QDragLeaveEvent *evt);
     void dropEvent(QDropEvent *evt);
+    void keyPressEvent(QKeyEvent *evt);
 };
 
 #endif // UPLOADFILESWINDOW_H

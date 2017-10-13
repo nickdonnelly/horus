@@ -72,7 +72,6 @@ void FileDropper::fileDropped(){
     QString actualData = QString(data->data("text/uri-list")).replace("%20", " ").trimmed();
     if(actualData.length() > 0 && actualData.startsWith("file://")){
         settings->sync();
-        QTextStream(stdout) << "FILE " << actualData << endl;
 #ifdef Q_OS_WIN
         actualData.remove("file:///"); // yay windows
 #else
