@@ -50,7 +50,7 @@ void EditSettingsWindow::saveAllAndClose() {
         copyMode = "none";
     }
 
-    saveDirectory = ui->leSaveFolder->text();
+    saveDirectory = ui->leSaveFolder->text().trimmed();
 
     uploadImages = ui->rbUplImg->isChecked();
     uploadVideos = ui->rbUplVid->isChecked();
@@ -65,9 +65,9 @@ void EditSettingsWindow::saveAllAndClose() {
     askExpVid = ui->rbExpVid->isChecked();
     askExpFile = ui->rbExpFile->isChecked();
 
-    serverURL = ui->leServerAddr->text();
-    serverPort = ui->leServerPort->text();
-    lkey = ui->leLicenseKey->text();
+    serverURL = ui->leServerAddr->text().trimmed();
+    serverPort = ui->leServerPort->text().trimmed();
+    lkey = ui->leLicenseKey->text().trimmed();
 
 
     // *** SAVE SETTINGS ***

@@ -216,6 +216,7 @@ void ScreenWindow::takeScreenshot(){
      process->start(processStr);
  }
 
+ // TODO: Fix this not handling the copy mode setting correctly when set to resource rather than URL/none.
  void ScreenWindow::ffmpegFinished(int exitCode, QProcess::ExitStatus){
      emit recordEnded(exitCode);
      QThread::msleep(500); // let the file handles close so exists() returns true.
