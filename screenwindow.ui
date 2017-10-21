@@ -88,15 +88,18 @@ QLabel{
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>200</width>
-      <height>80</height>
+      <width>100</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
+     <enum>QFrame::NoFrame</enum>
     </property>
     <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="lineWidth">
+     <number>0</number>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="leftMargin">
@@ -121,8 +124,8 @@ QLabel{
        </property>
        <property name="minimumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>100</width>
+         <height>100</height>
         </size>
        </property>
        <property name="frameShape">
@@ -154,21 +157,6 @@ QLabel{
        </property>
        <property name="interactive">
         <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="lblCurrentMode">
-       <property name="font">
-        <font>
-         <family>8514oem</family>
-         <pointsize>20</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Image Mode</string>
        </property>
       </widget>
      </item>

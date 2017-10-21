@@ -37,16 +37,13 @@ ScreenWindow::ScreenWindow(QScreen* screen, HorusUploader *u, int vidDuration, Q
 
     useVideo = videoDuration != -1;
     if(useVideo) {
-        ui->lblCurrentMode->setText("Video Mode");
         curItem = modeScene->addPixmap(pixModeVideo);
         modeScene->setSceneRect(pixModeVideo.rect());
     }else{
-        ui->lblCurrentMode->setText("Still Mode");
         curItem = modeScene->addPixmap(pixModeImage);
         modeScene->setSceneRect(pixModeImage.rect());
     }
-    ui->gvMode->fitInView(modeScene->sceneRect(), Qt::KeepAspectRatio);
-    //ui->gvMode->fitInView(curItem, Qt::KeepAspectRatio);
+    ui->gvMode->fitInView(curItem, Qt::KeepAspectRatioByExpanding);
 
 
     wScreen = screen;
