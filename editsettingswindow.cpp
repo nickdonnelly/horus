@@ -39,8 +39,8 @@ void EditSettingsWindow::saveAllAndClose() {
     QString copyMode;
     QString saveDirectory, serverURL, serverPort, lkey;
     bool uploadImages, uploadVideos, uploadZIP;
-    bool askTitleImg, askTitleVid, askTitleFile;
-    bool askExpImg, askExpVid, askExpFile;
+    bool askTitleImg, askTitleVid, askTitlePaste;
+    bool askExpImg, askExpVid, askExpFile, askExpPaste;
 
     if(ui->rbCopyURL->isChecked()){
         copyMode = "url";
@@ -59,11 +59,12 @@ void EditSettingsWindow::saveAllAndClose() {
 
     askTitleImg = ui->rbTitleImg->isChecked();
     askTitleVid = ui->rbTitleVid->isChecked();
-    askTitleFile = ui->rbTitleFile->isChecked();
+    askTitlePaste = ui->rbTitlePaste->isChecked();
 
     askExpImg = ui->rbExpImg->isChecked();
     askExpVid = ui->rbExpVid->isChecked();
     askExpFile = ui->rbExpFile->isChecked();
+    askExpPaste = ui->rbExpPaste->isChecked();
 
     serverURL = ui->leServerAddr->text().trimmed();
     serverPort = ui->leServerPort->text().trimmed();
@@ -82,7 +83,9 @@ void EditSettingsWindow::saveAllAndClose() {
     sets->setValue("video/askTitle", askTitleVid);
     sets->setValue("video/askExp", askExpVid);
 
-    sets->setValue("file/askTitle", askTitleFile);
+    sets->setValue("paste/askTitle", askTitlePaste);
+    sets->setValue("paste/askExp", askExpPaste);
+
     sets->setValue("file/askExp", askExpFile);
 
     if(uploadZIP)
@@ -114,11 +117,12 @@ void EditSettingsWindow::setUIElementValues() {
     // Ask For Titles
     bool askTitleImg = sets->value("image/askTitle", false).toBool();
     bool askTitleVid = sets->value("video/askTitle", false).toBool();
-    bool askTitleFile = sets->value("file/askTitle", false).toBool();
+    bool askTitlePaste = sets->value("paste/askTitle", false).toBool();
 
     bool askExpImg = sets->value("image/askExp", false).toBool();
     bool askExpVid = sets->value("video/askExp", false).toBool();
     bool askExpFile = sets->value("file/askExp", false).toBool();
+    bool askExpPaste = sets->value("paste/askExp", false).toBool();
 
     bool uploadZIP = sets->value("file/multipleUpload", "nozip").toString().toLower() == "zip";
 
@@ -132,7 +136,7 @@ void EditSettingsWindow::setUIElementValues() {
 
     if(askTitleImg) ui->rbTitleImg->setChecked(true);
     if(askTitleVid) ui->rbTitleVid->setChecked(true);
-    if(askTitleFile) ui->rbTitleFile->setChecked(true);
+    if(askTitlePaste) ui->rbTitlePaste->setChecked(true);
 
     if(askExpImg) ui->rbExpImg->setChecked(true);
     if(askExpVid) ui->rbExpVid->setChecked(true);
