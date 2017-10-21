@@ -67,6 +67,7 @@ protected:
     void mousePressEvent(QMouseEvent *evt);
     void mouseReleaseEvent(QMouseEvent *evt);
     void mouseMoveEvent(QMouseEvent *evt);
+    void wheelEvent(QWheelEvent *evt);
 
     void closeEvent(QCloseEvent*);
 };

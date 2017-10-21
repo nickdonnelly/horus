@@ -40,6 +40,7 @@ ScreenWindow::ScreenWindow(QScreen* screen, HorusUploader *u, int vidDuration, Q
         curItem = modeScene->addPixmap(pixModeVideo);
         modeScene->setSceneRect(pixModeVideo.rect());
     }else{
+        videoDuration = 10;
         curItem = modeScene->addPixmap(pixModeImage);
         modeScene->setSceneRect(pixModeImage.rect());
     }
@@ -105,8 +106,6 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
         ih = std::abs(endYRel - startYRel);
 
         if(useVideo){
-            // Get the desired duration
-
             takeVideo(videoDuration, originX, originY, iw ,ih);
         }else{
             takeScreenshot(originX, originY, iw, ih);
@@ -230,6 +229,21 @@ void ScreenWindow::takeScreenshot(){
      process->start(processStr);
  }
 
+void ScreenWindow::wheelEvent(QWheelEvent *evt) {
+    modeScene->removeItem(curItem);
+    delete curItem;
+    useVideo = !useVideo;
+    if(useVideo) {
+        curItem = modeScene->addPixmap(pixModeVideo);
+        modeScene->setSceneRect(pixModeVideo.rect());
+    }else{
+        curItem = modeScene->addPixmap(pixModeImage);
+        modeScene->setSceneRect(pixModeImage.rect());
+    }
+    ui->gvMode->fitInView(curItem, Qt::KeepAspectRatioByExpanding);
+
+}
+
  // TODO: Fix this not handling the copy mode setting correctly when set to resource rather than URL/none.
  void ScreenWindow::ffmpegFinished(int exitCode, QProcess::ExitStatus){
      emit recordEnded(exitCode);
@@ -275,3 +289,5 @@ ScreenWindow::~ScreenWindow()
 void ScreenWindow::closeEvent(QCloseEvent*){
     emit closing();
 }
+
+
