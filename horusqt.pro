@@ -75,7 +75,9 @@ DISTFILES += \
     res/edit_last.png \
     res/paste.png \
     res/manage.png \
-    master.qss
+    master.qss \
+    res/icon_screenshot_mode.png \
+    res/icon_video_mode.png
 
 RESOURCES += \
     horus-resources.qrc

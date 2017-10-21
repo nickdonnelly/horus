@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QString>
 #include <QScreen>
+#include <QPixmap>
+#include <QGraphicsScene>
 #include <QProcess>
 #include <horusuploader.h>
 
@@ -26,6 +28,11 @@ public:
 private:
     Ui::ScreenWindow *ui;
     bool useVideo;
+
+    QGraphicsScene * modeScene;
+    QGraphicsPixmapItem *curItem;
+    QPixmap pixModeVideo, pixModeImage;
+
     HorusUploader * uploader;
     QRect windowScreen;
     QScreen * wScreen;

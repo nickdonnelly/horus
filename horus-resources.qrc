@@ -11,5 +11,7 @@
         <file>res/paste.png</file>
         <file>res/manage.png</file>
         <file>res/master.qss</file>
+        <file>res/icon_screenshot_mode.png</file>
+        <file>res/icon_video_mode.png</file>
     </qresource>
 </RCC>

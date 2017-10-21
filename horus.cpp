@@ -1,5 +1,4 @@
 #include "horus.h"
-#include <settingsdialog.h>
 #include <updatedownloaddialog.h>
 #include <screenwindow.h>
 #include <editimagewindow.h>

@@ -13,6 +13,8 @@
 #include <QKeyEvent>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QGraphicsView>
+#include <QGraphicsPixmapItem>
 #include <QScreen>
 #include <QSettings>
 #include <QDateTime>
@@ -28,9 +30,24 @@ ScreenWindow::ScreenWindow(QScreen* screen, HorusUploader *u, int vidDuration, Q
     videoDuration(vidDuration)
 {
     ui->setupUi(this);
-//    QRect r = QApplication::desktop()->screenGeometry(1);
+    modeScene = new QGraphicsScene(this);
+    ui->gvMode->setScene(modeScene);
+    pixModeImage = QPixmap(":/res/icon_screenshot_mode.png");
+    pixModeVideo = QPixmap(":/res/icon_video_mode.png");
+
     useVideo = videoDuration != -1;
-    //this->windowHandle()->setScreen()
+    if(useVideo) {
+        ui->lblCurrentMode->setText("Video Mode");
+        curItem = modeScene->addPixmap(pixModeVideo);
+        modeScene->setSceneRect(pixModeVideo.rect());
+    }else{
+        ui->lblCurrentMode->setText("Still Mode");
+        curItem = modeScene->addPixmap(pixModeImage);
+        modeScene->setSceneRect(pixModeImage.rect());
+    }
+    ui->gvMode->fitInView(modeScene->sceneRect(), Qt::KeepAspectRatio);
+    //ui->gvMode->fitInView(curItem, Qt::KeepAspectRatio);
+
 
     wScreen = screen;
     windowScreen = screen->geometry();
