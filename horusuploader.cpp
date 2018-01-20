@@ -5,7 +5,6 @@
 #include <QString>
 #include <QFile>
 #include <QFileInfo>
-#include <QTextStream>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QInputDialog>
@@ -31,10 +30,10 @@ HorusUploader::HorusUploader(QSettings * settings)
 {
     sets = settings;
     sets->sync();
-    sslOn = sets->value("useSSL", false).toBool();
-    SERVER_URL = sets->value("serverURL", "").toString();
-    SERVER_PORT = sets->value("serverPort", "").toString();
-    AUTH_TOKEN = sets->value("authToken", "").toString();
+    SERVER_URL = sets->value("auth/serverURL", "").toString();
+    SERVER_PORT = sets->value("auth/serverPort", "").toString();
+    AUTH_TOKEN = sets->value("auth/authToken", "").toString();
+    sslOn = SERVER_PORT == "443";
 
     ask_title_image = sets->value("image/askTitle", false).toBool();
     ask_title_video = sets->value("video/askTitle", false).toBool();
@@ -292,10 +291,10 @@ ExpirationDuration HorusUploader::getExpirationDuration()
 void HorusUploader::settingsUpdated()
 {
     sets->sync();
-    sslOn = sets->value("useSSL", false).toBool();
-    SERVER_URL = sets->value("serverURL", "").toString();
-    SERVER_PORT = sets->value("serverPort", "").toString();
-    AUTH_TOKEN = sets->value("authToken", "").toString();
+    SERVER_URL = sets->value("auth/serverURL", "").toString();
+    SERVER_PORT = sets->value("auth/serverPort", "").toString();
+    AUTH_TOKEN = sets->value("auth/authToken", "").toString();
+    sslOn = (SERVER_PORT == "443");
 
     ask_title_image = sets->value("image/askTitle", false).toBool();
     ask_title_video = sets->value("video/askTitle", false).toBool();

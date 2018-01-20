@@ -1,6 +1,7 @@
 #include "editsettingswindow.h"
 #include "screenwindow.h"
 #include "ui_editsettingswindow.h"
+#include <horus.h>
 #include <QIntValidator>
 #include <QSettings>
 #include <QStandardPaths>
@@ -21,6 +22,9 @@ EditSettingsWindow::EditSettingsWindow(QSettings *settings, QWidget *parent) :
     setUIElementValues();
 
     ui->leServerPort->setValidator( new QIntValidator(0, 65535, this) );
+    ui->lblAbout->setText("<html><head/><body><p align=\"center\">Horus Version "
+                          + Horus::HORUS_VERSION + "</p>"
+                          + "<p align=\"center\">Copyright <span style=\"font-family:'arial,sans-serif'; font-size:16px; color:#222222; background-color:#ffffff;\">©</span> 2017</p><p align=\"center\">Context menu icons courtesy of EmojiOne.</p></body></html>");
 
     connect(ui->rbUploads, SIGNAL(pressed()), this, SLOT(switchPageUpload()));
     connect(ui->rbLocal, SIGNAL(pressed()), this, SLOT(switchPageLocal()));
@@ -38,6 +42,7 @@ EditSettingsWindow::~EditSettingsWindow()
 void EditSettingsWindow::saveAllAndClose() {
     QString copyMode;
     QString saveDirectory, serverURL, serverPort, lkey;
+    bool openInBrowser;
     bool uploadImages, uploadVideos, uploadZIP;
     bool askTitleImg, askTitleVid, askTitlePaste;
     bool askExpImg, askExpVid, askExpFile, askExpPaste;
@@ -49,6 +54,8 @@ void EditSettingsWindow::saveAllAndClose() {
     }else{
         copyMode = "none";
     }
+
+    openInBrowser = ui->rbOpenBrowser->isChecked();
 
     saveDirectory = ui->leSaveFolder->text().trimmed();
 
@@ -74,6 +81,7 @@ void EditSettingsWindow::saveAllAndClose() {
     // *** SAVE SETTINGS ***
     sets->setValue("other/copyMode", copyMode);
     sets->setValue("other/saveDirectory", saveDirectory);
+    sets->setValue("other/openInBrowser", openInBrowser);
 
     sets->setValue("image/upload", uploadImages);
     sets->setValue("image/askTitle", askTitleImg);
@@ -110,6 +118,9 @@ void EditSettingsWindow::setUIElementValues() {
     QString copyMode = sets->value("other/copyMode", "url").toString().toLower();
     QString saveDirectory = sets->value("other/saveDirectory", getSystemImagesFolder()).toString();
 
+    // Open in browser
+    bool openInBrowser = sets->value("other/openInBrowser", true).toBool();
+
     // Auto Upload
     bool uploadImages = sets->value("image/upload", true).toBool();
     bool uploadVideos = sets->value("video/upload", true).toBool();
@@ -131,16 +142,17 @@ void EditSettingsWindow::setUIElementValues() {
     QString lkey = sets->value("auth/authToken", "").toString();
 
     // ** SETTING UI STATE **
-    if(uploadImages) ui->rbUplImg->setChecked(true);
-    if(uploadVideos) ui->rbUplVid->setChecked(true);
+    ui->rbUplImg->setChecked(uploadImages);
+    ui->rbUplVid->setChecked(uploadVideos);
+    ui->rbOpenBrowser->setChecked(openInBrowser);
 
-    if(askTitleImg) ui->rbTitleImg->setChecked(true);
-    if(askTitleVid) ui->rbTitleVid->setChecked(true);
-    if(askTitlePaste) ui->rbTitlePaste->setChecked(true);
+    ui->rbTitleImg->setChecked(askTitleImg);
+    ui->rbTitleVid->setChecked(askTitleVid);
+    ui->rbTitlePaste->setChecked(askTitlePaste);
 
-    if(askExpImg) ui->rbExpImg->setChecked(true);
-    if(askExpVid) ui->rbExpVid->setChecked(true);
-    if(askExpFile) ui->rbExpFile->setChecked(true);
+    ui->rbExpImg->setChecked(askExpImg);
+    ui->rbExpVid->setChecked(askExpVid);
+    ui->rbExpFile->setChecked(askExpFile);
 
     if(copyMode == "url"){
         ui->rbCopyURL->setChecked(true);

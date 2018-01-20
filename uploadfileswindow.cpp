@@ -25,10 +25,10 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, QSettings * sets, QWidge
     filelist = files;
 
     settings->sync();
-    url = settings->value("serverURL").toString();
-    port = settings->value("serverPort").toString();
-    token = settings->value("authToken").toString();
-    usessl = settings->value("useSSL").toBool();
+    url = settings->value("auth/serverURL").toString();
+    port = settings->value("auth/serverPort").toString();
+    token = settings->value("auth/authToken").toString();
+    usessl = port == "443";
 
     uploader = new HorusUploader(url, port, token, usessl);
     QObject::connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(fileUploaded(QString)));

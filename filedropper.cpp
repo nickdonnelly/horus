@@ -20,7 +20,7 @@ FileDropper::FileDropper(QSettings * sets, QObject *parent) : QObject(parent)
 void FileDropper::runUpload(QString files){
     QStringList eachfile = files.split("\n");
     settings->sync();
-    bool isZip = (settings->value("uploadMode", "standalone").toString() == "zip") && eachfile.length() > 1;
+    bool isZip = (settings->value("file/multipleUpload", "nozip").toString() == "zip") && eachfile.length() > 1;
 
     if(isZip){
         QString zipString = "";
@@ -83,7 +83,7 @@ void FileDropper::fileDropped(){
         box->setIconPixmap(QPixmap(":/res/filedrop.png"));
         box->addButton(QMessageBox::Yes);
         box->addButton(QMessageBox::No);
-        if(settings->value("uploadMode", "standalone").toString() == "zip"){
+        if(settings->value("file/multipleUploader", "nozip").toString() == "zip"){
             box->setText("Are you sure you want to zip and upload the following files?\n" + actualData);
         }else{
             box->setText("Are you sure you want to upload the following files?\n" + actualData);

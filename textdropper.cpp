@@ -9,10 +9,10 @@ TextDropper::TextDropper(QSettings * sets, QObject *parent) : QObject(parent)
     settings = sets;
 
     settings->sync();
-    url = settings->value("serverURL").toString();
-    port = settings->value("serverPort").toString();
-    token = settings->value("authToken").toString();
-    usessl = settings->value("useSSL").toBool();
+    url = settings->value("auth/serverURL").toString();
+    port = settings->value("auth/serverPort").toString();
+    token = settings->value("auth/authToken").toString();
+    usessl = port == "443";
 
     uploader = new HorusUploader(url, port, token, usessl);
 

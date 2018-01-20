@@ -21,7 +21,7 @@
 #include <QIcon>
 #include <QClipboard>
 
-const QString Horus::HORUS_VERSION = QString("2.1.0");
+const QString Horus::HORUS_VERSION = QString("2.1.1");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
@@ -63,11 +63,11 @@ void Horus::uploadComplete(QString url){
         mb->exec();
     }else{
         sets->sync();
-        if(sets->value("openInBrowser", true).toBool()){
+        if(sets->value("other/openInBrowser", true).toBool()){
             QTextStream(stdout) << url << endl;
             QDesktopServices::openUrl(url);
         }
-        if(sets->value("copyMode", "url").toString() == "url"){
+        if(sets->value("other/copyMode", "url").toString() == "url"){
             QClipboard* board = QApplication::clipboard();
             board->setText(url);
         }
@@ -90,7 +90,7 @@ void Horus::uploadFailed(QString failure){
 
 void Horus::stillImageTaken(QPixmap still){
     sets->sync();
-    if(sets->value("copyMode", "none").toString() == "image"){
+    if(sets->value("other/copyMode", "none").toString() == "image"){
         QClipboard* board = QApplication::clipboard();
         board->setPixmap(still);
     }
@@ -273,10 +273,10 @@ void Horus::versionStringReturned(QString version){
         if(res == QMessageBox::Yes){
             sets->sync();
             QString reqStr = uploader->build_base_req_string();
-            reqStr += "/meta/get_latest";
+            reqStr += "/meta/latest/";
             reqStr += platformString;
             UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog(
-                        reqStr, sets->value("authToken", "").toString());
+                        reqStr, sets->value("auth/authToken", "").toString());
             downloadDialog->setWindowIcon(main_icon);
             downloadDialog->show();
         }

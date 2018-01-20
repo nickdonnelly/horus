@@ -1,3 +1,4 @@
+color: #000000;
 QPushButton {
         margin: 0;
         border: none;
