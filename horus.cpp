@@ -64,7 +64,6 @@ void Horus::uploadComplete(QString url){
     }else{
         sets->sync();
         if(sets->value("other/openInBrowser", true).toBool()){
-            QTextStream(stdout) << url << endl;
             QDesktopServices::openUrl(url);
         }
         if(sets->value("other/copyMode", "url").toString() == "url"){

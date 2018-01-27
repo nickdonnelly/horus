@@ -86,7 +86,6 @@ void UpdateDownloadDialog::attemptExtract(){
 #elif defined Q_OS_LINUX
     procStr += "unzip -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"";
 #endif
-    QTextStream(stdout) << procStr << " end " << endl;
     int exitCode = proc.execute(procStr);
     if(exitCode == 0){
         QSettings * sets = new QSettings("horus-settings.ini", QSettings::IniFormat);
