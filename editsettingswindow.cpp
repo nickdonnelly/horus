@@ -13,7 +13,7 @@
 
 #include <QTextStream>
 
-EditSettingsWindow::EditSettingsWindow(QSettings *settings, QWidget *parent) :
+EditSettingsWindow::EditSettingsWindow(HorusSettings *settings, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::EditSettingsWindow),
     sets(settings)
@@ -109,7 +109,7 @@ void EditSettingsWindow::saveAllAndClose() {
     sets->sync();
 
     // Notify observers
-    emit notifyUpdated();
+    sets->notifyUpdated();
 
     close();
 }

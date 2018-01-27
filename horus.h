@@ -4,6 +4,7 @@
 #include <screenwindow.h>
 #include <filedropper.h>
 #include <horusuploader.h>
+#include <horussettings.h>
 #include <textdropper.h>
 #include <QObject>
 #include <QSettings>
@@ -45,7 +46,7 @@ private:
     QList<QScreen*> screens;
     QList<QMainWindow*> windows;
     ScreenWindow * sw;
-    QSettings * sets;
+    HorusSettings * sets;
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
     QIcon main_icon;

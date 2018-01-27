@@ -36,7 +36,7 @@ Horus::Horus(){
         sets->setValue("other/firstLaunchPostUpdate", false);
     }
 
-    connect(sets, SIGNAL(notifyUpdated()), this, SLOT(setsUpdated()));
+    connect(sets, SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
     connect(textDropper, SIGNAL(complete(QString)), this, SLOT(uploadComplete(QString)));
     connect(textDropper, SIGNAL(failure(QString)), this, SLOT(uploadFailed(QString)));
     createTrayIcon();
@@ -299,5 +299,5 @@ void Horus::screenWindowClosed(){
 }
 
 void Horus::setsUpdated(){
-    // TODO
+    // Nothing here for now but that may change later.
 }

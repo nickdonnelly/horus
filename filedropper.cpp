@@ -11,7 +11,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
-FileDropper::FileDropper(QSettings * sets, QObject *parent) : QObject(parent)
+FileDropper::FileDropper(HorusSettings * sets, QObject *parent) : QObject(parent)
 {
     settings = sets;
 }

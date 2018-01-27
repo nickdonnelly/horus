@@ -11,7 +11,7 @@
 #include <QApplication>
 #include <QTextStream>
 
-UploadFilesWindow::UploadFilesWindow(QStringList files, QSettings * sets, QWidget *parent) :
+UploadFilesWindow::UploadFilesWindow(QStringList files, HorusSettings * sets, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::UploadFilesWindow),
     ctrlHeld(false)
@@ -29,6 +29,7 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, QSettings * sets, QWidge
     port = settings->value("auth/serverPort").toString();
     token = settings->value("auth/authToken").toString();
     usessl = port == "443";
+    QObject::connect(settings, SIGNAL(notifyUpdated()), this, SLOT(setsUpdated()));
 
     uploader = new HorusUploader(url, port, token, usessl);
     QObject::connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(fileUploaded(QString)));
@@ -144,4 +145,13 @@ void UploadFilesWindow::processMimeData(const QMimeData* mimeData){
         // If there are files in the lv, we don't want to cancel an upload.
         if(startNext) startNextFile();
     }
+}
+
+void UploadFilesWindow::setsUpdated() {
+    settings->sync();
+    url = settings->value("auth/serverURL").toString();
+    port = settings->value("auth/serverPort").toString();
+    token = settings->value("auth/authToken").toString();
+    usessl = port == "443";
+
 }

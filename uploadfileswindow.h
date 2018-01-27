@@ -2,6 +2,7 @@
 #define UPLOADFILESWINDOW_H
 
 #include <horusuploader.h>
+#include <horussettings.h>
 #include <QMainWindow>
 #include <QDragEnterEvent>
 #include <QKeyEvent>
@@ -20,7 +21,7 @@ class UploadFilesWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit UploadFilesWindow(QStringList files, QSettings * sets, QWidget *parent = 0);
+    explicit UploadFilesWindow(QStringList files, HorusSettings * sets, QWidget *parent = 0);
     ~UploadFilesWindow();
 
 signals:
@@ -31,6 +32,7 @@ private slots:
     void fileUploadFailed(QString reason);
     void updateProgressBar(qint64 sent, qint64 total);
     void selectedCompleteChanged(QListWidgetItem *current, QListWidgetItem*);
+    void setsUpdated();
 
 private:
     Ui::UploadFilesWindow *ui;
@@ -38,7 +40,7 @@ private:
     QString url, port, token;
     bool usessl;
     bool ctrlHeld;
-    QSettings * settings;
+    HorusSettings * settings;
     HorusUploader * uploader;
 
     void startNextFile();

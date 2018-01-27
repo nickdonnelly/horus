@@ -4,7 +4,7 @@
 #include <QIcon>
 #include <QMessageBox>
 
-TextDropper::TextDropper(QSettings * sets, QObject *parent) : QObject(parent)
+TextDropper::TextDropper(HorusSettings * sets, QObject *parent) : QObject(parent)
 {
     settings = sets;
 
@@ -13,6 +13,8 @@ TextDropper::TextDropper(QSettings * sets, QObject *parent) : QObject(parent)
     port = settings->value("auth/serverPort").toString();
     token = settings->value("auth/authToken").toString();
     usessl = port == "443";
+
+    QObject::connect(settings, SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
 
     uploader = new HorusUploader(url, port, token, usessl);
 
@@ -47,4 +49,11 @@ void TextDropper::uploadComplete(QString url) {
 
 void TextDropper::uploadFail(QString reason) {
     emit failure(reason);
+}
+
+void TextDropper::setsUpdated() {
+    url = settings->value("auth/serverURL").toString();
+    port = settings->value("auth/serverPort").toString();
+    token = settings->value("auth/authToken").toString();
+    usessl = port == "443";
 }
