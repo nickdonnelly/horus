@@ -159,7 +159,7 @@ void Horus::openVideoWindow10(){
 
 void Horus::openVideoWindowDur(){
     bool ok;
-    QInputDialog * dialog = new QInputDialog(this);
+    QInputDialog * dialog = new QInputDialog(this, Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
     // TODO: This move operation is not working on linux.
     dialog->move(QApplication::desktop()->screenGeometry().center() - dialog->pos()/2);
     int dur = dialog->getInt(this, tr(""), tr("Record duration (s):"),

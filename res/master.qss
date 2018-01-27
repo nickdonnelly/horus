@@ -1,6 +1,109 @@
 * {
         color: #000000;
+        background: white;
 }
+
+QLabel {
+        background: none;
+}
+
+QFrame {
+        border: none;
+}
+
+QDialog {
+        background: #eeeeee;
+}
+
+QListWidget {
+        border: 1px solid gray;
+}
+
+QListWidgetItem {
+        padding: 5px;
+}
+
+#scrollAreaContents, #lblAbout{
+        background: white;
+        border: none;
+        padding: 0;
+}
+
+#stackedWidget { border-left: 1px solid #777777; }
+
+QRadioButton::indicator { width: 0; height: 0; }
+
+QRadioButton {
+        background: white;
+        margin: 0px;
+        padding: 0 0 0 10;
+        height: 60px;
+
+        icon-size: 0px;
+        text-align: center;
+}
+
+QRadioButton:hover {
+        background: rgb(239, 239, 239)
+}
+
+QRadioButton:checked {
+        background: rgba( 3, 155, 229, 255) !important;
+}
+
+QRadioButton:checked:hover {
+        background: rgb(100, 206, 255) !important;
+}
+
+QPushButton {
+        background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(3, 155, 229, 255), stop:1 rgba(3, 155, 229, 255));
+        color: #000000;
+        border-radius: 18px;
+}
+
+QPushButton:hover {
+        background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 109, 179, 255), stop:1 rgba(0, 109, 179, 255));
+        color: #ffffff;
+}
+
+QLineEdit {
+        background: rgb(3,155,229);
+        border: 1px solid gray;
+        border-radius: 18px;
+        color: #000000;
+        margin: 0;
+        padding: 5px;
+}
+QLineEdit:focus, QLineEdit:hover {
+        background: rgb(0,109,179);
+        border: 1px solid black;
+        color: #ffffff;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+        background: none;
+        border: none;
+        width: 0;
+        height: 0;
+}
+
+QScrollBar:vertical{
+        max-width: 8;
+}
+
+QScrollBar::handle:vertical {
+        background: rgb(0,109,179);
+        border-radius: 4px;
+}
+
+#btnDeleteAllLocal {
+        background: rgb(243, 14, 14);
+        color: #ffffff;
+}
+#btnDeleteAllLocal:hover {
+        background: rgb(255, 0, 0);
+}
+
 QPushButton {
         margin: 0;
         border: none;
@@ -23,7 +126,4 @@ QDialogButtonBox {
         dialogbuttonbox-buttons-have-icons: 1;
 }
 
-QLineEdit{
-        padding: 5px;
-}
 

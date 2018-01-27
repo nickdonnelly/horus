@@ -252,7 +252,6 @@ QString HorusUploader::get_auth_str() {
     return url;
 }
 
-// TODO: get rid of the event loop here, this is way too much overhead for a version string request
 void HorusUploader::checkLatestVersion(){
     QString reqURL = build_base_req_string().append("/meta/version");
     QEventLoop el;

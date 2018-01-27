@@ -244,10 +244,9 @@ void ScreenWindow::wheelEvent(QWheelEvent *evt) {
 
 }
 
- // TODO: Fix this not handling the copy mode setting correctly when set to resource rather than URL/none.
  void ScreenWindow::ffmpegFinished(int exitCode, QProcess::ExitStatus){
      emit recordEnded(exitCode);
-     QThread::msleep(500); // let the file handles close so exists() returns true.
+     QThread::msleep(250); // let the file handles close so exists() returns true.
      if(exitCode == 0){
         uploader->upload(true, fileStr.replace("\"", ""));
      }
