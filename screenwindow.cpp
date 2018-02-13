@@ -193,6 +193,7 @@ void ScreenWindow::takeScreenshot(){
          box.setText("Unable to save screenshot to disk. Are you sure the save directory exists and you have permissions?");
          box.setWindowTitle("Image Save Failed");
          box.setStandardButtons(QMessageBox::Ok);
+         box.exec();
      } else {
          // Upload
          uploader->upload(false, lastSaveLocation);
