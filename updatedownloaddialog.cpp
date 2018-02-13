@@ -84,6 +84,7 @@ void UpdateDownloadDialog::attemptExtract(){
 #ifdef Q_OS_WIN
     procStr += "\"" + qApp->applicationDirPath() + "/bin/unzip\" -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"";
 #elif defined Q_OS_LINUX
+    procStr += "pkexec"; // run it as root in the event we are in a directory like /usr/bin, for example
     procStr += "unzip -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"";
 #endif
     int exitCode = proc.execute(procStr);

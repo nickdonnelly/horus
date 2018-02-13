@@ -14,6 +14,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QGraphicsView>
+#include <QMessageBox>
 #include <QGraphicsPixmapItem>
 #include <QScreen>
 #include <QSettings>
@@ -164,7 +165,6 @@ void ScreenWindow::takeScreenshot(){
 
     QFile file(getAppSaveDirectory() + "/cache_last_taken.png");
     file.open(QIODevice::WriteOnly);
-    screenMap.save(&file, "PNG");
     file.close();
     close();
 }
@@ -187,9 +187,17 @@ void ScreenWindow::takeScreenshot(){
      lastSaveLocation = getImagesDirectory() + "/" + getFilename(".png");
      QFile file(lastSaveLocation);
      file.open(QIODevice::WriteOnly);
-     screenMap.save(&file, "PNG");
-     // Upload
-     uploader->upload(false, lastSaveLocation);
+     bool saved = screenMap.save(&file, "PNG");
+     if(!saved){
+         QMessageBox box;
+         box.setText("Unable to save screenshot to disk. Are you sure the save directory exists and you have permissions?");
+         box.setWindowTitle("Image Save Failed");
+         box.setStandardButtons(QMessageBox::Ok);
+     } else {
+         // Upload
+         uploader->upload(false, lastSaveLocation);
+     }
+
      // Remove window
      close();
  }
