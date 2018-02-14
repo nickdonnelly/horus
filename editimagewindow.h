@@ -45,12 +45,12 @@ private slots:
     void clearPressed();
     void brushWidthChanged(int value);
 
-    void colorRed(){ scene->setBrushColor(QColor(255, 0, 0, 255)); }
-    void colorOrange(){ scene->setBrushColor(QColor(255, 165, 0, 255)); }
-    void colorBlack(){ scene->setBrushColor(QColor(0, 0, 0, 255)); }
-    void colorBlue(){ scene->setBrushColor(QColor(0, 0, 255, 255)); }
-    void colorGreen(){ scene->setBrushColor(QColor(0, 255, 0, 255)); }
-    void colorPink(){ scene->setBrushColor(QColor(255, 0, 255, 255)); }
+    void colorRed(){ scene->setBrushColor(QColor(255, 0, 0, 255)); setSelectedColor(HColor::Red); }
+    void colorOrange(){ scene->setBrushColor(QColor(255, 165, 0, 255)); setSelectedColor(HColor::Orange); }
+    void colorBlack(){ scene->setBrushColor(QColor(0, 0, 0, 255)); setSelectedColor(HColor::Black); }
+    void colorBlue(){ scene->setBrushColor(QColor(0, 0, 255, 255)); setSelectedColor(HColor::Blue); }
+    void colorGreen(){ scene->setBrushColor(QColor(0, 255, 0, 255)); setSelectedColor(HColor::Green); }
+    void colorPink(){ scene->setBrushColor(QColor(255, 0, 255, 255)); setSelectedColor(HColor::Pink); }
 
     void textEditMode();
     void exitTextEditMode();
@@ -73,6 +73,12 @@ private:
     QGraphicsItem *imageItem, *croppedItem;
     QGraphicsRectItem *outlineItem;
     HorusRectItem *rectangleItem;
+
+    enum HColor {
+        Red, Orange, Black, Blue, Green, Pink
+    };
+    void setSelectedColor(HColor color);
+
 
 
 protected:

@@ -187,6 +187,14 @@
 border: 0px;
 width: 35px;
 height: 35px;
+}
+
+QPushButton[selected = true]{
+border: 2px groove;
+}
+
+QPushButton[selected = false]{
+border: 0px;
 }</string>
          </property>
          <property name="frameShape">
@@ -199,7 +207,8 @@ height: 35px;
           <item>
            <widget class="QPushButton" name="btnRed">
             <property name="styleSheet">
-             <string notr="true">background-color: rgba(255,0,0,255);</string>
+             <string notr="true">background-color: rgba(255,0,0,255);
+border-radius: 10px;</string>
             </property>
             <property name="text">
              <string/>
@@ -209,7 +218,8 @@ height: 35px;
           <item>
            <widget class="QPushButton" name="btnOrange">
             <property name="styleSheet">
-             <string notr="true">background-color: orange;</string>
+             <string notr="true">background-color: orange;
+border-radius: 10px;</string>
             </property>
             <property name="text">
              <string/>
@@ -219,7 +229,8 @@ height: 35px;
           <item>
            <widget class="QPushButton" name="btnPink">
             <property name="styleSheet">
-             <string notr="true">background-color: rgba(255,0,255,255);</string>
+             <string notr="true">background-color: rgba(255,0,255,255);
+border-radius: 10px;</string>
             </property>
             <property name="text">
              <string/>
@@ -229,7 +240,8 @@ height: 35px;
           <item>
            <widget class="QPushButton" name="btnGreen">
             <property name="styleSheet">
-             <string notr="true">background-color: rgba(0,255,0,255);</string>
+             <string notr="true">background-color: rgba(0,255,0,255);
+border-radius: 10px;</string>
             </property>
             <property name="text">
              <string/>
@@ -239,7 +251,8 @@ height: 35px;
           <item>
            <widget class="QPushButton" name="btnBlue">
             <property name="styleSheet">
-             <string notr="true">background-color: rgba(0,0,255,255);</string>
+             <string notr="true">background-color: rgba(0,0,255,255);
+border-radius: 10px;</string>
             </property>
             <property name="text">
              <string/>
@@ -249,7 +262,8 @@ height: 35px;
           <item>
            <widget class="QPushButton" name="btnBlack">
             <property name="styleSheet">
-             <string notr="true">background: rgba(0,0,0,255);</string>
+             <string notr="true">background: rgba(0,0,0,255);
+border-radius: 10px;</string>
             </property>
             <property name="text">
              <string/>
@@ -270,7 +284,7 @@ height: 35px;
      <x>0</x>
      <y>0</y>
      <width>1040</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>

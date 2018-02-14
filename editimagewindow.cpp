@@ -42,7 +42,6 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
     ui->sliderBrushSize->setVisible(false);
     ui->lblBrushSize->setVisible(false);
     ui->btnClear->setVisible(false);
-    ui->frameColors->setVisible(false);
 
     ui->sliderW->setMaximum(imgOriginalWidth);
     ui->sliderW->setMinimum(1);
@@ -245,7 +244,7 @@ void EditImageWindow::drawingModeToggled(){
         ui->lblWidth->setVisible(true);
         ui->lblHeight->setVisible(true);
         ui->btnClear->setVisible(false);
-        ui->frameColors->setVisible(false);
+        ui->btnAddText->setVisible(true);
         ui->btnBox->setEnabled(true);
 
         rectangleItem->setVisible(true);
@@ -263,10 +262,9 @@ void EditImageWindow::drawingModeToggled(){
         ui->sliderW->setVisible(false);
         ui->lblWidth->setVisible(false);
         ui->lblHeight->setVisible(false);
-        ui->frameColors->setVisible(true);
+        ui->btnAddText->setVisible(false);
 
         rectangleItem->setVisible(false);
-        //outlineItem->setVisible(false);
         ui->btnDrawMode->setText("Exit Drawing Mode");
     }
     scene->setDrawingMode(inDrawingMode);
@@ -282,14 +280,58 @@ void EditImageWindow::clearPressed(){
 }
 
 // TODO: Make this font/color editable so that it isnt always ugly and red.
-void EditImageWindow::addTextPressed(){
+void EditImageWindow::addTextPressed()
+{
     scene->addNewText("New Text. Click to edit.", QPointF(0, 0));
 }
 
-void EditImageWindow::textEditMode(){
+// Ugly, yes. But for now this is fine.
+void EditImageWindow::setSelectedColor(HColor color)
+{
+    QPushButton *buttons[6] = {
+        ui->btnBlack, ui->btnBlue, ui->btnOrange,
+        ui->btnRed, ui->btnPink, ui->btnGreen
+    };
+    int asize = sizeof(buttons) / sizeof(buttons[0]);
+
+    for(int i = 0; i < asize; i++){
+        buttons[i]->setProperty("selected", false);
+    }
+
+    switch(color) {
+    case HColor::Red:
+        ui->btnRed->setProperty("selected", true);
+        break;
+    case HColor::Orange:
+        ui->btnOrange->setProperty("selected", true);
+        break;
+    case HColor::Blue:
+        ui->btnBlue->setProperty("selected", true);
+        break;
+    case HColor::Black:
+        ui->btnBlack->setProperty("selected", true);
+        break;
+    case HColor::Pink:
+        ui->btnPink->setProperty("selected", true);
+        break;
+    case HColor::Green:
+        ui->btnGreen->setProperty("selected", true);
+        break;
+    }
+
+    for(int i = 0; i < asize; i++) {
+        buttons[i]->style()->unpolish(buttons[i]);
+        buttons[i]->style()->polish(buttons[i]);
+    }
 
 }
 
-void EditImageWindow::exitTextEditMode(){
+void EditImageWindow::textEditMode()
+{
+
+}
+
+void EditImageWindow::exitTextEditMode()
+{
 
 }
