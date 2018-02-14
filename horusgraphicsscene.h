@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneWheelEvent>
 #include <QGraphicsItem>
 #include <QGraphicsLineItem>
 #include <QPolygon>
@@ -25,6 +26,7 @@ public:
 signals:
     void enterTextEdit();
     void exitTextEdit();
+    void scrollEvent(QGraphicsSceneWheelEvent*);
 
 
 private slots:
@@ -50,6 +52,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *evt);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *evt);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *evt);
+    void wheelEvent(QGraphicsSceneWheelEvent *evt);
 };
 
 #endif // HORUSGRAPHICSSCENE_H

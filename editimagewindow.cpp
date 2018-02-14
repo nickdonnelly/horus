@@ -29,7 +29,9 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
     QMainWindow(parent),
     ui(new Ui::EditImageWindow),
     uploader(upl),
-    fileLoc(filename)
+    fileLoc(filename),
+    zoom_coef(1.35),
+    zoom_count(0)
 {
     ui->setupUi(this);
     ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -53,6 +55,8 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
     ui->lblWidth->setText("Crop Width: 360");
     ui->lblHeight->setText("Crop Height: 240");
 
+
+
     connect(ui->sliderH, SIGNAL(valueChanged(int)), this, SLOT(rectHeightChanged(int)));
     connect(ui->sliderW, SIGNAL(valueChanged(int)), this, SLOT(rectWidthChanged(int)));
     connect(ui->sliderBrushSize, SIGNAL(valueChanged(int)), this, SLOT(brushWidthChanged(int)));
@@ -74,6 +78,7 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
 
 
     scene = new HorusGraphicsScene(this);
+    connect(scene, SIGNAL(scrollEvent(QGraphicsSceneWheelEvent*)), this, SLOT(scrolled(QGraphicsSceneWheelEvent*)));
     scene->setSceneRect(ui->graphicsView->x(), ui->graphicsView->y(), ui->graphicsView->width(), ui->graphicsView->height());
     imageItem =  scene->addPixmap(*imagePixmap);
     rectangleItem = new HorusRectItem(0, 0, 360, 240);
@@ -282,10 +287,9 @@ void EditImageWindow::clearPressed(){
 // TODO: Make this font/color editable so that it isnt always ugly and red.
 void EditImageWindow::addTextPressed()
 {
-    scene->addNewText("New Text. Click to edit.", QPointF(0, 0));
+    scene->addNewText("Click to edit.", QPointF(0, 0));
 }
 
-// Ugly, yes. But for now this is fine.
 void EditImageWindow::setSelectedColor(HColor color)
 {
     QPushButton *buttons[6] = {
@@ -326,6 +330,17 @@ void EditImageWindow::setSelectedColor(HColor color)
 
 }
 
+void EditImageWindow::scrolled(QGraphicsSceneWheelEvent* evt)
+{
+    if(evt->delta() > 0) {
+        zoom_count++;
+        imageItem->setScale(imageItem->scale() + 0.1);
+    } else if(evt->delta() < 0) {
+        zoom_count--;
+        imageItem->setScale(imageItem->scale() - 0.1);
+    }
+}
+
 void EditImageWindow::textEditMode()
 {
 
@@ -335,3 +350,5 @@ void EditImageWindow::exitTextEditMode()
 {
 
 }
+
+

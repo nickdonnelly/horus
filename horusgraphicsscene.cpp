@@ -111,3 +111,8 @@ void HorusGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *evt){
     }
 }
 
+
+void HorusGraphicsScene::wheelEvent(QGraphicsSceneWheelEvent *evt){
+    emit scrollEvent(evt);
+}
+

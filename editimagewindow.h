@@ -6,6 +6,7 @@
 #include <horusuploader.h>
 #include <QMainWindow>
 #include <QString>
+#include <QGraphicsSceneWheelEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
@@ -55,6 +56,8 @@ private slots:
     void textEditMode();
     void exitTextEditMode();
 
+    void scrolled(QGraphicsSceneWheelEvent *evt);
+
 
 private:
     Ui::EditImageWindow *ui;
@@ -63,6 +66,8 @@ private:
     float imgScaleFactor;
     int rdx, rdy, mx, my, mxOld, myOld;
     float startX, startY;
+    float zoom_coef;
+    int zoom_count;
 
     HorusUploader * uploader;
 
