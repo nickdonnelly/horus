@@ -252,9 +252,17 @@ void EditImageWindow::confirmCancelled(){
     ui->btnBoxConfirm->setVisible(false);
 
     scene->removeItem(croppedItem);
+    imageItem->setScale(1.0);
     scene->addItem(imageItem);
     scene->addItem(rectangleItem);
     scene->addItem(outlineItem);
+    rectangleItem->setPos(0, 0);
+    outlineItem->setPos(0, 0);
+
+    rectangleItem->setVisible(true);
+    outlineItem->setVisible(true);
+
+    imageItem->setZValue(1);
     ui->graphicsView->fitInView(imageItem->boundingRect(), Qt::KeepAspectRatio);
     ui->graphicsView->centerOn(imageItem);
     showingCropped = false;
