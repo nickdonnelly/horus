@@ -76,15 +76,20 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
     connect(ui->btnGreen, SIGNAL(pressed()), this, SLOT(colorGreen()));
     connect(ui->btnRed, SIGNAL(pressed()), this, SLOT(colorRed()));
 
-
+    // Scene preparation
     scene = new HorusGraphicsScene(this);
     connect(scene, SIGNAL(scrollEvent(QGraphicsSceneWheelEvent*)), this, SLOT(scrolled(QGraphicsSceneWheelEvent*)));
     scene->setSceneRect(ui->graphicsView->x(), ui->graphicsView->y(), ui->graphicsView->width(), ui->graphicsView->height());
-    imageItem =  scene->addPixmap(*imagePixmap);
+
+
+    imageItem = new HorusPixmapGraphicsItem(*imagePixmap);
+    scene->addItem(imageItem);
+
     rectangleItem = new HorusRectItem(0, 0, 360, 240);
     scene->setImgRef(rectangleItem);
     scene->addItem(rectangleItem);
     rectangleItem->setBrush(QBrush(QColor(0, 0, 255, 80)));
+    rectangleItem->setZValue(100);
     outlineItem = scene->addRect(0, 0, 360, 240);
     outlineItem->setPen(QPen(Qt::blue));
     ui->graphicsView->setScene(scene);
@@ -99,9 +104,16 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
     this->move(r.width() / 2 - this->width() / 2, r.height() / 2 - this->height() / 2);
 
 
+    // Rectangle Mouse Events
     connect(rectangleItem, SIGNAL(lMouseDown(QPointF)), this, SLOT(rectMouseDown(QPointF)));
     connect(rectangleItem, SIGNAL(lMouseUp()), this, SLOT(rectMouseUp()));
     connect(rectangleItem, SIGNAL(mouseMoved(QPointF)), this, SLOT(rectMoved(QPointF)));
+
+    // Image mouse events
+    connect(imageItem, SIGNAL(lMouseDown(QPointF)), this, SLOT(panStart(QPointF)));
+    connect(imageItem, SIGNAL(lMouseUp()), this, SLOT(panEnd()));
+    connect(imageItem, SIGNAL(mouseMoved(QPointF)), this, SLOT(panMove(QPointF)));
+
 }
 
 EditImageWindow::~EditImageWindow()
@@ -110,17 +122,17 @@ EditImageWindow::~EditImageWindow()
 }
 
 void EditImageWindow::rectMoved(QPointF position){
-    // Holy inefficiency, batman!ore...
     float dx = position.x() - startX;
     float dy = position.y() - startY;
     QPointF rPos = rectangleItem->pos();
     float newX = std::max(0.0f, (float)rPos.x() + dx);
     float newY = std::max(0.0f, (float)rPos.y() + dy);
-    if(rPos.x() + dx + rectangleItem->rect().width() > imgOriginalWidth){
+    float scale = imageItem->scale();
+    if(rPos.x() + dx + rectangleItem->rect().width() > (imgOriginalWidth * imageItem->scale())){
         newX = (float)imgOriginalWidth - rectangleItem->rect().width();
     }
 
-    if(rPos.y() + dy + rectangleItem->rect().height() > imgOriginalHeight){
+    if(rPos.y() + dy + rectangleItem->rect().height() > (imgOriginalHeight * imageItem->scale())){
         newY = (float)imgOriginalHeight - rectangleItem->rect().height();
     }
     rectangleItem->setPos(newX, newY);
@@ -188,7 +200,32 @@ void EditImageWindow::rectMouseUp(){
     dragging = false;
 }
 
-void EditImageWindow::okPressed(){
+void EditImageWindow::panStart(QPointF position)
+{
+    startPanX = position.x();
+    startPanY = position.y();
+    dragging = true;
+}
+
+void EditImageWindow::panEnd()
+{
+    dragging = false;
+}
+
+void EditImageWindow::panMove(QPointF position)
+{
+
+    float dx = position.x() - startPanX;
+    float dy = position.y() - startPanY;
+    QPointF currentPos = imageItem->pos();
+    float newX = (float) currentPos.x() + dx;
+    float newY = (float) currentPos.y() + dy;
+
+    imageItem->setPos(newX, newY);
+}
+
+void EditImageWindow::okPressed()
+{
     int cropXPos, cropYPos, cropW, cropH;
     cropXPos = rectangleItem->pos().x();
     cropYPos = rectangleItem->pos().y();
@@ -332,10 +369,9 @@ void EditImageWindow::setSelectedColor(HColor color)
 
 void EditImageWindow::scrolled(QGraphicsSceneWheelEvent* evt)
 {
-    if(evt->delta() > 0) {
-        zoom_count++;
+    if(evt->delta() > 0 && imageItem->scale() < 4.0) {
         imageItem->setScale(imageItem->scale() + 0.1);
-    } else if(evt->delta() < 0) {
+    } else if(evt->delta() < 0 && imageItem->scale() > 0.2) {
         zoom_count--;
         imageItem->setScale(imageItem->scale() - 0.1);
     }

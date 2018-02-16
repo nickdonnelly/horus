@@ -3,6 +3,7 @@
 
 #include <horusrectitem.h>
 #include <horusgraphicsscene.h>
+#include <horuspixmapgraphicsitem.h>
 #include <horusuploader.h>
 #include <QMainWindow>
 #include <QString>
@@ -35,6 +36,9 @@ private slots:
     void rectMouseUp();
     void rectMoved(QPointF position);
 
+    void panStart(QPointF position);
+    void panEnd();
+    void panMove(QPointF position);
 
     void drawingModeToggled();
     void cancelPressed();
@@ -65,7 +69,7 @@ private:
     int imgOriginalWidth, imgOriginalHeight;
     float imgScaleFactor;
     int rdx, rdy, mx, my, mxOld, myOld;
-    float startX, startY;
+    float startX, startY, startPanX, startPanY;
     float zoom_coef;
     int zoom_count;
 
@@ -75,7 +79,8 @@ private:
     QPixmap * imagePixmap;
     QPixmap cropped;
     HorusGraphicsScene * scene;
-    QGraphicsItem *imageItem, *croppedItem;
+    QGraphicsItem *croppedItem;
+    HorusPixmapGraphicsItem *imageItem;
     QGraphicsRectItem *outlineItem;
     HorusRectItem *rectangleItem;
 

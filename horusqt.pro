@@ -42,7 +42,8 @@ SOURCES += \
     horusstyle.cpp \
     horussettings.cpp \
     editsettingswindow.cpp \
-    models.cpp
+    models.cpp \
+    horuspixmapgraphicsitem.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -61,7 +62,8 @@ HEADERS += \
     horusstyle.h \
     horussettings.h \
     editsettingswindow.h \
-    models.h
+    models.h \
+    horuspixmapgraphicsitem.h
 
 FORMS += \
         screenwindow.ui \
