@@ -10,6 +10,7 @@ class HorusTextItem : public QGraphicsTextItem
 {
 public:
     HorusTextItem();
+    void setCanDrag(bool canDrag);
 
 signals:
 
@@ -17,6 +18,7 @@ public slots:
 
 private:
     bool dragging;
+    bool canDrag;
     int anchorX, anchorY;
 
 protected:

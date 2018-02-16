@@ -1,6 +1,7 @@
 #ifndef HORUSGRAPHICSSCENE_H
 #define HORUSGRAPHICSSCENE_H
 
+#include <horustextitem.h>
 #include <QObject>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
@@ -42,11 +43,13 @@ private:
     QGraphicsLineItem *indicatorPoint;
 
     QList<QGraphicsItem*> points, pathItems;
-    QList<QGraphicsTextItem*> text;
+    QList<HorusTextItem*> text;
 
     bool dragging;
     bool isDrawingMode;
     int brush_width;
+
+    void removeTextItems();
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *evt);

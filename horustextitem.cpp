@@ -4,6 +4,11 @@
 HorusTextItem::HorusTextItem() : QGraphicsTextItem(),
     dragging(false)
 {
+    canDrag = true;
+}
+
+void HorusTextItem::setCanDrag(bool canDrag) {
+    this->canDrag = canDrag;
 }
 
 void HorusTextItem::mousePressEvent(QGraphicsSceneMouseEvent *evt){
@@ -17,7 +22,7 @@ void HorusTextItem::mouseReleaseEvent(QGraphicsSceneMouseEvent){
 }
 
 void HorusTextItem::mouseMoveEvent(QGraphicsSceneMouseEvent *evt){
-    if(dragging){
+    if(dragging && canDrag){
         float dx = evt->pos().x() - anchorX;
         float dy = evt->pos().y() - anchorY;
 

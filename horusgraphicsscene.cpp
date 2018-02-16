@@ -31,11 +31,25 @@ void HorusGraphicsScene::setDrawingMode(bool mode){
     this->isDrawingMode = mode;
     if(isDrawingMode){
         indicatorPoint->setVisible(true);
+        // Disable iteraction on the text items.
+        for(int i = 0; i < text.length(); i++){
+            text.at(i)->setCanDrag(false);
+        }
     }else{
         indicatorPoint->setVisible(false);
+        for(int i = 0; i < text.length(); i++){
+            text.at(i)->setCanDrag(true);
+        }
     }
 }
 
+void HorusGraphicsScene::removeTextItems() {
+    for(int i = 0; i < text.length(); i++){
+        removeItem(text.at(i));
+        text.at(i)->deleteLater();
+        text.removeAt(i);
+    }
+}
 
 void HorusGraphicsScene::addNewText(QString content, QPointF loc){
     HorusTextItem *ti = new HorusTextItem();
@@ -71,6 +85,7 @@ void HorusGraphicsScene::clearDrawing(){
         delete pathItems.at(i);
     }
     pathItems.clear();
+    removeTextItems();
 }
 
 void HorusGraphicsScene::setImgRef(QGraphicsItem *ref){
