@@ -130,15 +130,10 @@ void EditImageWindow::rectMoved(QPointF position){
     float scale = imageItem->scale();
     float h_scaled = imgOriginalHeight * scale;
     float w_scaled = imgOriginalWidth * scale;
-    if(rPos.x() + dx + rectangleItem->rect().width() > w_scaled){
-        newX = (float) w_scaled - rectangleItem->rect().width();
-    }
 
-    if(rPos.y() + dy + rectangleItem->rect().height() > h_scaled){
-        newY = (float) h_scaled - rectangleItem->rect().height();
-    }
     rectangleItem->setPos(newX, newY);
     outlineItem->setPos(newX, newY);
+    enforceRectangleBound();
 }
 
 void EditImageWindow::resizeEvent(QResizeEvent *evt){
@@ -168,10 +163,7 @@ void EditImageWindow::rectHeightChanged(int value){
 
     rectangleItem->setRect(rX, rY, rectangleItem->rect().width(), value);
     outlineItem->setRect(rX, rY, rectangleItem->rect().width(), value);
-    if(value + rPosY > imgOriginalHeight){
-        rectangleItem->setPos(rPosX, imgOriginalHeight - rectangleItem->rect().height());
-        outlineItem->setPos(rPosX, imgOriginalHeight - rectangleItem->rect().height());
-    }
+    enforceRectangleBound();
 }
 
 void EditImageWindow::rectWidthChanged(int value){
@@ -186,10 +178,7 @@ void EditImageWindow::rectWidthChanged(int value){
 
     rectangleItem->setRect(rX, rY, value, rectangleItem->rect().height());
     outlineItem->setRect(rX, rY, value, rectangleItem->rect().height());
-    if(value + rPosX > imgOriginalWidth){
-        rectangleItem->setPos(imgOriginalWidth - rectangleItem->rect().width(), rPosY);
-        outlineItem->setPos(imgOriginalWidth - rectangleItem->rect().width(), rPosY);
-    }
+    enforceRectangleBound();
 }
 
 void EditImageWindow::rectMouseDown(QPointF position){
@@ -224,6 +213,7 @@ void EditImageWindow::panMove(QPointF position)
     float newY = (float) currentPos.y() + dy;
 
     imageItem->setPos(newX, newY);
+    enforceRectangleBound();
 }
 
 void EditImageWindow::okPressed()
@@ -377,6 +367,56 @@ void EditImageWindow::scrolled(QGraphicsSceneWheelEvent* evt)
         zoom_count--;
         imageItem->setScale(imageItem->scale() - 0.1);
     }
+
+    // Check our rectangle is still in bounds.
+    enforceRectangleBound();
+}
+
+void EditImageWindow::enforceRectangleBound() {
+     QPointF rectPos = rectangleItem->pos();
+    QPointF imagePos = imageItem->pos();
+    float w_scaled = imgOriginalWidth * imageItem->scale();
+    float h_scaled = imgOriginalHeight * imageItem->scale();
+
+    float newX = rectPos.x();
+    float newY = rectPos.y();
+
+    // Width
+    if(rectangleItem->rect().width() > w_scaled){
+        rectangleItem->rect().setWidth(w_scaled);
+        ui->sliderW->setValue(w_scaled);
+    }
+
+    // Height
+    if(rectangleItem->rect().height() > h_scaled){
+        rectangleItem->rect().setHeight(h_scaled);
+        ui->sliderH->setValue(h_scaled);
+    }
+
+    // Left Edge
+    if(rectPos.x() < imagePos.x()){
+        newX = imagePos.x();
+    }
+
+    // Top Edge
+    if(rectPos.y() < imagePos.y()){
+        newY = imagePos.y();
+    }
+
+    // Right Edge
+    if(rectPos.x() + rectangleItem->rect().width() > imagePos.x() + w_scaled) {
+        float diff = (rectPos.x() + rectangleItem->rect().width()) - (imagePos.x() + w_scaled);
+        newX = newX - diff;
+    }
+
+    // Bottom Edge
+    if(rectPos.y() + rectangleItem->rect().height() > imagePos.y() + h_scaled) {
+        float diff = (rectPos.y() + rectangleItem->rect().height()) - (imagePos.y() + h_scaled);
+        newY = newY - diff;
+    }
+
+    rectangleItem->setPos(newX, newY);
+    outlineItem->setPos(newX, newY);
 }
 
 void EditImageWindow::textEditMode()
@@ -388,5 +428,3 @@ void EditImageWindow::exitTextEditMode()
 {
 
 }
-
-

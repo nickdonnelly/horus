@@ -88,6 +88,7 @@ private:
         Red, Orange, Black, Blue, Green, Pink
     };
     void setSelectedColor(HColor color);
+    void enforceRectangleBound();
 
 
 
