@@ -128,12 +128,14 @@ void EditImageWindow::rectMoved(QPointF position){
     float newX = std::max(0.0f, (float)rPos.x() + dx);
     float newY = std::max(0.0f, (float)rPos.y() + dy);
     float scale = imageItem->scale();
-    if(rPos.x() + dx + rectangleItem->rect().width() > (imgOriginalWidth * imageItem->scale())){
-        newX = (float)imgOriginalWidth - rectangleItem->rect().width();
+    float h_scaled = imgOriginalHeight * scale;
+    float w_scaled = imgOriginalWidth * scale;
+    if(rPos.x() + dx + rectangleItem->rect().width() > w_scaled){
+        newX = (float) w_scaled - rectangleItem->rect().width();
     }
 
-    if(rPos.y() + dy + rectangleItem->rect().height() > (imgOriginalHeight * imageItem->scale())){
-        newY = (float)imgOriginalHeight - rectangleItem->rect().height();
+    if(rPos.y() + dy + rectangleItem->rect().height() > h_scaled){
+        newY = (float) h_scaled - rectangleItem->rect().height();
     }
     rectangleItem->setPos(newX, newY);
     outlineItem->setPos(newX, newY);
