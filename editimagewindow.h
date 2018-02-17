@@ -35,6 +35,7 @@ private slots:
     void rectMouseDown(QPointF position);
     void rectMouseUp();
     void rectMoved(QPointF position);
+    void rectMouseResize(QPointF start, QPointF end, HorusRectItem::Corner c);
 
     void panStart(QPointF position);
     void panEnd();

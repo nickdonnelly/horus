@@ -108,6 +108,10 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
     connect(rectangleItem, SIGNAL(lMouseDown(QPointF)), this, SLOT(rectMouseDown(QPointF)));
     connect(rectangleItem, SIGNAL(lMouseUp()), this, SLOT(rectMouseUp()));
     connect(rectangleItem, SIGNAL(mouseMoved(QPointF)), this, SLOT(rectMoved(QPointF)));
+    connect(rectangleItem,
+            SIGNAL(resizeFrom(QPointF,QPointF,HorusRectItem::Corner)),
+            this,
+            SLOT(rectMouseResize(QPointF,QPointF,HorusRectItem::Corner)));
 
     // Image mouse events
     connect(imageItem, SIGNAL(lMouseDown(QPointF)), this, SLOT(panStart(QPointF)));
@@ -181,13 +185,60 @@ void EditImageWindow::rectWidthChanged(int value){
     enforceRectangleBound();
 }
 
-void EditImageWindow::rectMouseDown(QPointF position){
+void EditImageWindow::rectMouseResize(QPointF start, QPointF end, HorusRectItem::Corner c)
+{
+    QRectF r = rectangleItem->rect();
+    float sx = start.x();
+    float sy = start.y();
+    float ex = end.x();
+    float ey = end.y();
+
+    int newX, newY, newW, newH;
+
+    float x = r.x();
+    float y = r.y();
+    float dx = ex - sx;
+    float dy = ey - sy;
+
+    switch(c) {
+    case HorusRectItem::Corner::TopLeft:
+        newX = x + dx;
+        newY = y + dy;
+        newW = r.width() - dx;
+        newH = r.height() - dy;
+        break;
+    case HorusRectItem::Corner::TopRight:
+        newX = x;
+        newY = y + dy;
+        newW = (r.topLeft().x() + dx);
+        newH = (r.bottomLeft().y()) - newY;
+        break;
+    case HorusRectItem::Corner::BottomLeft:
+        newY = y;
+        break;
+    case HorusRectItem::Corner::BottomRight:
+        newX = x;
+        newY = y;
+        newW = r.width() + dx;
+        newH = r.height() + dy;
+        break;
+    }
+
+    rectangleItem->setRect(newX, newY, std::max(newW, 5), std::max(newH, 5));
+    outlineItem->setRect(newX, newY, std::max(newW, 5), std::max(newH, 5));
+
+    enforceRectangleBound();
+}
+
+void EditImageWindow::rectMouseDown(QPointF position)
+{
     startX = position.x();
     startY = position.y();
     dragging = true;
 }
 
-void EditImageWindow::rectMouseUp(){
+void EditImageWindow::rectMouseUp()
+{
     dragging = false;
 }
 
