@@ -281,6 +281,11 @@ void EditImageWindow::confirmCancelled(){
     scene->addItem(imageItem);
     scene->addItem(rectangleItem);
     scene->addItem(outlineItem);
+    ui->graphicsView->fitInView(imageItem->boundingRect(), Qt::IgnoreAspectRatio);
+    ui->graphicsView->centerOn(imageItem);
+    imageItem->setScale(1);
+    imageItem->setPos(0, 0);
+
     rectangleItem->setPos(0, 0);
     outlineItem->setPos(0, 0);
 
