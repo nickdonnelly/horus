@@ -254,6 +254,7 @@ void EditImageWindow::okPressed()
     cropped = QPixmap(cropW, cropH);
     QPainter * croppedPainter = new QPainter(&cropped);
     scene->render(croppedPainter, cropped.rect(), QRect(cropXPos, cropYPos, cropW, cropH), Qt::KeepAspectRatio);
+    delete croppedPainter;
     scene->clearDrawing();
 
     scene->removeItem(imageItem);
