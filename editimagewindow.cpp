@@ -109,9 +109,9 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
     connect(rectangleItem, SIGNAL(lMouseUp()), this, SLOT(rectMouseUp()));
     connect(rectangleItem, SIGNAL(mouseMoved(QPointF)), this, SLOT(rectMoved(QPointF)));
     connect(rectangleItem,
-            SIGNAL(resizeFrom(QPointF,QPointF,HorusRectItem::Corner)),
+            SIGNAL(resizeFrom(float,float,HorusRectItem::Corner)),
             this,
-            SLOT(rectMouseResize(QPointF,QPointF,HorusRectItem::Corner)));
+            SLOT(rectMouseResize(float,float,HorusRectItem::Corner)));
 
     // Image mouse events
     connect(imageItem, SIGNAL(lMouseDown(QPointF)), this, SLOT(panStart(QPointF)));
@@ -185,47 +185,21 @@ void EditImageWindow::rectWidthChanged(int value){
     enforceRectangleBound();
 }
 
-void EditImageWindow::rectMouseResize(QPointF start, QPointF end, HorusRectItem::Corner c)
+void EditImageWindow::rectMouseResize(float dx, float dy, HorusRectItem::Corner c)
 {
+    float w_scaled = imageItem->scale() * imgOriginalWidth;
+    float h_scaled = imageItem->scale() * imgOriginalHeight;
     QRectF r = rectangleItem->rect();
-    float sx = start.x();
-    float sy = start.y();
-    float ex = end.x();
-    float ey = end.y();
-
-    int newX, newY, newW, newH;
-
-    float x = r.x();
-    float y = r.y();
-    float dx = ex - sx;
-    float dy = ey - sy;
-
-    switch(c) {
-    case HorusRectItem::Corner::TopLeft:
-        newX = x + dx;
-        newY = y + dy;
-        newW = r.width() - dx;
-        newH = r.height() - dy;
-        break;
-    case HorusRectItem::Corner::TopRight:
-        newX = x;
-        newY = y + dy;
-        newW = (r.topLeft().x() + dx);
-        newH = (r.bottomLeft().y()) - newY;
-        break;
-    case HorusRectItem::Corner::BottomLeft:
-        newY = y;
-        break;
-    case HorusRectItem::Corner::BottomRight:
-        newX = x;
-        newY = y;
-        newW = r.width() + dx;
-        newH = r.height() + dy;
-        break;
+    if(rectangleItem->x() + (r.width() - dx) <= imageItem->x() + w_scaled) {
+        r.setWidth(std::max(1, (int)(r.width() - dx)));
     }
 
-    rectangleItem->setRect(newX, newY, std::max(newW, 5), std::max(newH, 5));
-    outlineItem->setRect(newX, newY, std::max(newW, 5), std::max(newH, 5));
+    if(rectangleItem->y() + (r.height() - dy) <= imageItem->y() + h_scaled) {
+        r.setHeight(std::max(1, (int)(r.height() - dy)));
+    }
+
+    rectangleItem->setRect(r);
+    outlineItem->setRect(r);
 
     enforceRectangleBound();
 }
@@ -432,7 +406,7 @@ void EditImageWindow::scrolled(QGraphicsSceneWheelEvent* evt)
 }
 
 void EditImageWindow::enforceRectangleBound() {
-     QPointF rectPos = rectangleItem->pos();
+    QPointF rectPos = rectangleItem->pos();
     QPointF imagePos = imageItem->pos();
     float w_scaled = imgOriginalWidth * imageItem->scale();
     float h_scaled = imgOriginalHeight * imageItem->scale();
@@ -444,12 +418,16 @@ void EditImageWindow::enforceRectangleBound() {
     if(rectangleItem->rect().width() > w_scaled){
         rectangleItem->rect().setWidth(w_scaled);
         ui->sliderW->setValue(w_scaled);
+    } else {
+        ui->sliderW->setValue(rectangleItem->rect().width());
     }
 
     // Height
     if(rectangleItem->rect().height() > h_scaled){
         rectangleItem->rect().setHeight(h_scaled);
         ui->sliderH->setValue(h_scaled);
+    } else {
+        ui->sliderH->setValue(rectangleItem->rect().height());
     }
 
     // Left Edge

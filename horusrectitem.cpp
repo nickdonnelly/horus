@@ -34,6 +34,7 @@ void HorusRectItem::paint(QPainter *painter,
     QPointF bottomLeft = this->rect().bottomLeft();
     QPointF bottomRight = this->rect().bottomRight();
 
+    /* We only use bottom right for now.
     tl.moveTo(topLeft.x(), topLeft.y());
     tl.arcTo(topLeft.x() - cw, topLeft.y() - cw, corner_diameter, corner_diameter, 0, -90);
     tl.closeSubpath();
@@ -45,6 +46,7 @@ void HorusRectItem::paint(QPainter *painter,
     bl.moveTo(bottomLeft.x(), bottomLeft.y());
     bl.arcTo(bottomLeft.x() - cw, bottomLeft.y() - cw, corner_diameter, corner_diameter, 0, 90);
     bl.closeSubpath();
+    */
 
     br.moveTo(bottomRight.x(), bottomRight.y());
     br.arcTo(bottomRight.x() - cw, bottomRight.y() - cw, corner_diameter, corner_diameter, -180, -90);
@@ -70,7 +72,7 @@ void HorusRectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if(dragging){
         emit mouseMoved(event->pos());
     } else if(resizing) {
-        emit resizeFrom(start, event->pos(), corner);
+        emit resizeFrom(start.x() - event->pos().x(), start.y() - event->pos().y(), corner);
         start = event->pos();
     }
 }
@@ -80,7 +82,7 @@ void HorusRectItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if(event->button() == Qt::MouseButton::LeftButton){
 
         Corner c = isInResizeArea(event->pos());
-        if(c != Corner::None) {
+        if(c == Corner::BottomRight) {
             resizing = true;
             corner = c;
             start = event->pos();
@@ -117,7 +119,7 @@ HorusRectItem::Corner HorusRectItem::isInResizeArea(QPointF area)
     } else if (ax < x + cw && ay > y + h - cw){
         return Corner::BottomLeft;
     } else if (ax > x + w - cw && ay > y + h - cw) {
-        return Corner::BottomLeft;
+        return Corner::BottomRight;
     } else {
         return Corner::None;
     }

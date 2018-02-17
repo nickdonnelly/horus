@@ -38,7 +38,7 @@ signals:
     void lMouseUp();
     void mouseMoved(QPointF position);
 
-    void resizeFrom(QPointF start, QPointF end, HorusRectItem::Corner c);
+    void resizeFrom(float start, float end, HorusRectItem::Corner c);
 
 private:
     bool dragging, resizing;
