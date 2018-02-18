@@ -47,7 +47,9 @@ SOURCES += \
     horussettings.cpp \
     editsettingswindow.cpp \
     models.cpp \
-    horuspixmapgraphicsitem.cpp
+    horuspixmapgraphicsitem.cpp \
+    components/hotkeyselector.cpp \
+    components/hotkeyselectorlineedit.cpp
 
 linux: SOURCES += nativeeventfilter.cpp
 
@@ -69,7 +71,9 @@ HEADERS += \
     horussettings.h \
     editsettingswindow.h \
     models.h \
-    horuspixmapgraphicsitem.h
+    horuspixmapgraphicsitem.h \
+    components/hotkeyselector.h \
+    components/hotkeyselectorlineedit.h
 
 linux: HEADERS +=  nativeeventfilter.h
 
@@ -79,7 +83,8 @@ FORMS += \
     updatedownloaddialog.ui \
     uploadfileswindow.ui \
     expirationselectiondialog.ui \
-    editsettingswindow.ui
+    editsettingswindow.ui \
+    components/hotkeyselector.ui
 
 DISTFILES += \
     res/edit_last.png \

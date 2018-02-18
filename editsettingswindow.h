@@ -4,6 +4,7 @@
 #include <horussettings.h>
 #include <QMainWindow>
 #include <QSettings>
+#include <components/hotkeyselector.h>
 
 namespace Ui {
 class EditSettingsWindow;
@@ -25,12 +26,17 @@ private slots:
     void switchPageUpload();
     void switchPageLocal();
     void switchPageServer();
+    void switchPageHotkeys();
     void switchPageAbout();
     void selectLocalFolder();
     void saveAllAndClose();
 private:
     Ui::EditSettingsWindow *ui;
     HorusSettings * sets;
+
+    HotkeySelector *hksScreenshot, *hksVideo;
+
+    void setupHotkeysPanel();
 };
 
 #endif // EDITSETTINGSWINDOW_H

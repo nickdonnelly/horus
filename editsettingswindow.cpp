@@ -26,10 +26,13 @@ EditSettingsWindow::EditSettingsWindow(HorusSettings *settings, QWidget *parent)
                           + Horus::HORUS_VERSION + "</p>"
                           + "<p align=\"center\">Copyright <span style=\"font-family:'arial,sans-serif'; font-size:16px; color:#222222; background-color:#ffffff;\">©</span> 2017</p><p align=\"center\">Context menu icons courtesy of EmojiOne.</p></body></html>");
 
+    setupHotkeysPanel();
+
     connect(ui->rbUploads, SIGNAL(pressed()), this, SLOT(switchPageUpload()));
     connect(ui->rbLocal, SIGNAL(pressed()), this, SLOT(switchPageLocal()));
     connect(ui->rbAuth, SIGNAL(pressed()), this, SLOT(switchPageServer()));
     connect(ui->rbAbout, SIGNAL(pressed()), this, SLOT(switchPageAbout()));
+    connect(ui->rbHotkeys, SIGNAL(pressed()), this, SLOT(switchPageHotkeys()));
     connect(ui->btnDays, SIGNAL(pressed()), this, SLOT(selectLocalFolder()));
     connect(ui->btnSave, SIGNAL(pressed()), this, SLOT(saveAllAndClose()));
 }
@@ -190,21 +193,33 @@ void EditSettingsWindow::switchPageLocal()
     ui->stackedWidget->setCurrentIndex(1);
 }
 
-void EditSettingsWindow::switchPageServer()
+void EditSettingsWindow::switchPageHotkeys()
 {
     ui->stackedWidget->setCurrentIndex(2);
-
 }
-void EditSettingsWindow::switchPageAbout()
+
+void EditSettingsWindow::switchPageServer()
 {
     ui->stackedWidget->setCurrentIndex(3);
 }
 
-QString EditSettingsWindow::getSystemImagesFolder() {
+void EditSettingsWindow::switchPageAbout()
+{
+    ui->stackedWidget->setCurrentIndex(4);
+}
+
+QString EditSettingsWindow::getSystemImagesFolder()
+{
     QString picPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + "/horus";
     if(!QDir(picPath).exists()){
         QDir().mkpath(picPath);
     }
 
     return picPath;
+}
+
+void EditSettingsWindow::setupHotkeysPanel()
+{
+    hksScreenshot = new HotkeySelector(this);
+    ui->layoutHotkeys->addWidget(hksScreenshot);
 }
