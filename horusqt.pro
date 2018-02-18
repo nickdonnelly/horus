@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui network
+linux: QT += x11extras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -12,6 +13,9 @@ TARGET = horusqt
 TEMPLATE = app
 
 CONFIG +=
+
+linux: CONFIG += link_pkgconfig
+linux: PKGCONFIG += x11
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked as deprecated (the exact warnings
@@ -45,6 +49,8 @@ SOURCES += \
     models.cpp \
     horuspixmapgraphicsitem.cpp
 
+linux: SOURCES += nativeeventfilter.cpp
+
 HEADERS += \
         screenwindow.h \
     horus.h \
@@ -64,6 +70,8 @@ HEADERS += \
     editsettingswindow.h \
     models.h \
     horuspixmapgraphicsitem.h
+
+linux: HEADERS +=  nativeeventfilter.h
 
 FORMS += \
         screenwindow.ui \

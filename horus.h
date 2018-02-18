@@ -11,6 +11,9 @@
 #include <QCloseEvent>
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#ifdef Q_OS_LINUX
+#include <nativeeventfilter.h>
+#endif
 
 class Horus : public QMainWindow
 {
@@ -42,6 +45,7 @@ private slots:
 private:
     void createTrayIcon();
     void showChangelogs();
+    void registerHotkeys();
     bool firstTime;
     QList<QScreen*> screens;
     QList<QMainWindow*> windows;
@@ -55,6 +59,10 @@ private:
     HorusUploader * uploader;
     FileDropper * fileDropper;
     TextDropper * textDropper;
+
+#ifdef Q_OS_LINUX
+    NativeEventFilter *nefScreen;
+#endif
 
 protected:
     void closeEvent(QCloseEvent * evt);

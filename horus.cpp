@@ -20,13 +20,17 @@
 #include <QAction>
 #include <QIcon>
 #include <QClipboard>
-
-const QString Horus::HORUS_VERSION = QString("2.3");
+#ifdef Q_OS_LINUX
+#include <nativeeventfilter.h>
+#endif
+const QString Horus::HORUS_VERSION = QString("2.3.1");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
     recording_icon = QIcon(":/res/horus_recording.png");
     sets = new HorusSettings();
+
+    registerHotkeys();
 
     fileDropper = new FileDropper(sets);
     textDropper = new TextDropper(sets);
@@ -250,7 +254,8 @@ void Horus::closeEvent(QCloseEvent *evt){
     evt->ignore();
 }
 
-void Horus::versionStringReturned(QString version){
+void Horus::versionStringReturned(QString version)
+{
     if(version != HORUS_VERSION){
         QMessageBox * confBox = new QMessageBox();
         confBox->setWindowIcon(main_icon);
@@ -282,13 +287,15 @@ void Horus::versionStringReturned(QString version){
     }
 }
 
-void Horus::showChangelogs(){
+void Horus::showChangelogs()
+{
     QString url_base = uploader->build_base_req_string();
     url_base += "/meta/changelogs";
     QDesktopServices::openUrl(url_base);
 }
 
-void Horus::screenWindowClosed(){
+void Horus::screenWindowClosed()
+{
     while(windows.size() > 0){
         QMainWindow * win = windows.front();
         windows.pop_front();
@@ -297,6 +304,15 @@ void Horus::screenWindowClosed(){
     }
 }
 
-void Horus::setsUpdated(){
+void Horus::setsUpdated()
+{
     // Nothing here for now but that may change later.
+}
+
+void Horus::registerHotkeys()
+{
+    nefScreen = new NativeEventFilter(this);
+    qApp->installNativeEventFilter(nefScreen);
+    connect(nefScreen, SIGNAL(activated()), this, SLOT(openScreenshotWindow()));
+    nefScreen->setShortcut();
 }
