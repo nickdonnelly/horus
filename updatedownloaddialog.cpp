@@ -9,6 +9,7 @@
 #include <QProcess>
 #include <QDir>
 #include <QLabel>
+#include <QStandardPaths>
 #include <QStringList>
 
 UpdateDownloadDialog::UpdateDownloadDialog(QString url, QString authtoken, QWidget *parent) :
@@ -24,7 +25,7 @@ UpdateDownloadDialog::UpdateDownloadDialog(QString url, QString authtoken, QWidg
     ui->pbDownload->setValue(0);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint); // get rid of help button
     manager = new QNetworkAccessManager(this);
-    update_dir_str = qApp->applicationDirPath() + "/update_package";
+    update_dir_str = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/update_package";
     if(!QDir(update_dir_str).exists()){
         QDir(update_dir_str).mkpath(update_dir_str);
     }
@@ -84,9 +85,10 @@ void UpdateDownloadDialog::attemptExtract(){
 #ifdef Q_OS_WIN
     procStr += "\"" + qApp->applicationDirPath() + "/bin/unzip\" -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"";
 #elif defined Q_OS_LINUX
-    procStr += "pkexec"; // run it as root in the event we are in a directory like /usr/bin, for example
+    procStr += "pkexec "; // run it as root in the event we are in a directory like /usr/bin, for example
     procStr += "unzip -o \"" + update_dir_str + "/horus_update.zip\" -d \"" + qApp->applicationDirPath() + "\"";
 #endif
+    QTextStream(stdout) << procStr << endl;
     int exitCode = proc.execute(procStr);
     if(exitCode == 0){
         QSettings * sets = new QSettings("horus-settings.ini", QSettings::IniFormat);

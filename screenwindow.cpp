@@ -165,6 +165,7 @@ void ScreenWindow::takeScreenshot(){
 
     QFile file(getAppSaveDirectory() + "/cache_last_taken.png");
     file.open(QIODevice::WriteOnly);
+    screenMap.save(&file, "PNG");
     file.close();
     close();
 }
