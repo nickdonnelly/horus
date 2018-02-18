@@ -230,15 +230,16 @@ void EditImageWindow::panEnd()
 
 void EditImageWindow::panMove(QPointF position)
 {
+    if(!inDrawingMode){
+        float dx = position.x() - startPanX;
+        float dy = position.y() - startPanY;
+        QPointF currentPos = imageItem->pos();
+        float newX = (float) currentPos.x() + dx;
+        float newY = (float) currentPos.y() + dy;
 
-    float dx = position.x() - startPanX;
-    float dy = position.y() - startPanY;
-    QPointF currentPos = imageItem->pos();
-    float newX = (float) currentPos.x() + dx;
-    float newY = (float) currentPos.y() + dy;
-
-    imageItem->setPos(newX, newY);
-    enforceRectangleBound();
+        imageItem->setPos(newX, newY);
+        enforceRectangleBound();
+    }
 }
 
 void EditImageWindow::okPressed()
