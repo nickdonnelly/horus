@@ -5,6 +5,7 @@
 #include <QIntValidator>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QKeySequence>
 
 #include <QStackedWidget>
 #include <QFileDialog>
@@ -108,6 +109,8 @@ void EditSettingsWindow::saveAllAndClose() {
     sets->setValue("auth/serverPort", serverPort);
     sets->setValue("auth/authToken", lkey);
 
+    saveHotkeys();
+
     // Update on disk
     sets->sync();
 
@@ -176,6 +179,13 @@ void EditSettingsWindow::setUIElementValues() {
     ui->leLicenseKey->setText(lkey);
 }
 
+void EditSettingsWindow::saveHotkeys()
+{
+    sets->setValue("hotkeys/screenshot",
+                   hksScreenshot->getValue().toString(QKeySequence::PortableText)
+                   .replace(",", "").replace(" ", ""));
+}
+
 void EditSettingsWindow::selectLocalFolder()
 {
     QFileDialog d(this);
@@ -220,6 +230,10 @@ QString EditSettingsWindow::getSystemImagesFolder()
 
 void EditSettingsWindow::setupHotkeysPanel()
 {
-    hksScreenshot = new HotkeySelector(this);
+    QString s = sets->value("hotkeys/screenshot").toString();
+    QKeySequence ksScreen(s, QKeySequence::PortableText);
+    hksScreenshot = new HotkeySelector("Open Screenshot Window", this);
+    hksScreenshot->setKeySequence(ksScreen);
     ui->layoutHotkeys->addWidget(hksScreenshot);
+    ui->layoutHotkeys->addWidget(new HotkeySelector("Open Screenshot Window", this));
 }

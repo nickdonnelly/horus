@@ -20,6 +20,8 @@ public:
 
 private:
     void setUIElementValues();
+    void saveHotkeys();
+
     QString getSystemImagesFolder();
 
 private slots:

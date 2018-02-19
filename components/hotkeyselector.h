@@ -10,16 +10,21 @@ class HotkeySelector : public QWidget
 {
     Q_OBJECT
 public:
-    explicit HotkeySelector(QWidget *parent = nullptr);
+    explicit HotkeySelector(QString label, QWidget *parent = nullptr);
+
+    void setKeySequence(QKeySequence s);
+
+    QString getValueString();
+    QKeySequence getValue();
 
 signals:
-    void modifierChanged();
-    void keyChanged();
+    void keyChanged(int m, int k);
 
 public slots:
     void leFocused();
     void leDefocused();
     void cancelPressed();
+    void clearPressed();
 
 protected:
     void keyPressEvent(QKeyEvent *evt);
@@ -33,6 +38,7 @@ private:
     int key;
 
     bool isModifying;
+    bool cancelFocused;
 
     void updateLE();
 };

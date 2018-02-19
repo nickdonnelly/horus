@@ -129,8 +129,8 @@ QFrame QLabel {
             <property name="geometry">
              <rect>
               <x>0</x>
-              <y>-4</y>
-              <width>238</width>
+              <y>0</y>
+              <width>250</width>
               <height>115</height>
              </rect>
             </property>
@@ -1008,7 +1008,7 @@ QFrame QLabel {
                <x>0</x>
                <y>0</y>
                <width>439</width>
-               <height>54</height>
+               <height>20</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1019,15 +1019,7 @@ QFrame QLabel {
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_20">
               <item>
-               <layout class="QVBoxLayout" name="layoutHotkeys">
-                <item>
-                 <widget class="QPushButton" name="pushButton">
-                  <property name="text">
-                   <string>PushButton</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               <layout class="QVBoxLayout" name="layoutHotkeys"/>
               </item>
              </layout>
             </widget>

@@ -1,20 +1,23 @@
 #include "hotkeyselector.h"
 #include <QTextStream>
 
-HotkeySelector::HotkeySelector(QWidget *parent) :
+HotkeySelector::HotkeySelector(QString label, QWidget *parent) :
     QWidget(parent),
     isModifying(false),
+    cancelFocused(false),
     ui(new Ui::HotkeySelector)
 {
     ui->setupUi(this);
+    ui->lblTitle->setText(label);
     connect(ui->lineEdit, SIGNAL(focusIn()), this, SLOT(leFocused()));
     connect(ui->lineEdit, SIGNAL(focusOut()), this, SLOT(leDefocused()));
     connect(ui->btnCancel, SIGNAL(pressed()), this, SLOT(cancelPressed()));
+    connect(ui->btnClear, SIGNAL(pressed()), this, SLOT(clearPressed()));
 }
 
 void HotkeySelector::keyPressEvent(QKeyEvent *evt)
 {
-    if(evt->isAutoRepeat()) return; // do nothing on repeats.
+    if(cancelFocused || evt->isAutoRepeat()) return; // do nothing on repeats.
 
     int ekey = evt->key();
     if(evt->modifiers() == 0){
@@ -27,65 +30,58 @@ void HotkeySelector::keyPressEvent(QKeyEvent *evt)
         modifier = evt->modifiers();
         key = ekey;
         updateLE();
+        emit keyChanged(modifier, key);
     }
 }
 
 void HotkeySelector::keyReleaseEvent(QKeyEvent *evt)
 {
 
+}
 
+void HotkeySelector::setKeySequence(QKeySequence a)
+{
+    if(a.count() > 1) return;
+    s = a;
+    key = 0; // everything is in modifier because fromString not working with toString output
+    modifier = a[0];
+
+    updateLE();
+}
+
+QKeySequence HotkeySelector::getValue()
+{
+    updateLE();
+    return s;
+}
+
+QString HotkeySelector::getValueString()
+{
+    QKeySequence a(modifier, key);
+    return a.toString(QKeySequence::NativeText);
+}
+
+void HotkeySelector::clearPressed()
+{
+    modifier = 0;
+    key = 0;
+    ui->lineEdit->setText("");
 }
 
 void HotkeySelector::updateLE()
 {
-    int mod1 = 0;
-    int mod2 = 0;
-    int mod3 = 0;
-
-    switch(modifier){
-    case Qt::ShiftModifier:
-        mod1 = Qt::Key_Shift;
-        break;
-    case Qt::AltModifier:
-        mod1 = Qt::Key_Alt;
-        break;
-    case Qt::MetaModifier:
-        mod1 = Qt::Key_Meta;
-        break;
-    case Qt::ControlModifier:
-        mod1 = Qt::Key_Control;
-        break;
-
-    case (Qt::ShiftModifier|Qt::AltModifier):
-        mod1 = Qt::Key_Shift;
-        mod2 = Qt::Key_Alt;
-        break;
-    case (Qt::ControlModifier|Qt::AltModifier):
-        mod1 = Qt::Key_Control;
-        mod2 = Qt::Key_Alt;
-        break;
-    case (Qt::ControlModifier|Qt::ShiftModifier):
-        mod1 = Qt::Key_Control;
-        mod2 = Qt::Key_Shift;
-        break;
-
-    case (Qt::ControlModifier|Qt::AltModifier|Qt::ShiftModifier):
-        mod1 = Qt::Key_Control;
-        mod2 = Qt::Key_Alt;
-        mod3 = Qt::Key_Shift;
-    }
-
     s = QKeySequence(modifier, key);
     ui->lineEdit->setText(s.toString(QKeySequence::NativeText).replace(", ", ""));
 }
 
 void HotkeySelector::leFocused()
 {
-    ui->btnCancel->setEnabled(true);
+    cancelFocused = false;
 }
 
 void HotkeySelector::leDefocused()
 {
+    cancelFocused = true;
 }
 
 void HotkeySelector::cancelPressed()
