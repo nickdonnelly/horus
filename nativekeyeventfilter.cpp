@@ -98,8 +98,6 @@ void NativeKeyEventFilter::addShortcut(int identifier, QKeySequence seq)
     reg.modifier = _modifier;
     reg.keycode = XKeysymToKeycode(m_display, _key);
 
-    QTextStream(stdout) << reg.modifier << " " << reg.keycode << " " << _key << endl;
-
     // don't register if these are zero, otherwise you eat keys.
     if(reg.keycode != 0 && reg.modifier != 0){
         foreach(quint32 mod, maskModifiers()){
