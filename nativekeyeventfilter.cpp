@@ -1,4 +1,6 @@
+#include <QTextStream>
 #include "nativekeyeventfilter.h"
+#include <helpers/x11helper.h>
 
 #include <QVector>
 #include <QHash>
@@ -13,9 +15,6 @@
 namespace {
     Display *m_display; // x11 server
     Window m_win; // system window
-    int keycode;
-    unsigned int modifier; // ctrl, shift, etc..
-
 
     QVector<quint32> maskModifiers()
     {
@@ -91,7 +90,7 @@ void NativeKeyEventFilter::addShortcut(int identifier, QKeySequence seq)
         } else if(key.toLower() == "meta") {
             _modifier |= KeyModifier::WindowsKey;
         } else {
-            _key = QKeySequence::fromString(key)[0];
+            _key = qt_key_to_x11_sym(QKeySequence::fromString(key)[0]);
         }
     }
 
@@ -99,9 +98,14 @@ void NativeKeyEventFilter::addShortcut(int identifier, QKeySequence seq)
     reg.modifier = _modifier;
     reg.keycode = XKeysymToKeycode(m_display, _key);
 
-    foreach(quint32 mod, maskModifiers()){
+    QTextStream(stdout) << reg.modifier << " " << reg.keycode << " " << _key << endl;
+
+    // don't register if these are zero, otherwise you eat keys.
+    if(reg.keycode != 0 && reg.modifier != 0){
+        foreach(quint32 mod, maskModifiers()){
         XGrabKey(m_display, reg.keycode, reg.modifier | mod,
-                 m_win, True, GrabModeAsync, GrabModeAsync);
+             m_win, True, GrabModeAsync, GrabModeAsync);
+        }
     }
 
     registrations.insert(identifier, reg);

@@ -205,22 +205,6 @@ QFrame QLabel {
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
             <item row="0" column="0">
-             <spacer name="verticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Expanding</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>100</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item row="1" column="0">
              <widget class="QPushButton" name="btnSave">
               <property name="minimumSize">
                <size>
@@ -277,8 +261,8 @@ QFrame QLabel {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>439</width>
-               <height>460</height>
+               <width>376</width>
+               <height>370</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_16">
@@ -1007,7 +991,7 @@ QFrame QLabel {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>439</width>
+               <width>100</width>
                <height>20</height>
               </rect>
              </property>

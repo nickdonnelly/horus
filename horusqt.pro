@@ -76,9 +76,9 @@ HEADERS += \
     components/hotkeyselector.h \
     components/hotkeyselectorlineedit.h \
     nativekeyeventfilter.h \
-    horusshortcut.h
+    horusshortcut.h \
 
-linux: HEADERS += 
+linux: HEADERS += helpers/x11helper.h
 
 FORMS += \
         screenwindow.ui \
