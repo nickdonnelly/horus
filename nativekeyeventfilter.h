@@ -3,21 +3,22 @@
 
 #include <QObject>
 #include <QAbstractNativeEventFilter>
+#include <QKeySequence>
 #include <X11/Xlib.h>
 
 #ifdef None // XLib defines none and it will interfere with a
 #undef None // qt definition of none in an enum if you dont undefine it.
 #endif
 
-class NativeEventFilter : public QObject, public QAbstractNativeEventFilter
+class NativeKeyEventFilter : public QObject, public QAbstractNativeEventFilter
 {
     Q_OBJECT
 public:
-    explicit NativeEventFilter(QObject *parent = 0);
+    explicit NativeKeyEventFilter(QObject *parent = 0);
 
     bool nativeEventFilter(const QByteArray &eventType, void *msg, long *result);
-    void setShortcut();
-    void unsetShortcut();
+    void addShortcut(QString identifier, QKeySequence seq);
+    void removeShortcut(QString identifier);
 
     enum KeyModifier {
         NoModifer = 0,
@@ -29,6 +30,7 @@ public:
 
 signals:
     void activated();
+    void shortcutPressed(QString identifier);
 
 public slots:
 

@@ -21,7 +21,7 @@
 #include <QIcon>
 #include <QClipboard>
 #ifdef Q_OS_LINUX
-#include <nativeeventfilter.h>
+#include <nativekeyeventfilter.h>
 #endif
 const QString Horus::HORUS_VERSION = QString("2.3.1");
 
@@ -309,10 +309,19 @@ void Horus::setsUpdated()
     // Nothing here for now but that may change later.
 }
 
+void Horus::executeShortcut(QString ident)
+{
+
+}
+
 void Horus::registerHotkeys()
 {
-    nefScreen = new NativeEventFilter(this);
+    nefScreen = new NativeKeyEventFilter(this);
     qApp->installNativeEventFilter(nefScreen);
-    connect(nefScreen, SIGNAL(activated()), this, SLOT(openScreenshotWindow()));
-    nefScreen->setShortcut();
+    connect(nefScreen, SIGNAL(shortcutPressed(QString)), this, SLOT(executeShortcut(QString)));
+
+    QString screenHotkey = sets->value("hotkeys/screenshot").toString();
+    QKeySequence seq(screenHotkey, QKeySequence::PortableText);
+
+    nefScreen->addShortcut("screenshot", seq);
 }

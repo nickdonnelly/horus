@@ -49,9 +49,10 @@ SOURCES += \
     models.cpp \
     horuspixmapgraphicsitem.cpp \
     components/hotkeyselector.cpp \
-    components/hotkeyselectorlineedit.cpp
+    components/hotkeyselectorlineedit.cpp \
+    nativekeyeventfilter.cpp
 
-linux: SOURCES += nativeeventfilter.cpp
+linux: SOURCES +=
 
 HEADERS += \
         screenwindow.h \
@@ -73,9 +74,10 @@ HEADERS += \
     models.h \
     horuspixmapgraphicsitem.h \
     components/hotkeyselector.h \
-    components/hotkeyselectorlineedit.h
+    components/hotkeyselectorlineedit.h \
+    nativekeyeventfilter.h
 
-linux: HEADERS +=  nativeeventfilter.h
+linux: HEADERS += 
 
 FORMS += \
         screenwindow.ui \

@@ -232,6 +232,7 @@ void EditSettingsWindow::setupHotkeysPanel()
 {
     QString s = sets->value("hotkeys/screenshot").toString();
     QKeySequence ksScreen(s, QKeySequence::PortableText);
+
     hksScreenshot = new HotkeySelector("Open Screenshot Window", this);
     hksScreenshot->setKeySequence(ksScreen);
     ui->layoutHotkeys->addWidget(hksScreenshot);

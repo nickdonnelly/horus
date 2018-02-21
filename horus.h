@@ -12,7 +12,7 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #ifdef Q_OS_LINUX
-#include <nativeeventfilter.h>
+#include <nativekeyeventfilter.h>
 #endif
 
 class Horus : public QMainWindow
@@ -41,6 +41,7 @@ private slots:
     void versionStringReturned(QString version);
     void screenWindowClosed();
     void setsUpdated();
+    void executeShortcut(QString ident);
 
 private:
     void createTrayIcon();
@@ -61,7 +62,7 @@ private:
     TextDropper * textDropper;
 
 #ifdef Q_OS_LINUX
-    NativeEventFilter *nefScreen;
+    NativeKeyEventFilter *nefScreen;
 #endif
 
 protected:
