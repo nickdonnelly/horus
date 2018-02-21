@@ -41,7 +41,7 @@ private:
     HorusSettings * sets;
     HorusUploader * uploader;
 
-    HotkeySelector *hksScreenshot, *hksVideo;
+    HotkeySelector *hksScreenshot, *hksVideoDur, *hksVideoCustom;
 
     void setupHotkeysPanel();
 };

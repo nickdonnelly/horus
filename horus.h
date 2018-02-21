@@ -63,6 +63,7 @@ private:
 
 #ifdef Q_OS_LINUX
     NativeKeyEventFilter *nefScreen;
+
 #endif
 
 protected:

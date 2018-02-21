@@ -189,6 +189,14 @@ void EditSettingsWindow::saveHotkeys()
     sets->setValue("hotkeys/screenshot",
                    hksScreenshot->getValue().toString(QKeySequence::PortableText)
                    .replace(",", "").replace(" ", ""));
+
+    sets->setValue("hotkeys/videodur",
+                   hksVideoDur->getValue().toString(QKeySequence::PortableText)
+                   .replace(",", "").replace(" ", ""));
+
+    sets->setValue("hotkeys/videocustom",
+                   hksVideoCustom->getValue().toString(QKeySequence::PortableText)
+                   .replace(",", "").replace(" ", ""));
 }
 
 void EditSettingsWindow::selectLocalFolder()
@@ -247,13 +255,27 @@ QString EditSettingsWindow::getSystemImagesFolder()
     return picPath;
 }
 
+// TODO: Just create a registry intead.
 void EditSettingsWindow::setupHotkeysPanel()
 {
-    QString s = sets->value("hotkeys/screenshot").toString();
-    QKeySequence ksScreen(s, QKeySequence::PortableText);
+    QString sScreen = sets->value("hotkeys/screenshot").toString();
+    QString sVideoDur = sets->value("hotkeys/videodur").toString();
+    QString sVideoCus = sets->value("hotkeys/videocustom").toString();
 
+    QKeySequence ksScreen(sScreen, QKeySequence::PortableText);
+    QKeySequence ksVidDur(sVideoDur, QKeySequence::PortableText);
+    QKeySequence ksVidCus(sVideoCus, QKeySequence::PortableText);
+
+    // TODO: Translations
     hksScreenshot = new HotkeySelector("Open Screenshot Window", this);
+    hksVideoDur = new HotkeySelector("Open Video Window (10s)", this);
+    hksVideoCustom = new HotkeySelector("Open Video Window (Custom)", this);
+
     hksScreenshot->setKeySequence(ksScreen);
+    hksVideoDur->setKeySequence(ksVidDur);
+    hksVideoCustom->setKeySequence(ksVidCus);
+
     ui->layoutHotkeys->addWidget(hksScreenshot);
-    ui->layoutHotkeys->addWidget(new HotkeySelector("Open Screenshot Window", this));
+    ui->layoutHotkeys->addWidget(hksVideoDur);
+    ui->layoutHotkeys->addWidget(hksVideoCustom);
 }
