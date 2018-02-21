@@ -3,6 +3,7 @@
 #include "ui_editsettingswindow.h"
 #include <horus.h>
 #include <QIntValidator>
+#include <QDesktopServices>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QKeySequence>
@@ -14,10 +15,12 @@
 
 #include <QTextStream>
 
-EditSettingsWindow::EditSettingsWindow(HorusSettings *settings, QWidget *parent) :
+EditSettingsWindow::EditSettingsWindow(HorusSettings *settings,
+                                       HorusUploader *upl, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::EditSettingsWindow),
-    sets(settings)
+    sets(settings),
+    uploader(upl)
 {
     ui->setupUi(this);
     setUIElementValues();
@@ -36,6 +39,8 @@ EditSettingsWindow::EditSettingsWindow(HorusSettings *settings, QWidget *parent)
     connect(ui->rbHotkeys, SIGNAL(pressed()), this, SLOT(switchPageHotkeys()));
     connect(ui->btnDays, SIGNAL(pressed()), this, SLOT(selectLocalFolder()));
     connect(ui->btnSave, SIGNAL(pressed()), this, SLOT(saveAllAndClose()));
+    connect(ui->btnChangelogs, SIGNAL(pressed()), this, SLOT(showChangelogs()));
+    connect(ui->btnUpdates, SIGNAL(pressed()), this, SLOT(checkForUpdates()));
 }
 
 EditSettingsWindow::~EditSettingsWindow()
@@ -216,6 +221,20 @@ void EditSettingsWindow::switchPageServer()
 void EditSettingsWindow::switchPageAbout()
 {
     ui->stackedWidget->setCurrentIndex(4);
+}
+
+void EditSettingsWindow::showChangelogs()
+{
+    QString url_base = uploader->build_base_browser_string();
+    url_base += "/meta/changelogs";
+    QDesktopServices::openUrl(url_base);
+}
+
+void EditSettingsWindow::checkForUpdates()
+{
+    ui->btnUpdates->setText("Checking...");
+    uploader->checkLatestVersion();
+    ui->btnUpdates->setText("Check for Updates");
 }
 
 QString EditSettingsWindow::getSystemImagesFolder()

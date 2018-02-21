@@ -254,7 +254,7 @@ QFrame QLabel {
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>4</number>
         </property>
         <widget class="QWidget" name="pageUpload">
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1210,11 +1210,25 @@ QFrame QLabel {
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <layout class="QVBoxLayout" name="verticalLayout_21">
              <item>
               <widget class="QLabel" name="lblAbout">
                <property name="text">
                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Horus Version 2.0.2&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Copyright &lt;span style=&quot; font-family:'arial,sans-serif'; font-size:16px; color:#222222; background-color:#ffffff;&quot;&gt;©&lt;/span&gt; 2017&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Context menu icons courtesy of EmojiOne.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnUpdates">
+               <property name="text">
+                <string>Check for Updates</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnChangelogs">
+               <property name="text">
+                <string>View Changelogs</string>
                </property>
               </widget>
              </item>

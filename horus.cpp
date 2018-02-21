@@ -39,6 +39,7 @@ Horus::Horus(){
     if(sets->value("other/firstLaunchPostUpdate", false).toBool()){
         showChangelogs();
         sets->setValue("other/firstLaunchPostUpdate", false);
+        sets->sync();
     }
 
     connect(sets, SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
@@ -185,7 +186,7 @@ void Horus::openVideoWindowDur(){
 }
 
 void Horus::openSettingsWindow(){
-    EditSettingsWindow *sd = new EditSettingsWindow(sets);
+    EditSettingsWindow *sd = new EditSettingsWindow(sets, uploader);
     sd->setWindowIcon(main_icon);
     sd->show();
 }

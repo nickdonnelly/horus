@@ -2,6 +2,7 @@
 #define EDITSETTINGSWINDOW_H
 
 #include <horussettings.h>
+#include <horusuploader.h>
 #include <QMainWindow>
 #include <QSettings>
 #include <components/hotkeyselector.h>
@@ -15,7 +16,7 @@ class EditSettingsWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit EditSettingsWindow(HorusSettings *settings, QWidget *parent = 0);
+    explicit EditSettingsWindow(HorusSettings *settings, HorusUploader *upl, QWidget *parent = 0);
     ~EditSettingsWindow();
 
 private:
@@ -32,9 +33,13 @@ private slots:
     void switchPageAbout();
     void selectLocalFolder();
     void saveAllAndClose();
+    void checkForUpdates();
+    void showChangelogs();
+
 private:
     Ui::EditSettingsWindow *ui;
     HorusSettings * sets;
+    HorusUploader * uploader;
 
     HotkeySelector *hksScreenshot, *hksVideo;
 
