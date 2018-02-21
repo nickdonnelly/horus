@@ -41,7 +41,7 @@ private slots:
     void versionStringReturned(QString version);
     void screenWindowClosed();
     void setsUpdated();
-    void executeShortcut(QString ident);
+    void executeShortcut(int ident);
 
 private:
     void createTrayIcon();

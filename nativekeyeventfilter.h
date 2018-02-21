@@ -17,8 +17,8 @@ public:
     explicit NativeKeyEventFilter(QObject *parent = 0);
 
     bool nativeEventFilter(const QByteArray &eventType, void *msg, long *result);
-    void addShortcut(QString identifier, QKeySequence seq);
-    void removeShortcut(QString identifier);
+    void addShortcut(int identifier, QKeySequence seq);
+    void removeShortcut(int identifier);
 
     enum KeyModifier {
         NoModifer = 0,
@@ -30,7 +30,7 @@ public:
 
 signals:
     void activated();
-    void shortcutPressed(QString identifier);
+    void shortcutPressed(int identifier);
 
 public slots:
 

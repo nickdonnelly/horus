@@ -1,4 +1,5 @@
 #include "horus.h"
+#include "horusshortcut.h"
 #include <updatedownloaddialog.h>
 #include <screenwindow.h>
 #include <editimagewindow.h>
@@ -307,21 +308,32 @@ void Horus::screenWindowClosed()
 void Horus::setsUpdated()
 {
     // Nothing here for now but that may change later.
+    // TODO: Deregister and re-register all hotkeys!
 }
 
-void Horus::executeShortcut(QString ident)
+void Horus::executeShortcut(int ident)
 {
-
+    switch(ident) {
+    case HorusShortcut::Screenshot:
+        openScreenshotWindow();
+        break;
+    case HorusShortcut::VideoDefault:
+        openVideoWindow10();
+        break;
+    case HorusShortcut::VideoCustom:
+        openVideoWindowDur();
+        break;
+    }
 }
 
 void Horus::registerHotkeys()
 {
     nefScreen = new NativeKeyEventFilter(this);
     qApp->installNativeEventFilter(nefScreen);
-    connect(nefScreen, SIGNAL(shortcutPressed(QString)), this, SLOT(executeShortcut(QString)));
+    connect(nefScreen, SIGNAL(shortcutPressed(int)), this, SLOT(executeShortcut(int)));
 
     QString screenHotkey = sets->value("hotkeys/screenshot").toString();
     QKeySequence seq(screenHotkey, QKeySequence::PortableText);
 
-    nefScreen->addShortcut("screenshot", seq);
+    nefScreen->addShortcut(HorusShortcut::Screenshot, seq);
 }

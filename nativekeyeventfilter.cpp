@@ -29,7 +29,7 @@ namespace {
         int keycode;
     };
 
-    QHash<QString, KeyRegistration> registrations;
+    QHash<int, KeyRegistration> registrations;
 
 }
 
@@ -52,7 +52,7 @@ bool NativeKeyEventFilter::nativeEventFilter(const QByteArray &eventType, void *
             // we are in a key event
             keyEvent = static_cast<xcb_key_press_event_t *>(msg);
 
-            QHashIterator<QString, KeyRegistration> iter(registrations);
+            QHashIterator<int, KeyRegistration> iter(registrations);
 
             while(iter.hasNext()){
                 iter.next();
@@ -74,7 +74,7 @@ bool NativeKeyEventFilter::nativeEventFilter(const QByteArray &eventType, void *
     return false;
 }
 
-void NativeKeyEventFilter::addShortcut(QString identifier, QKeySequence seq)
+void NativeKeyEventFilter::addShortcut(int identifier, QKeySequence seq)
 {
     if(registrations.contains(identifier)) registrations.remove(identifier);
 
@@ -107,7 +107,7 @@ void NativeKeyEventFilter::addShortcut(QString identifier, QKeySequence seq)
     registrations.insert(identifier, reg);
 }
 
-void NativeKeyEventFilter::removeShortcut(QString identifier)
+void NativeKeyEventFilter::removeShortcut(int identifier)
 {
     if(registrations.contains(identifier)){
         foreach(quint32 mod, maskModifiers()){

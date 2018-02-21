@@ -75,7 +75,8 @@ HEADERS += \
     horuspixmapgraphicsitem.h \
     components/hotkeyselector.h \
     components/hotkeyselectorlineedit.h \
-    nativekeyeventfilter.h
+    nativekeyeventfilter.h \
+    horusshortcut.h
 
 linux: HEADERS += 
 
