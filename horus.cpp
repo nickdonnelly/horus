@@ -31,8 +31,6 @@ Horus::Horus(){
     recording_icon = QIcon(":/res/horus_recording.png");
     sets = new HorusSettings();
 
-    registerHotkeys();
-
     fileDropper = new FileDropper(sets);
     textDropper = new TextDropper(sets);
 
@@ -51,6 +49,18 @@ Horus::Horus(){
     firstTime = true;
     setWindowIcon(main_icon);
     trayIcon->show();
+
+#ifdef Q_OS_LINUX
+    nefScreen = new NativeKeyEventFilter(this);
+    qApp->installNativeEventFilter(nefScreen);
+    connect(nefScreen, SIGNAL(shortcutPressed(int)), this, SLOT(executeShortcut(int)));
+#else
+    winHotkeyRegistry = new Win32HotkeyRegistry(Horus::winId(), this);
+    qApp->installNativeEventFilter(winHotkeyRegistry);
+    connect(winHotkeyRegistry, SIGNAL(hotkeyPressed(int)), this, SLOT(executeShortcut(int)));
+#endif
+    registerHotkeys();
+
 
     uploader = new HorusUploader(sets);
     connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
@@ -314,6 +324,9 @@ void Horus::setsUpdated()
     nefScreen->removeShortcut(HorusShortcut::VideoDefault);
 
 #else
+    winHotkeyRegistry->unRegisterHotkey(HorusShortcut::Screenshot);
+    winHotkeyRegistry->unRegisterHotkey(HorusShortcut::VideoCustom);
+    winHotkeyRegistry->unRegisterHotkey(HorusShortcut::VideoDefault);
 #endif
 
     registerHotkeys();
@@ -346,13 +359,12 @@ void Horus::registerHotkeys()
     QKeySequence seqVidCus(vidCustomHotkey, QKeySequence::PortableText);
 
 #ifdef Q_OS_LINUX
-    nefScreen = new NativeKeyEventFilter(this);
-    qApp->installNativeEventFilter(nefScreen);
-    connect(nefScreen, SIGNAL(shortcutPressed(int)), this, SLOT(executeShortcut(int)));
-
     nefScreen->addShortcut(HorusShortcut::Screenshot, seqScreen);
     nefScreen->addShortcut(HorusShortcut::VideoDefault, seqVid);
     nefScreen->addShortcut(HorusShortcut::VideoCustom, seqVidCus);
 #else
+    winHotkeyRegistry->registerHotkey(HorusShortcut::Screenshot, seqScreen);
+    winHotkeyRegistry->registerHotkey(HorusShortcut::VideoDefault, seqVid);
+    winHotkeyRegistry->registerHotkey(HorusShortcut::VideoCustom, seqVidCus);
 #endif
 }

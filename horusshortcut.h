@@ -2,9 +2,9 @@
 #define HORUSSHORTCUT_H
 
 enum HorusShortcut {
-    Screenshot = 0,
-    VideoDefault = 1,
-    VideoCustom = 2
+    Screenshot = 1000,
+    VideoDefault = 1001,
+    VideoCustom = 1002
 };
 
 #endif // HORUSSHORTCUT_H
