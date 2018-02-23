@@ -308,11 +308,13 @@ void Horus::screenWindowClosed()
 
 void Horus::setsUpdated()
 {
-    // Nothing here for now but that may change later.
-    // TODO: Deregister and re-register all hotkeys!
+#ifdef Q_OS_LINUX
     nefScreen->removeShortcut(HorusShortcut::Screenshot);
     nefScreen->removeShortcut(HorusShortcut::VideoCustom);
     nefScreen->removeShortcut(HorusShortcut::VideoDefault);
+
+#else
+#endif
 
     registerHotkeys();
 }
@@ -334,9 +336,6 @@ void Horus::executeShortcut(int ident)
 
 void Horus::registerHotkeys()
 {
-    nefScreen = new NativeKeyEventFilter(this);
-    qApp->installNativeEventFilter(nefScreen);
-    connect(nefScreen, SIGNAL(shortcutPressed(int)), this, SLOT(executeShortcut(int)));
 
     QString screenHotkey = sets->value("hotkeys/screenshot").toString();
     QString vidHotkey = sets->value("hotkeys/videodur").toString();
@@ -346,7 +345,14 @@ void Horus::registerHotkeys()
     QKeySequence seqVid(vidHotkey, QKeySequence::PortableText);
     QKeySequence seqVidCus(vidCustomHotkey, QKeySequence::PortableText);
 
+#ifdef Q_OS_LINUX
+    nefScreen = new NativeKeyEventFilter(this);
+    qApp->installNativeEventFilter(nefScreen);
+    connect(nefScreen, SIGNAL(shortcutPressed(int)), this, SLOT(executeShortcut(int)));
+
     nefScreen->addShortcut(HorusShortcut::Screenshot, seqScreen);
     nefScreen->addShortcut(HorusShortcut::VideoDefault, seqVid);
     nefScreen->addShortcut(HorusShortcut::VideoCustom, seqVidCus);
+#else
+#endif
 }
