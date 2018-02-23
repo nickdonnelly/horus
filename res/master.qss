@@ -1,3 +1,21 @@
+QStackedWidget {
+        background: white;
+}
+
+QScrollArea {
+        background: white;
+}
+
+QScrollArea > QWidget > QWidget {
+        background: white;
+}
+
+QScrollBar::right-arrow:vertical, QScrollBar::left-arrow:vertical {
+        border: none;
+        background: none;
+        color: none;
+}
+
 QLabel {
         background: none;
 }
@@ -78,6 +96,7 @@ QLineEdit:focus, QLineEdit:hover {
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
         background: none;
         border: none;
+        color: none;
         width: 0;
         height: 0;
 }
