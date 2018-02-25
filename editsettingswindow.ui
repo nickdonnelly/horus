@@ -130,8 +130,8 @@ QFrame QLabel {
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>250</width>
-              <height>115</height>
+              <width>248</width>
+              <height>100</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -261,8 +261,8 @@ QFrame QLabel {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>439</width>
-               <height>460</height>
+               <width>435</width>
+               <height>456</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_16">
@@ -991,8 +991,8 @@ QFrame QLabel {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>439</width>
-               <height>20</height>
+               <width>433</width>
+               <height>24</height>
               </rect>
              </property>
              <property name="sizePolicy">

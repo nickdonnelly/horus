@@ -13,6 +13,8 @@
 #include <QSystemTrayIcon>
 #ifdef Q_OS_LINUX
 #include <nativekeyeventfilter.h>
+#else
+#include <helpers/win32hotkeyregistry.h>
 #endif
 
 class Horus : public QMainWindow
@@ -63,7 +65,8 @@ private:
 
 #ifdef Q_OS_LINUX
     NativeKeyEventFilter *nefScreen;
-
+#else
+    Win32HotkeyRegistry *winHotkeyRegistry;
 #endif
 
 protected:

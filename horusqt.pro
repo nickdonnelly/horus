@@ -50,9 +50,12 @@ SOURCES += \
     horuspixmapgraphicsitem.cpp \
     components/hotkeyselector.cpp \
     components/hotkeyselectorlineedit.cpp \
+
+linux: SOURCES += \
     nativekeyeventfilter.cpp
 
-linux: SOURCES +=
+win32: SOURCES += \
+    helpers/win32hotkeyregistry.cpp
 
 HEADERS += \
         screenwindow.h \
@@ -75,10 +78,14 @@ HEADERS += \
     horuspixmapgraphicsitem.h \
     components/hotkeyselector.h \
     components/hotkeyselectorlineedit.h \
-    nativekeyeventfilter.h \
     horusshortcut.h \
 
-linux: HEADERS += helpers/x11helper.h
+linux: HEADERS += \
+        helpers/x11helper.h \
+        nativekeyeventfilter.h \
+
+win32: HEADERS += \
+    helpers/win32hotkeyregistry.h
 
 FORMS += \
         screenwindow.ui \
