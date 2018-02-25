@@ -24,7 +24,7 @@
 #ifdef Q_OS_LINUX
 #include <nativekeyeventfilter.h>
 #endif
-const QString Horus::HORUS_VERSION = QString("2.3.1");
+const QString Horus::HORUS_VERSION = QString("2.4");
 
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
