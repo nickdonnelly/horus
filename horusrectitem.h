@@ -32,6 +32,8 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 signals:
     void lMouseDown(QPointF position);
@@ -41,10 +43,9 @@ signals:
     void resizeFrom(float start, float end, HorusRectItem::Corner c);
 
 private:
-    bool dragging, resizing;
+    bool dragging, resizing, hover;
     int corner_diameter;
-    QBrush ellipseBrush;
-    QPen ellipsePen;
+    QBrush ellipseBrush, ellipseBrushHover;
     Corner corner;
 
     QPointF start;

@@ -8,11 +8,13 @@
 HorusRectItem::HorusRectItem(qreal x, qreal y, qreal w, qreal h)
     : QGraphicsRectItem(x,y,w,h)
 {
+    setAcceptHoverEvents(true);
     dragging = false;
     resizing = false;
     corner_diameter = 80;
     ellipseBrush = QBrush(Qt::cyan);
-    ellipsePen = QPen(Qt::darkCyan, 3.0f);
+    ellipseBrushHover = QBrush(Qt::magenta);
+    hover = false;
 }
 
 void HorusRectItem::paint(QPainter *painter,
@@ -23,25 +25,34 @@ void HorusRectItem::paint(QPainter *painter,
     QGraphicsRectItem::paint(painter, option, widget);
 
     painter->setOpacity(0.70);
-    painter->setBrush(ellipseBrush);
-    painter->setPen(ellipsePen);
+
     int cw = corner_diameter / 2;
 
     QPainterPath tl, tr, bl, br;
 
-    QPointF topLeft = this->rect().topLeft();
-    QPointF topRight = this->rect().topRight();
-    QPointF bottomLeft = this->rect().bottomLeft();
     QPointF bottomRight = this->rect().bottomRight();
 
     br.moveTo(bottomRight.x(), bottomRight.y());
     br.arcTo(bottomRight.x() - cw, bottomRight.y() - cw, corner_diameter, corner_diameter, -180, -90);
     br.closeSubpath();
 
-    painter->fillPath(tl, ellipseBrush);
-    painter->fillPath(tr, ellipseBrush);
-    painter->fillPath(bl, ellipseBrush);
-    painter->fillPath(br, ellipseBrush);
+    if(hover) {
+        painter->fillPath(br, ellipseBrushHover);
+    } else {
+        painter->fillPath(br, ellipseBrush);
+    }
+}
+
+void HorusRectItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+{
+    hover = isInResizeArea(event->pos()) == Corner::BottomRight;
+    update(); // force a repaint.
+}
+
+void HorusRectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    hover = false;
+    update();
 }
 
 void HorusRectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
