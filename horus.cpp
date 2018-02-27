@@ -223,7 +223,7 @@ void Horus::createTrayIcon(){
     actionBoxVideoDur = trayIconMenu->addAction(tr("Take Custom Recording"));
     actionBoxVideoDur->setIcon(QIcon(":/res/recording.png"));
 
-    actionEditLast = trayIconMenu->addAction(tr("Edit Previous Screenshot"));
+    actionEditLast = trayIconMenu->addAction(tr("Screenshot Editor"));
     actionEditLast->setIcon(QIcon(":/res/edit_last.png"));
 
     actionDropFile = trayIconMenu->addAction(tr("Drop File(s) On Clipboard"));
