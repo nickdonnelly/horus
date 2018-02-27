@@ -14,6 +14,8 @@
 #include <QTextStream>
 #include <QMouseEvent>
 #include <QGuiApplication>
+#include <QFileDialog>
+#include <QStandardPaths>
 #include <QThread>
 #include <QBrush>
 #include <QPen>
@@ -55,13 +57,13 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
     ui->lblWidth->setText("Crop Width: 360");
     ui->lblHeight->setText("Crop Height: 240");
 
-
-
     connect(ui->sliderH, SIGNAL(valueChanged(int)), this, SLOT(rectHeightChanged(int)));
     connect(ui->sliderW, SIGNAL(valueChanged(int)), this, SLOT(rectWidthChanged(int)));
     connect(ui->sliderBrushSize, SIGNAL(valueChanged(int)), this, SLOT(brushWidthChanged(int)));
     connect(ui->btnBox, SIGNAL(accepted()), this, SLOT(okPressed()));
     connect(ui->btnBox, SIGNAL(rejected()), this, SLOT(cancelPressed()));
+    connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(cancelPressed()));
+    connect(ui->actionOpen_Image, SIGNAL(triggered()), this, SLOT(openImage()));
     connect(ui->btnBoxConfirm, SIGNAL(accepted()), this, SLOT(confirmConfirmed()));
     connect(ui->btnBoxConfirm, SIGNAL(rejected()), this, SLOT(confirmCancelled()));
     connect(ui->btnDrawMode, SIGNAL(pressed()), this, SLOT(drawingModeToggled()));
@@ -94,7 +96,7 @@ EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget 
     outlineItem->setPen(QPen(Qt::blue));
     ui->graphicsView->setScene(scene);
     ui->graphicsView->scene()->setSceneRect(ui->graphicsView->rect());
-    ui->graphicsView->fitInView(imageItem->boundingRect(), Qt::IgnoreAspectRatio);
+    ui->graphicsView->fitInView(imageItem->boundingRect(), Qt::KeepAspectRatio);
     ui->graphicsView->centerOn(imageItem);
     showingCropped = false;
     show();
@@ -401,7 +403,7 @@ void EditImageWindow::setSelectedColor(HColor color)
 
 void EditImageWindow::scrolled(QGraphicsSceneWheelEvent* evt)
 {
-    if(evt->delta() > 0 && imageItem->scale() < 4.0) {
+    if(evt->delta() > 0 && imageItem->scale() < 5.0) {
         imageItem->setScale(imageItem->scale() + 0.1);
     } else if(evt->delta() < 0 && imageItem->scale() > 0.2) {
         zoom_count--;
@@ -463,12 +465,42 @@ void EditImageWindow::enforceRectangleBound() {
     outlineItem->setPos(newX, newY);
 }
 
-void EditImageWindow::textEditMode()
+void EditImageWindow::openImage()
 {
+    // open find window.
+    QString file = QFileDialog::getOpenFileName(this,
+                    "Select an image to open...",
+                    QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
+                    "Images (*.png *.jpg *.jpeg)");
 
-}
+    if(file != "") {
+        fileLoc = file;
+        scene->removeItem(imageItem);
+        imageItem->deleteLater();
+        delete imagePixmap;
+        imagePixmap = new QPixmap(fileLoc);
+        imgOriginalWidth = imagePixmap->width();
+        imgOriginalHeight = imagePixmap->height();
 
-void EditImageWindow::exitTextEditMode()
-{
+        rectangleItem->rect().setWidth(imgOriginalWidth * 0.15);
+        rectangleItem->rect().setHeight(imgOriginalHeight * 0.15);
 
+        ui->sliderW->setMaximum(imgOriginalWidth);
+        ui->sliderW->setMinimum(1);
+        ui->sliderH->setMaximum(imgOriginalHeight);
+        ui->sliderH->setMinimum(1);
+
+        imageItem = new HorusPixmapGraphicsItem(*imagePixmap);
+        scene->addItem(imageItem);
+
+        ui->graphicsView->centerOn(imageItem);
+        showingCropped = false;
+
+        connect(imageItem, SIGNAL(lMouseDown(QPointF)), this, SLOT(panStart(QPointF)));
+        connect(imageItem, SIGNAL(lMouseUp()), this, SLOT(panEnd()));
+        connect(imageItem, SIGNAL(mouseMoved(QPointF)), this, SLOT(panMove(QPointF)));
+
+        enforceRectangleBound();
+
+    }
 }

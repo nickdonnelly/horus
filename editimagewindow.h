@@ -41,6 +41,8 @@ private slots:
     void panEnd();
     void panMove(QPointF position);
 
+    void openImage();
+
     void drawingModeToggled();
     void cancelPressed();
     void okPressed();
@@ -57,9 +59,6 @@ private slots:
     void colorBlue(){ scene->setBrushColor(QColor(0, 0, 255, 255)); setSelectedColor(HColor::Blue); }
     void colorGreen(){ scene->setBrushColor(QColor(0, 255, 0, 255)); setSelectedColor(HColor::Green); }
     void colorPink(){ scene->setBrushColor(QColor(255, 0, 255, 255)); setSelectedColor(HColor::Pink); }
-
-    void textEditMode();
-    void exitTextEditMode();
 
     void scrolled(QGraphicsSceneWheelEvent *evt);
 

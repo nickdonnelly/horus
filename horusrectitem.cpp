@@ -34,20 +34,6 @@ void HorusRectItem::paint(QPainter *painter,
     QPointF bottomLeft = this->rect().bottomLeft();
     QPointF bottomRight = this->rect().bottomRight();
 
-    /* We only use bottom right for now.
-    tl.moveTo(topLeft.x(), topLeft.y());
-    tl.arcTo(topLeft.x() - cw, topLeft.y() - cw, corner_diameter, corner_diameter, 0, -90);
-    tl.closeSubpath();
-
-    tr.moveTo(topRight.x(), topRight.y());
-    tr.arcTo(topRight.x() - cw, topRight.y() - cw, corner_diameter, corner_diameter, -180, 90);
-    tr.closeSubpath();
-
-    bl.moveTo(bottomLeft.x(), bottomLeft.y());
-    bl.arcTo(bottomLeft.x() - cw, bottomLeft.y() - cw, corner_diameter, corner_diameter, 0, 90);
-    bl.closeSubpath();
-    */
-
     br.moveTo(bottomRight.x(), bottomRight.y());
     br.arcTo(bottomRight.x() - cw, bottomRight.y() - cw, corner_diameter, corner_diameter, -180, -90);
     br.closeSubpath();
@@ -56,15 +42,6 @@ void HorusRectItem::paint(QPainter *painter,
     painter->fillPath(tr, ellipseBrush);
     painter->fillPath(bl, ellipseBrush);
     painter->fillPath(br, ellipseBrush);
-
-    // Top left corner
-    //painter->drawEllipse(-1 * cw, -1 * cw, corner_diameter, corner_diameter);
-    // Top right corner
-    //painter->drawEllipse(w - cw, -1 * cw, corner_diameter, corner_diameter);
-    // Bottom left corner
-    //painter->drawEllipse(-1 * cw, h - cw, corner_diameter, corner_diameter);
-    // Bottom right corner
-    //painter->drawEllipse(w - cw, h - cw, corner_diameter, corner_diameter);
 }
 
 void HorusRectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
