@@ -225,7 +225,11 @@ void HorusUploader::fileUploadComplete(QNetworkReply *reply){
 
     }else{
         QUrlQuery q(reply->request().url());
-        emit uploadFailed("Upload failed. Check your license key!");
+        if(statusCode == 413) {
+            emit uploadFailed("Upload failed: file too large.");
+        } else {
+            emit uploadFailed("Upload failed. Check your license key!");
+        }
     }
     reply->close();
     reply->deleteLater();
