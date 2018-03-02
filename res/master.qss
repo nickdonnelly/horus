@@ -141,3 +141,17 @@ QDialogButtonBox {
 }
 
 
+ToggleSwitch::groove:horizontal {
+        height: 30px;
+        border: 1px solid #dddddd;
+        border-radius: 15px;
+        background: rgba( 124, 204, 254, 255);
+}
+
+ToggleSwitch::handle:horizontal {
+        background: rgba(3, 155, 250, 255);
+        width: 24px;
+        height: 30px;
+        border-radius: 15px;
+        border: 3px solid rgba(143, 199, 235, 255);
+}

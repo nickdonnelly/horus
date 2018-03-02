@@ -21,11 +21,16 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, HorusSettings * sets, QW
 {
     setAcceptDrops(true);
     ui->setupUi(this);
+
     ui->pbCurrentFile->setMinimum(0);
     ui->pbCurrentFile->setMaximum(100);
     ui->pbCurrentFile->setValue(0);
     settings = sets;
     filelist = files;
+
+    zipSwitch = new ToggleSwitch(this);
+    zipSwitch->setOn(settings->value("file/multipleUpload", "") == "zip");
+    ui->layoutQueueLabel->addWidget(zipSwitch);
 
     settings->sync();
     url = settings->value("auth/serverURL").toString();
@@ -141,7 +146,7 @@ void UploadFilesWindow::processMimeData(const QMimeData* mimeData){
 
         // One file -> no zipping no matter what
         // Otherwise check setting
-        if(urls.size() == 1 || settings->value("file/multipleUpload", "") != "zip") {
+        if(urls.size() == 1 || !zipSwitch->getOn()) {
             for(int i = 0; i < urls.size(); i++){
                 QListWidgetItem *newItem = new QListWidgetItem;
                 newItem->setText(urls.at(i).toLocalFile());

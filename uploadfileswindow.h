@@ -3,6 +3,7 @@
 
 #include <horusuploader.h>
 #include <horussettings.h>
+#include <components/toggleswitch.h>
 #include <QMainWindow>
 #include <QDragEnterEvent>
 #include <QKeyEvent>
@@ -43,6 +44,7 @@ private:
     bool ctrlHeld;
     HorusSettings * settings;
     HorusUploader * uploader;
+    ToggleSwitch * zipSwitch;
 
     void startNextFile();
     void processMimeData(const QMimeData *mimeData);

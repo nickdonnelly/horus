@@ -50,6 +50,7 @@ SOURCES += \
     horuspixmapgraphicsitem.cpp \
     components/hotkeyselector.cpp \
     components/hotkeyselectorlineedit.cpp \
+    components/toggleswitch.cpp
 
 linux: SOURCES += \
     nativekeyeventfilter.cpp
@@ -79,6 +80,7 @@ HEADERS += \
     components/hotkeyselector.h \
     components/hotkeyselectorlineedit.h \
     horusshortcut.h \
+    components/toggleswitch.h
 
 linux: HEADERS += \
         helpers/x11helper.h \

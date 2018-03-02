@@ -66,10 +66,36 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="lblQueue">
-      <property name="text">
-       <string>Queued For Upload</string>
+     <widget class="QFrame" name="frameQueue">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="layoutQueueLabel">
+         <item>
+          <widget class="QLabel" name="lblQueue">
+           <property name="text">
+            <string>Queued For Upload</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblZipSwitch">
+           <property name="text">
+            <string>Zip Multiple Files</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
     </item>
     <item>
