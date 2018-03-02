@@ -23,6 +23,7 @@ class UploadFilesWindow : public QMainWindow
 public:
     explicit UploadFilesWindow(QStringList files, HorusSettings * sets, QWidget *parent = 0);
     ~UploadFilesWindow();
+    static QString getArchiveName();
 
 signals:
     void complete();

@@ -24,6 +24,7 @@ void FileDropper::runUpload(QString files){
 
     if(isZip){
         QString zipString = "";
+        QString archive_name = UploadFilesWindow::getArchiveName();
         tempDir = new QTemporaryDir();
         tempDir->setAutoRemove(false);
 #ifdef Q_OS_WIN
@@ -31,7 +32,7 @@ void FileDropper::runUpload(QString files){
 #else
         zipString += "zip";
 #endif
-        zipString += " -r9 -j \"" + tempDir->path() + "/temp.zip\" ";
+        zipString += " -r9 -j \"" + tempDir->path() + "/" + archive_name + ".zip\" ";
 
         for(int i = 0; i < eachfile.size(); i++){
             zipString += "\"" + eachfile.at(i).trimmed()  + "\" ";
@@ -46,7 +47,7 @@ void FileDropper::runUpload(QString files){
             box->setText(QString("Unable to zip files! zip exited with exit code") + QString::number(exitCode));
             box->show();
         }else{
-            eachfile.push_back(QString(tempDir->path() + "/temp.zip"));
+            eachfile.push_back(QString(tempDir->path() + "/" + archive_name + ".zip"));
         }
     }
     // invoke new window with eachfile

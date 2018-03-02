@@ -10,6 +10,9 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QTextStream>
+#include <QTemporaryDir>
+#include <QMessageBox>
+#include <QProcess>
 
 UploadFilesWindow::UploadFilesWindow(QStringList files, HorusSettings * sets, QWidget *parent) :
     QMainWindow(parent),
@@ -29,7 +32,7 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, HorusSettings * sets, QW
     port = settings->value("auth/serverPort").toString();
     token = settings->value("auth/authToken").toString();
     usessl = port == "443";
-    QObject::connect(settings, SIGNAL(notifyUpdated()), this, SLOT(setsUpdated()));
+    QObject::connect(settings, SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
 
     uploader = new HorusUploader(url, port, token, usessl);
     QObject::connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(fileUploaded(QString)));
@@ -136,12 +139,43 @@ void UploadFilesWindow::processMimeData(const QMimeData* mimeData){
         bool startNext = ui->lvFiles->count() == 0;
         QList<QUrl> urls = mimeData->urls();
 
-        for(int i = 0; i < urls.size(); i++){
-            QListWidgetItem *newItem = new QListWidgetItem;
-            newItem->setText(urls.at(i).toLocalFile());
-            ui->lvFiles->insertItem(i, newItem);
-        }
+        // One file -> no zipping no matter what
+        // Otherwise check setting
+        if(urls.size() == 1 || settings->value("file/multipleUpload", "") != "zip") {
+            for(int i = 0; i < urls.size(); i++){
+                QListWidgetItem *newItem = new QListWidgetItem;
+                newItem->setText(urls.at(i).toLocalFile());
+                ui->lvFiles->insertItem(i, newItem);
+            }
+        } else { // zip first
+            QString zipString = "";
+            QString archive_name = getArchiveName();
+            QTemporaryDir tempD;
+            tempD.setAutoRemove(false);
+#ifdef Q_OS_WIN
+            zipString += "bin/zip";
+#else
+            zipString += "zip";
+#endif
+            zipString += " -r9 -j \"" + tempD.path() + "/" + archive_name + ".zip\" ";
+            for(int i = 0; i < urls.size(); i++){
+                zipString += "\"" + urls.at(i).toLocalFile().trimmed() + "\" ";
+            }
 
+            int exitCode = QProcess::execute(zipString);
+
+            if(exitCode != 0){
+                QMessageBox *box = new QMessageBox();
+                box->setWindowIcon(QIcon(":/res/horus.png"));
+                box->setText(QString("Unable to zip dropped files. zip exited with exit code ")
+                             + QString::number(exitCode));
+                box->show();
+            } else {
+                QListWidgetItem *newItem = new QListWidgetItem;
+                newItem->setText(QString(tempD.path() + "/" + archive_name + ".zip"));
+                ui->lvFiles->insertItem(0, newItem);
+            }
+        }
         // If there are files in the lv, we don't want to cancel an upload.
         if(startNext) startNextFile();
     }
@@ -154,4 +188,16 @@ void UploadFilesWindow::setsUpdated() {
     token = settings->value("auth/authToken").toString();
     usessl = port == "443";
 
+}
+
+QString UploadFilesWindow::getArchiveName()
+{
+    const QString alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890");
+    QString result;
+    for(int i = 0; i < 6; i++){
+        int index = qrand() % alphabet.length();
+        QChar c = alphabet.at(index);
+        result.append(c);
+    }
+    return result;
 }
