@@ -138,17 +138,18 @@ void ScreenWindow::keyPressEvent(QKeyEvent *evt){
 
  }
 
- void ScreenWindow::paintEvent(QPaintEvent *evt){
+void ScreenWindow::paintEvent(QPaintEvent *evt)
+{
      QMainWindow::paintEvent(evt);
      if(mousePressed){
          QPainter painter(this);
          painter.setPen(QPen(Qt::blue));
          painter.drawRect(originXRel-1, originYRel-1, iw+2, ih+2);
      }
- }
+}
 
-void ScreenWindow::takeScreenshot(){
-    hide();
+void ScreenWindow::takeFullScreenshot()
+{
     QDesktopWidget* s = QApplication::desktop();
     QRect compositeGeometry;
     for(int i = 0; i < s->screenCount(); ++i){
@@ -167,6 +168,13 @@ void ScreenWindow::takeScreenshot(){
     file.open(QIODevice::WriteOnly);
     screenMap.save(&file, "PNG");
     file.close();
+
+}
+
+void ScreenWindow::takeScreenshot()
+{
+    hide();
+    takeFullScreenshot();
     close();
 }
 

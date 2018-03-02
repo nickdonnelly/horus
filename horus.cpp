@@ -344,6 +344,16 @@ void Horus::executeShortcut(int ident)
     case HorusShortcut::VideoCustom:
         openVideoWindowDur();
         break;
+    case HorusShortcut::PasteClip:
+        textDropper->textDropped();
+        break;
+    case HorusShortcut::FileDrop:
+        fileDropper->fileDropped();
+        break;
+    case HorusShortcut::ScreenshotFull:
+        ScreenWindow::takeFullScreenshot();
+        openEditLastWindow();
+        break;
     }
 }
 
@@ -351,20 +361,32 @@ void Horus::registerHotkeys()
 {
 
     QString screenHotkey = sets->value("hotkeys/screenshot").toString();
+    QString screenFullHotkey = sets->value("hotkeys/fullscreenshot").toString();
     QString vidHotkey = sets->value("hotkeys/videodur").toString();
     QString vidCustomHotkey = sets->value("hotkeys/videocustom").toString();
+    QString pasteTextHotkey = sets->value("hotkeys/pasteclip").toString();
+    QString dropFileHotkey = sets->value("hotkeys/filedrop").toString();
 
     QKeySequence seqScreen(screenHotkey, QKeySequence::PortableText);
+    QKeySequence seqScreenFull(screenFullHotkey, QKeySequence::PortableText);
     QKeySequence seqVid(vidHotkey, QKeySequence::PortableText);
     QKeySequence seqVidCus(vidCustomHotkey, QKeySequence::PortableText);
+    QKeySequence seqPasteText(pasteTextHotkey, QKeySequence::PortableText);
+    QKeySequence seqFileDrop(dropFileHotkey, QKeySequence::PortableText);
 
 #ifdef Q_OS_LINUX
     nefScreen->addShortcut(HorusShortcut::Screenshot, seqScreen);
+    nefScreen->addShortcut(HorusShortcut::ScreenshotFull, seqScreenFull);
     nefScreen->addShortcut(HorusShortcut::VideoDefault, seqVid);
     nefScreen->addShortcut(HorusShortcut::VideoCustom, seqVidCus);
+    nefScreen->addShortcut(HorusShortcut::PasteClip, seqPasteText);
+    nefScreen->addShortcut(HorusShortcut::FileDrop, seqFileDrop);
 #else
     winHotkeyRegistry->registerHotkey(HorusShortcut::Screenshot, seqScreen);
+    winHotkeyRegistry->registerHotkey(HorusShortcut::ScreenshotFull, seqScreenFull);
     winHotkeyRegistry->registerHotkey(HorusShortcut::VideoDefault, seqVid);
     winHotkeyRegistry->registerHotkey(HorusShortcut::VideoCustom, seqVidCus);
+    winHotkeyRegistry->registerHotkey(HorusShortcut::PasteClip, seqPasteText);
+    winHotkeyRegistry->registerHotkey(HorusShortcut::FileDrop, seqFileDrop);
 #endif
 }

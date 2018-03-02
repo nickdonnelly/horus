@@ -24,6 +24,7 @@ public:
     static QString getAppSaveDirectory();
     static QString getFilename(const QString ext);
     static QString getImagesDirectory();
+    static void takeFullScreenshot();
 
 private:
     Ui::ScreenWindow *ui;

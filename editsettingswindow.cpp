@@ -197,6 +197,18 @@ void EditSettingsWindow::saveHotkeys()
     sets->setValue("hotkeys/videocustom",
                    hksVideoCustom->getValue().toString(QKeySequence::PortableText)
                    .replace(",", "").replace(" ", ""));
+
+    sets->setValue("hotkeys/fullscreenshot",
+                   hksFullScreen->getValue().toString(QKeySequence::PortableText)
+                   .replace(",", "").replace(" ", ""));
+
+    sets->setValue("hotkeys/pasteclip",
+                   hksPasteClip->getValue().toString(QKeySequence::PortableText)
+                   .replace(",", "").replace(" ", ""));
+
+    sets->setValue("hotkeys/filedrop",
+                   hksFileDrop->getValue().toString(QKeySequence::PortableText)
+                   .replace(",", "").replace(" ", ""));
 }
 
 void EditSettingsWindow::selectLocalFolder()
@@ -259,23 +271,37 @@ QString EditSettingsWindow::getSystemImagesFolder()
 void EditSettingsWindow::setupHotkeysPanel()
 {
     QString sScreen = sets->value("hotkeys/screenshot").toString();
+    QString sFullScreen= sets->value("hotkeys/fullscreenshot").toString();
     QString sVideoDur = sets->value("hotkeys/videodur").toString();
     QString sVideoCus = sets->value("hotkeys/videocustom").toString();
+    QString sPasteClip = sets->value("hotkeys/pasteclip").toString();
+    QString sFileDrop = sets->value("hotkeys/filedrop").toString();
 
     QKeySequence ksScreen(sScreen, QKeySequence::PortableText);
+    QKeySequence ksFullScreen(sFullScreen, QKeySequence::PortableText);
     QKeySequence ksVidDur(sVideoDur, QKeySequence::PortableText);
     QKeySequence ksVidCus(sVideoCus, QKeySequence::PortableText);
+    QKeySequence ksPasteClip(sPasteClip, QKeySequence::PortableText);
+    QKeySequence ksFileDrop(sFileDrop, QKeySequence::PortableText);
 
-    // TODO: Translations
     hksScreenshot = new HotkeySelector("Open Screenshot Window", this);
+    hksFullScreen = new HotkeySelector("Take Screenshot and Open In Editor", this);
     hksVideoDur = new HotkeySelector("Open Video Window (10s)", this);
-    hksVideoCustom = new HotkeySelector("Open Video Window (Custom)", this);
+    hksVideoCustom= new HotkeySelector("Open Video Window (Custom Duration)", this);
+    hksPasteClip = new HotkeySelector("Paste Clipboard Text", this);
+    hksFileDrop = new HotkeySelector("Open File Dropper", this);
 
     hksScreenshot->setKeySequence(ksScreen);
+    hksFullScreen->setKeySequence(ksFullScreen);
     hksVideoDur->setKeySequence(ksVidDur);
     hksVideoCustom->setKeySequence(ksVidCus);
+    hksPasteClip->setKeySequence(ksPasteClip);
+    hksFileDrop->setKeySequence(ksFileDrop);
 
     ui->layoutHotkeys->addWidget(hksScreenshot);
+    ui->layoutHotkeys->addWidget(hksFullScreen);
     ui->layoutHotkeys->addWidget(hksVideoDur);
     ui->layoutHotkeys->addWidget(hksVideoCustom);
+    ui->layoutHotkeys->addWidget(hksPasteClip);
+    ui->layoutHotkeys->addWidget(hksFileDrop);
 }

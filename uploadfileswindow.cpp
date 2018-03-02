@@ -44,7 +44,7 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, HorusSettings * sets, QW
         ui->lvFiles->insertItem(i, newItem);
     }
     show();
-    ui->sb->showMessage("Ready. Drag-and-drop files to upload (non-zipped).");
+    ui->sb->showMessage("Ready. Drag-and-drop or paste files to upload.");
     if(ui->lvFiles->count() > 0) startNextFile();
 }
 
