@@ -354,6 +354,11 @@ void Horus::executeShortcut(int ident)
         ScreenWindow::takeFullScreenshot();
         openEditLastWindow();
         break;
+    case HorusShortcut::ScreenshotFullUp:
+        ScreenWindow::takeFullScreenshot();
+        QString f = ScreenWindow::getAppSaveDirectory() + "/cache_last_taken.png";
+        uploader->upload(false, f);
+        break;
     }
 }
 
@@ -362,6 +367,7 @@ void Horus::registerHotkeys()
 
     QString screenHotkey = sets->value("hotkeys/screenshot").toString();
     QString screenFullHotkey = sets->value("hotkeys/fullscreenshot").toString();
+    QString screenFullUpHotkey = sets->value("hotkeys/fullupscreenshot").toString();
     QString vidHotkey = sets->value("hotkeys/videodur").toString();
     QString vidCustomHotkey = sets->value("hotkeys/videocustom").toString();
     QString pasteTextHotkey = sets->value("hotkeys/pasteclip").toString();
@@ -369,6 +375,7 @@ void Horus::registerHotkeys()
 
     QKeySequence seqScreen(screenHotkey, QKeySequence::PortableText);
     QKeySequence seqScreenFull(screenFullHotkey, QKeySequence::PortableText);
+    QKeySequence seqScreenFullUp(screenFullUpHotkey, QKeySequence::PortableText);
     QKeySequence seqVid(vidHotkey, QKeySequence::PortableText);
     QKeySequence seqVidCus(vidCustomHotkey, QKeySequence::PortableText);
     QKeySequence seqPasteText(pasteTextHotkey, QKeySequence::PortableText);
@@ -377,6 +384,7 @@ void Horus::registerHotkeys()
 #ifdef Q_OS_LINUX
     nefScreen->addShortcut(HorusShortcut::Screenshot, seqScreen);
     nefScreen->addShortcut(HorusShortcut::ScreenshotFull, seqScreenFull);
+    nefScreen->addShortcut(HorusShortcut::ScreenshotFullUp, seqScreenFullUp);
     nefScreen->addShortcut(HorusShortcut::VideoDefault, seqVid);
     nefScreen->addShortcut(HorusShortcut::VideoCustom, seqVidCus);
     nefScreen->addShortcut(HorusShortcut::PasteClip, seqPasteText);
@@ -384,6 +392,7 @@ void Horus::registerHotkeys()
 #else
     winHotkeyRegistry->registerHotkey(HorusShortcut::Screenshot, seqScreen);
     winHotkeyRegistry->registerHotkey(HorusShortcut::ScreenshotFull, seqScreenFull);
+    winHotkeyRegistry->registerHotkey(HorusShortcut::ScreenshotFullUp, seqScreenFullUp);
     winHotkeyRegistry->registerHotkey(HorusShortcut::VideoDefault, seqVid);
     winHotkeyRegistry->registerHotkey(HorusShortcut::VideoCustom, seqVidCus);
     winHotkeyRegistry->registerHotkey(HorusShortcut::PasteClip, seqPasteText);

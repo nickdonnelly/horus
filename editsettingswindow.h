@@ -42,7 +42,8 @@ private:
     HorusUploader * uploader;
 
     HotkeySelector *hksScreenshot, *hksVideoDur, *hksVideoCustom,
-                   *hksFullScreen, *hksPasteClip, *hksFileDrop;
+                   *hksFullScreen, *hksPasteClip, *hksFileDrop,
+                   *hksFullUpScreen;
 
     void setupHotkeysPanel();
 };

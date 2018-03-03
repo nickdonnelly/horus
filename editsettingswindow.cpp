@@ -272,6 +272,7 @@ void EditSettingsWindow::setupHotkeysPanel()
 {
     QString sScreen = sets->value("hotkeys/screenshot").toString();
     QString sFullScreen= sets->value("hotkeys/fullscreenshot").toString();
+    QString sFullUpScreen= sets->value("hotkeys/fullupscreenshot").toString();
     QString sVideoDur = sets->value("hotkeys/videodur").toString();
     QString sVideoCus = sets->value("hotkeys/videocustom").toString();
     QString sPasteClip = sets->value("hotkeys/pasteclip").toString();
@@ -279,6 +280,7 @@ void EditSettingsWindow::setupHotkeysPanel()
 
     QKeySequence ksScreen(sScreen, QKeySequence::PortableText);
     QKeySequence ksFullScreen(sFullScreen, QKeySequence::PortableText);
+    QKeySequence ksFullUpScreen(sFullUpScreen, QKeySequence::PortableText);
     QKeySequence ksVidDur(sVideoDur, QKeySequence::PortableText);
     QKeySequence ksVidCus(sVideoCus, QKeySequence::PortableText);
     QKeySequence ksPasteClip(sPasteClip, QKeySequence::PortableText);
@@ -286,6 +288,7 @@ void EditSettingsWindow::setupHotkeysPanel()
 
     hksScreenshot = new HotkeySelector("Open Screenshot Window", this);
     hksFullScreen = new HotkeySelector("Take Screenshot and Open In Editor", this);
+    hksFullUpScreen = new HotkeySelector("Take Full Screenshot ", this);
     hksVideoDur = new HotkeySelector("Open Video Window (10s)", this);
     hksVideoCustom= new HotkeySelector("Open Video Window (Custom Duration)", this);
     hksPasteClip = new HotkeySelector("Paste Clipboard Text", this);
@@ -293,6 +296,7 @@ void EditSettingsWindow::setupHotkeysPanel()
 
     hksScreenshot->setKeySequence(ksScreen);
     hksFullScreen->setKeySequence(ksFullScreen);
+    hksFullUpScreen->setKeySequence(ksFullUpScreen);
     hksVideoDur->setKeySequence(ksVidDur);
     hksVideoCustom->setKeySequence(ksVidCus);
     hksPasteClip->setKeySequence(ksPasteClip);
@@ -300,6 +304,7 @@ void EditSettingsWindow::setupHotkeysPanel()
 
     ui->layoutHotkeys->addWidget(hksScreenshot);
     ui->layoutHotkeys->addWidget(hksFullScreen);
+    ui->layoutHotkeys->addWidget(hksFullUpScreen);
     ui->layoutHotkeys->addWidget(hksVideoDur);
     ui->layoutHotkeys->addWidget(hksVideoCustom);
     ui->layoutHotkeys->addWidget(hksPasteClip);

@@ -6,8 +6,9 @@ enum HorusShortcut {
     VideoDefault = 1001,
     VideoCustom = 1002,
     ScreenshotFull = 1003,
-    PasteClip = 1004,
-    FileDrop = 1005
+    ScreenshotFullUp = 1004,
+    PasteClip = 1005,
+    FileDrop = 1006
 };
 
 #endif // HORUSSHORTCUT_H
