@@ -291,8 +291,8 @@ void EditSettingsWindow::setupHotkeysPanel()
     QKeySequence ksFileDrop(sFileDrop, QKeySequence::PortableText);
 
     hksScreenshot = new HotkeySelector("Open Screenshot Window", this);
-    hksFullScreen = new HotkeySelector("Take Screenshot and Open In Editor", this);
-    hksFullUpScreen = new HotkeySelector("Take Full Screenshot ", this);
+    hksFullScreen = new HotkeySelector("Take Full Screenshot and Open In Editor", this);
+    hksFullUpScreen = new HotkeySelector("Take Full Screenshot and Upload", this);
     hksVideoDur = new HotkeySelector("Open Video Window (10s)", this);
     hksVideoCustom= new HotkeySelector("Open Video Window (Custom Duration)", this);
     hksPasteClip = new HotkeySelector("Paste Clipboard Text", this);
