@@ -325,7 +325,6 @@ void EditSettingsWindow::hotkeySelected(int row, int col, int pr, int pc)
     QKeySequence seq(sc, QKeySequence::PortableText);
 
     hks->setLabel(title);
-    QTextStream(stdout) << "Set label to " << title << endl;
     hks->setKeySequence(seq);
 }
 
