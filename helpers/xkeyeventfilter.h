@@ -10,11 +10,11 @@
 #undef None // qt definition of none in an enum if you dont undefine it.
 #endif
 
-class NativeKeyEventFilter : public QObject, public QAbstractNativeEventFilter
+class XKeyEventFilter : public QObject, public QAbstractNativeEventFilter
 {
     Q_OBJECT
 public:
-    explicit NativeKeyEventFilter(QObject *parent = 0);
+    explicit XKeyEventFilter(QObject *parent = 0);
 
     bool nativeEventFilter(const QByteArray &eventType, void *msg, long *result);
     void addShortcut(int identifier, QKeySequence seq);

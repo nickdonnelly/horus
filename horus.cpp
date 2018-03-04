@@ -21,9 +21,7 @@
 #include <QAction>
 #include <QIcon>
 #include <QClipboard>
-#ifdef Q_OS_LINUX
-#include <nativekeyeventfilter.h>
-#endif
+
 const QString Horus::HORUS_VERSION = QString("2.4");
 
 Horus::Horus(){

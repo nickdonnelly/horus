@@ -32,13 +32,13 @@ namespace {
 
 }
 
-NativeKeyEventFilter::NativeKeyEventFilter(QObject *parent) : QObject(parent)
+XKeyEventFilter::XKeyEventFilter(QObject *parent) : QObject(parent)
 {
     m_display = QX11Info::display();
     m_win = DefaultRootWindow(m_display);
 }
 
-bool NativeKeyEventFilter::nativeEventFilter(const QByteArray &eventType, void *msg, long *result)
+bool XKeyEventFilter::nativeEventFilter(const QByteArray &eventType, void *msg, long *result)
 {
     Q_UNUSED(result)
 
@@ -73,7 +73,7 @@ bool NativeKeyEventFilter::nativeEventFilter(const QByteArray &eventType, void *
     return false;
 }
 
-void NativeKeyEventFilter::addShortcut(int identifier, QKeySequence seq)
+void XKeyEventFilter::addShortcut(int identifier, QKeySequence seq)
 {
     if(registrations.contains(identifier)) registrations.remove(identifier);
 
@@ -109,7 +109,7 @@ void NativeKeyEventFilter::addShortcut(int identifier, QKeySequence seq)
     registrations.insert(identifier, reg);
 }
 
-void NativeKeyEventFilter::removeShortcut(int identifier)
+void XKeyEventFilter::removeShortcut(int identifier)
 {
     if(registrations.contains(identifier)){
         foreach(quint32 mod, maskModifiers()){

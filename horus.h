@@ -12,7 +12,7 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #ifdef Q_OS_LINUX
-#include <nativekeyeventfilter.h>
+#include <helpers/xkeyeventfilter.h>
 #else
 #include <helpers/win32hotkeyregistry.h>
 #endif
