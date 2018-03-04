@@ -202,6 +202,10 @@ void EditSettingsWindow::saveHotkeys()
                    hksFullScreen->getValue().toString(QKeySequence::PortableText)
                    .replace(",", "").replace(" ", ""));
 
+    sets->setValue("hotkeys/fullupscreenshot",
+                   hksFullUpScreen->getValue().toString(QKeySequence::PortableText)
+                   .replace(",", "").replace(" ", ""));
+
     sets->setValue("hotkeys/pasteclip",
                    hksPasteClip->getValue().toString(QKeySequence::PortableText)
                    .replace(",", "").replace(" ", ""));
