@@ -68,7 +68,7 @@ bool Win32HotkeyRegistry::nativeEventFilter(const QByteArray &eventType, void *m
         QHashIterator<int, KeyRegistration> iter(registrations);
         while(iter.hasNext()) {
             iter.next();
-            if(iter.key() == m->wParam) {
+            if((unsigned int)iter.key() == m->wParam) {
                 emit hotkeyPressed(iter.key());
                 return true;
             }

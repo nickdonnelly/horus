@@ -51,6 +51,7 @@ void HorusRectItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 
 void HorusRectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
+    Q_UNUSED(event)
     hover = false;
     update();
 }

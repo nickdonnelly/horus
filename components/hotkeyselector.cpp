@@ -3,9 +3,9 @@
 
 HotkeySelector::HotkeySelector(QString label, QWidget *parent) :
     QWidget(parent),
+    ui(new Ui::HotkeySelector),
     isModifying(false),
-    cancelFocused(false),
-    ui(new Ui::HotkeySelector)
+    cancelFocused(false)
 {
     ui->setupUi(this);
     ui->lblTitle->setText(label);

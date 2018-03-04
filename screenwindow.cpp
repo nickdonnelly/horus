@@ -248,6 +248,7 @@ void ScreenWindow::takeScreenshot()
  }
 
 void ScreenWindow::wheelEvent(QWheelEvent *evt) {
+    Q_UNUSED(evt)
     modeScene->removeItem(curItem);
     delete curItem;
     useVideo = !useVideo;

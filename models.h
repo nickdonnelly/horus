@@ -7,6 +7,7 @@
 
 // Ignore the warnings from this. It's used in HorusUploader.
 static QJsonDocument get_paste_form(QString title, QString paste_data){
+    Q_UNUSED(get_paste_form)
     QJsonObject serialized;
     serialized.insert("title", title);
     serialized.insert("paste_data", paste_data);

@@ -30,10 +30,9 @@
 EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::EditImageWindow),
+    zoom_count(0),
     uploader(upl),
-    fileLoc(filename),
-    zoom_coef(1.35),
-    zoom_count(0)
+    fileLoc(filename)
 {
     ui->setupUi(this);
     ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
@@ -133,9 +132,6 @@ void EditImageWindow::rectMoved(QPointF position){
     QPointF rPos = rectangleItem->pos();
     float newX = std::max(0.0f, (float)rPos.x() + dx);
     float newY = std::max(0.0f, (float)rPos.y() + dy);
-    float scale = imageItem->scale();
-    float h_scaled = imgOriginalHeight * scale;
-    float w_scaled = imgOriginalWidth * scale;
 
     rectangleItem->setPos(newX, newY);
     outlineItem->setPos(newX, newY);
@@ -158,12 +154,9 @@ void EditImageWindow::paintEvent(QPaintEvent *evt){
 }
 
 void EditImageWindow::rectHeightChanged(int value){
-    int rX, rY, rPosX, rPosY;
+    int rX, rY;
     rX = rectangleItem->rect().x();
     rY = rectangleItem->rect().y();
-
-    rPosX = rectangleItem->pos().x();
-    rPosY = rectangleItem->pos().y();
 
     ui->lblHeight->setText(QString("Crop Height: ") + QString::number(value));
 
@@ -173,12 +166,9 @@ void EditImageWindow::rectHeightChanged(int value){
 }
 
 void EditImageWindow::rectWidthChanged(int value){
-    int rX, rY, rPosX, rPosY;
+    int rX, rY;
     rX = rectangleItem->rect().x();
     rY = rectangleItem->rect().y();
-
-    rPosX = rectangleItem->pos().x();
-    rPosY = rectangleItem->pos().y();
 
     ui->lblWidth->setText(QString("Crop Width: ") + QString::number(value));
 
@@ -189,6 +179,7 @@ void EditImageWindow::rectWidthChanged(int value){
 
 void EditImageWindow::rectMouseResize(float dx, float dy, HorusRectItem::Corner c)
 {
+    Q_UNUSED(c)
     float w_scaled = imageItem->scale() * imgOriginalWidth;
     float h_scaled = imageItem->scale() * imgOriginalHeight;
     QRectF r = rectangleItem->rect();

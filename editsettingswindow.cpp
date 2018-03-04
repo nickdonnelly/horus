@@ -148,6 +148,7 @@ void EditSettingsWindow::setUIElementValues() {
     bool askExpImg = sets->value("image/askExp", false).toBool();
     bool askExpVid = sets->value("video/askExp", false).toBool();
     bool askExpFile = sets->value("file/askExp", false).toBool();
+    // TODO: implement this.
     bool askExpPaste = sets->value("paste/askExp", false).toBool();
 
     bool uploadZIP = sets->value("file/multipleUpload", "nozip").toString().toLower() == "zip";
@@ -331,6 +332,8 @@ void EditSettingsWindow::hotkeySelected(int row, int col, int pr, int pc)
 
 void EditSettingsWindow::hotkeyChanged(int m, int k)
 {
+    Q_UNUSED(m)
+    Q_UNUSED(k)
     if(selectedRow != -1){
         QString t = hks->getValue().toString(QKeySequence::PortableText)
                 .replace(",", "").replace(" ", "");

@@ -70,7 +70,6 @@ private:
     float imgScaleFactor;
     int rdx, rdy, mx, my, mxOld, myOld;
     float startX, startY, startPanX, startPanY;
-    float zoom_coef;
     int zoom_count;
 
     HorusUploader * uploader;
