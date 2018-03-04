@@ -49,6 +49,7 @@ private:
     void createTrayIcon();
     void showChangelogs();
     void registerHotkeys();
+    void deregisterHotkeys();
     bool firstTime;
     QList<QScreen*> screens;
     QList<QMainWindow*> windows;

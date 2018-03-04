@@ -316,17 +316,7 @@ void Horus::screenWindowClosed()
 
 void Horus::setsUpdated()
 {
-#ifdef Q_OS_LINUX
-    nefScreen->removeShortcut(HorusShortcut::Screenshot);
-    nefScreen->removeShortcut(HorusShortcut::VideoCustom);
-    nefScreen->removeShortcut(HorusShortcut::VideoDefault);
-
-#else
-    winHotkeyRegistry->unRegisterHotkey(HorusShortcut::Screenshot);
-    winHotkeyRegistry->unRegisterHotkey(HorusShortcut::VideoCustom);
-    winHotkeyRegistry->unRegisterHotkey(HorusShortcut::VideoDefault);
-#endif
-
+    deregisterHotkeys();
     registerHotkeys();
 }
 
@@ -362,38 +352,38 @@ void Horus::executeShortcut(int ident)
 
 void Horus::registerHotkeys()
 {
+    QHash<QString, HShortcut> hotkeys = getShortcutHash();
+    QHashIterator<QString, HShortcut> hotkeyIter(hotkeys);
 
-    QString screenHotkey = sets->value("hotkeys/screenshot").toString();
-    QString screenFullHotkey = sets->value("hotkeys/fullscreenshot").toString();
-    QString screenFullUpHotkey = sets->value("hotkeys/fullupscreenshot").toString();
-    QString vidHotkey = sets->value("hotkeys/videodur").toString();
-    QString vidCustomHotkey = sets->value("hotkeys/videocustom").toString();
-    QString pasteTextHotkey = sets->value("hotkeys/pasteclip").toString();
-    QString dropFileHotkey = sets->value("hotkeys/filedrop").toString();
-
-    QKeySequence seqScreen(screenHotkey, QKeySequence::PortableText);
-    QKeySequence seqScreenFull(screenFullHotkey, QKeySequence::PortableText);
-    QKeySequence seqScreenFullUp(screenFullUpHotkey, QKeySequence::PortableText);
-    QKeySequence seqVid(vidHotkey, QKeySequence::PortableText);
-    QKeySequence seqVidCus(vidCustomHotkey, QKeySequence::PortableText);
-    QKeySequence seqPasteText(pasteTextHotkey, QKeySequence::PortableText);
-    QKeySequence seqFileDrop(dropFileHotkey, QKeySequence::PortableText);
-
+    while(hotkeyIter.hasNext()){
+        hotkeyIter.next();
+        QString hotkeyString = sets->value(hotkeyIter.key()).toString();
+        QKeySequence seq(hotkeyString, QKeySequence::PortableText);
+        int ident = hotkeyIter.value().ident;
 #ifdef Q_OS_LINUX
-    nefScreen->addShortcut(HorusShortcut::Screenshot, seqScreen);
-    nefScreen->addShortcut(HorusShortcut::ScreenshotFull, seqScreenFull);
-    nefScreen->addShortcut(HorusShortcut::ScreenshotFullUp, seqScreenFullUp);
-    nefScreen->addShortcut(HorusShortcut::VideoDefault, seqVid);
-    nefScreen->addShortcut(HorusShortcut::VideoCustom, seqVidCus);
-    nefScreen->addShortcut(HorusShortcut::PasteClip, seqPasteText);
-    nefScreen->addShortcut(HorusShortcut::FileDrop, seqFileDrop);
+        nefScreen->addShortcut(ident, seq);
 #else
-    winHotkeyRegistry->registerHotkey(HorusShortcut::Screenshot, seqScreen);
-    winHotkeyRegistry->registerHotkey(HorusShortcut::ScreenshotFull, seqScreenFull);
-    winHotkeyRegistry->registerHotkey(HorusShortcut::ScreenshotFullUp, seqScreenFullUp);
-    winHotkeyRegistry->registerHotkey(HorusShortcut::VideoDefault, seqVid);
-    winHotkeyRegistry->registerHotkey(HorusShortcut::VideoCustom, seqVidCus);
-    winHotkeyRegistry->registerHotkey(HorusShortcut::PasteClip, seqPasteText);
-    winHotkeyRegistry->registerHotkey(HorusShortcut::FileDrop, seqFileDrop);
+        winHotkeyRegistry->registerHotkey(ident, seq);
 #endif
+
+    }
+}
+
+void Horus::deregisterHotkeys()
+{
+    QHash<QString, HShortcut> hotkeys = getShortcutHash();
+    QHashIterator<QString, HShortcut> hotkeyIter(hotkeys);
+
+    while(hotkeyIter.hasNext()){
+        hotkeyIter.next();
+        QString hotkeyString = sets->value(hotkeyIter.key()).toString();
+        QKeySequence seq(hotkeyString, QKeySequence::PortableText);
+        int ident = hotkeyIter.value().ident;
+#ifdef Q_OS_LINUX
+        nefScreen->removeShortcut(ident);
+#else
+        winHotkeyRegistry->unRegisterHotkey(ident);
+#endif
+
+    }
 }
