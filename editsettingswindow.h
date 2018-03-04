@@ -36,14 +36,17 @@ private slots:
     void checkForUpdates();
     void showChangelogs();
 
+    void hotkeySelected(int r, int c, int pr, int pc);
+    void hotkeyChanged(int m, int k);
+
 private:
     Ui::EditSettingsWindow *ui;
+
+    int selectedRow;
     HorusSettings * sets;
     HorusUploader * uploader;
 
-    HotkeySelector *hksScreenshot, *hksVideoDur, *hksVideoCustom,
-                   *hksFullScreen, *hksPasteClip, *hksFileDrop,
-                   *hksFullUpScreen;
+    HotkeySelector *hks;
 
     void setupHotkeysPanel();
 };

@@ -2,16 +2,20 @@
 #include "screenwindow.h"
 #include "ui_editsettingswindow.h"
 #include <horus.h>
+#include <horusshortcut.h>
 #include <QIntValidator>
 #include <QDesktopServices>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QKeySequence>
+#include <QHash>
+#include <QHashIterator>
 
 #include <QStackedWidget>
 #include <QFileDialog>
 #include <QLineEdit>
 #include <QRadioButton>
+#include <QTableWidgetItem>
 
 #include <QTextStream>
 
@@ -186,6 +190,7 @@ void EditSettingsWindow::setUIElementValues() {
 
 void EditSettingsWindow::saveHotkeys()
 {
+    /*
     sets->setValue("hotkeys/screenshot",
                    hksScreenshot->getValue().toString(QKeySequence::PortableText)
                    .replace(",", "").replace(" ", ""));
@@ -213,6 +218,7 @@ void EditSettingsWindow::saveHotkeys()
     sets->setValue("hotkeys/filedrop",
                    hksFileDrop->getValue().toString(QKeySequence::PortableText)
                    .replace(",", "").replace(" ", ""));
+   */
 }
 
 void EditSettingsWindow::selectLocalFolder()
@@ -271,46 +277,63 @@ QString EditSettingsWindow::getSystemImagesFolder()
     return picPath;
 }
 
-// TODO: Just create a registry intead.
 void EditSettingsWindow::setupHotkeysPanel()
 {
-    QString sScreen = sets->value("hotkeys/screenshot").toString();
-    QString sFullScreen= sets->value("hotkeys/fullscreenshot").toString();
-    QString sFullUpScreen= sets->value("hotkeys/fullupscreenshot").toString();
-    QString sVideoDur = sets->value("hotkeys/videodur").toString();
-    QString sVideoCus = sets->value("hotkeys/videocustom").toString();
-    QString sPasteClip = sets->value("hotkeys/pasteclip").toString();
-    QString sFileDrop = sets->value("hotkeys/filedrop").toString();
+    // Configure the table widget
+    ui->twHotkeys->setHorizontalHeaderItem(0, new QTableWidgetItem("Action"));
+    ui->twHotkeys->setHorizontalHeaderItem(1, new QTableWidgetItem("Shortcut"));
+    ui->twHotkeys->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->twHotkeys->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
 
-    QKeySequence ksScreen(sScreen, QKeySequence::PortableText);
-    QKeySequence ksFullScreen(sFullScreen, QKeySequence::PortableText);
-    QKeySequence ksFullUpScreen(sFullUpScreen, QKeySequence::PortableText);
-    QKeySequence ksVidDur(sVideoDur, QKeySequence::PortableText);
-    QKeySequence ksVidCus(sVideoCus, QKeySequence::PortableText);
-    QKeySequence ksPasteClip(sPasteClip, QKeySequence::PortableText);
-    QKeySequence ksFileDrop(sFileDrop, QKeySequence::PortableText);
+    // Add the table widget elements
+    QHash<QString, HShortcut> shortcuts = getShortcutHash();
+    QHashIterator<QString, HShortcut> shortcutIterator(shortcuts);
+    int row = 0;
+    while(shortcutIterator.hasNext()) {
+        shortcutIterator.next();
+        HShortcut scut = shortcutIterator.value();
+        QString setting = sets->value(shortcutIterator.key(), "<none>").toString();
+        QTableWidgetItem *col_name = new QTableWidgetItem(scut.displayString);
+        QTableWidgetItem *col_shortcut = new QTableWidgetItem(setting);
+        col_name->setData(150, shortcutIterator.key()); // setting key
 
-    hksScreenshot = new HotkeySelector("Open Screenshot Window", this);
-    hksFullScreen = new HotkeySelector("Take Full Screenshot and Open In Editor", this);
-    hksFullUpScreen = new HotkeySelector("Take Full Screenshot and Upload", this);
-    hksVideoDur = new HotkeySelector("Open Video Window (10s)", this);
-    hksVideoCustom= new HotkeySelector("Open Video Window (Custom Duration)", this);
-    hksPasteClip = new HotkeySelector("Paste Clipboard Text", this);
-    hksFileDrop = new HotkeySelector("Open File Dropper", this);
+        ui->twHotkeys->insertRow(row);
+        ui->twHotkeys->setItem(row, 0, col_name);
+        ui->twHotkeys->setItem(row, 1, col_shortcut);
+        row++;
+    }
 
-    hksScreenshot->setKeySequence(ksScreen);
-    hksFullScreen->setKeySequence(ksFullScreen);
-    hksFullUpScreen->setKeySequence(ksFullUpScreen);
-    hksVideoDur->setKeySequence(ksVidDur);
-    hksVideoCustom->setKeySequence(ksVidCus);
-    hksPasteClip->setKeySequence(ksPasteClip);
-    hksFileDrop->setKeySequence(ksFileDrop);
+    // Add the hotkeySelector
+    hks = new HotkeySelector("<select a hotkey>", this);
+    ui->vlHotkeys->addWidget(hks);
 
-    ui->layoutHotkeys->addWidget(hksScreenshot);
-    ui->layoutHotkeys->addWidget(hksFullScreen);
-    ui->layoutHotkeys->addWidget(hksFullUpScreen);
-    ui->layoutHotkeys->addWidget(hksVideoDur);
-    ui->layoutHotkeys->addWidget(hksVideoCustom);
-    ui->layoutHotkeys->addWidget(hksPasteClip);
-    ui->layoutHotkeys->addWidget(hksFileDrop);
+    // Only connect after everything is initialized.
+    connect(ui->twHotkeys, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(hotkeySelected(int,int,int,int)));
+    connect(hks, SIGNAL(keyChanged(int,int)), this, SLOT(hotkeyChanged(int, int)));
+
+    selectedRow = -1;
+}
+
+void EditSettingsWindow::hotkeySelected(int row, int col, int pr, int pc)
+{
+    Q_UNUSED(pr)
+    Q_UNUSED(pc)
+
+    selectedRow = row;
+    QString title = ui->twHotkeys->item(row, 0)->text();
+    QString sc = ui->twHotkeys->item(row, 1)->text();
+    QKeySequence seq(sc, QKeySequence::PortableText);
+
+    hks->setLabel(title);
+    QTextStream(stdout) << "Set label to " << title << endl;
+    hks->setKeySequence(seq);
+}
+
+void EditSettingsWindow::hotkeyChanged(int m, int k)
+{
+    if(selectedRow != -1){
+        QString t = hks->getValue().toString(QKeySequence::PortableText)
+                .replace(",", "").replace(" ", "");
+        ui->twHotkeys->item(selectedRow, 1)->setText(t);
+    }
 }

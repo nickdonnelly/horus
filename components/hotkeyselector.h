@@ -13,6 +13,7 @@ public:
     explicit HotkeySelector(QString label, QWidget *parent = nullptr);
 
     void setKeySequence(QKeySequence s);
+    void setLabel(QString label);
 
     QString getValueString();
     QKeySequence getValue();
@@ -28,8 +29,6 @@ public slots:
 
 protected:
     void keyPressEvent(QKeyEvent *evt);
-    void keyReleaseEvent(QKeyEvent *evt);
-
 
 private:
     Ui::HotkeySelector *ui;

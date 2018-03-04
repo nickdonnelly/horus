@@ -238,7 +238,7 @@ QFrame QLabel {
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="pageUpload">
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -261,8 +261,8 @@ QFrame QLabel {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>435</width>
-               <height>456</height>
+               <width>365</width>
+               <height>367</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_16">
@@ -979,35 +979,41 @@ QFrame QLabel {
         <widget class="QWidget" name="pageHotkeys">
          <layout class="QVBoxLayout" name="verticalLayout_17">
           <item>
-           <widget class="QScrollArea" name="scrollArea_2">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>433</width>
-               <height>24</height>
-              </rect>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_20">
-              <item>
-               <layout class="QVBoxLayout" name="layoutHotkeys"/>
-              </item>
-             </layout>
-            </widget>
-           </widget>
+           <layout class="QVBoxLayout" name="vlHotkeys">
+            <item>
+             <widget class="QTableWidget" name="twHotkeys">
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::SingleSelection</enum>
+              </property>
+              <property name="selectionBehavior">
+               <enum>QAbstractItemView::SelectRows</enum>
+              </property>
+              <property name="columnCount">
+               <number>2</number>
+              </property>
+              <attribute name="horizontalHeaderMinimumSectionSize">
+               <number>55</number>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <column/>
+              <column/>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>

@@ -34,9 +34,9 @@ void HotkeySelector::keyPressEvent(QKeyEvent *evt)
     }
 }
 
-void HotkeySelector::keyReleaseEvent(QKeyEvent *evt)
+void HotkeySelector::setLabel(QString label)
 {
-
+    ui->lblTitle->setText(label);
 }
 
 void HotkeySelector::setKeySequence(QKeySequence a)
