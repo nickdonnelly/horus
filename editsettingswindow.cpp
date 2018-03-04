@@ -318,6 +318,7 @@ void EditSettingsWindow::hotkeySelected(int row, int col, int pr, int pc)
 {
     Q_UNUSED(pr)
     Q_UNUSED(pc)
+    Q_UNUSED(col)
 
     selectedRow = row;
     QString title = ui->twHotkeys->item(row, 0)->text();
