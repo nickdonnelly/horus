@@ -14,7 +14,7 @@ Build Windows:
   before_script:
   - docker login -u ${DOCKER_USER} -p {$DOCKER_PASSWD}
 
-  image: nickdonnelly/aws-deploy-horus:windows
+  image: registry.gitlab.com/nickdonnelly/horus/aws-deploy-horus:windows
 
   script:
   - i686-w64-mingw32-qmake-qt5 horusqt.pro
