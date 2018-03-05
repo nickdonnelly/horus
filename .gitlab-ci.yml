@@ -1,8 +1,22 @@
 stages:
-    - mirror
+  - mirror
+  - buildwin
 
 Mirror to gh:
   stage: mirror
   image: haffmans/git-mirror:latest
   script:
   - git-mirror "${CI_PROJECT_DIR}" git@github.com:${GITHUB_REPOSITORY}
+
+
+Build Windows:
+  stage: buildwin
+  before_script:
+  - docker login -u ${DOCKER_USER} -p {$DOCKER_PASSWD}
+
+  image: nickdonnelly/aws-deploy-horus:windows
+
+  script:
+  - i686-w64-mingw32-qmake-qt5 horusqt.pro
+  - make -j7
+  - ls release
