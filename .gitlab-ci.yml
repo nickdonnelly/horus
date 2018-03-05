@@ -12,6 +12,9 @@ Mirror to gh:
 Build Windows:
   stage: buildwin
   image: registry.gitlab.com/nickdonnelly/horus/aws-deploy-hours:windows
+  only:
+  - master
+  - staging
 
   script:
   - i686-w64-mingw32.static-qmake-qt5 horusqt.pro
