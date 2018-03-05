@@ -11,9 +11,6 @@ Mirror to gh:
 
 Build Windows:
   stage: buildwin
-  before_script:
-  - docker login -u ${DOCKER_USER} -p {$DOCKER_PASSWD}
-
   image: registry.gitlab.com/nickdonnelly/horus/aws-deploy-horus:windows
 
   script:
