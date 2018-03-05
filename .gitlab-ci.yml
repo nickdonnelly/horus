@@ -16,4 +16,14 @@ Build Windows:
   script:
   - i686-w64-mingw32.static-qmake-qt5 horusqt.pro
   - make -j7
-  - ls release
+  - cd release
+  - rm *.o *.h *.cpp
+  - cd ..
+
+  artifacts: # save the file 
+    paths:
+    - release/horusqt.exe
+    expire_in: 1 week
+  
+
+# TODO: Build Linux
