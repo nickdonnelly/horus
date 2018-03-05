@@ -14,6 +14,6 @@ Build Windows:
   image: registry.gitlab.com/nickdonnelly/horus/aws-deploy-horus:windows
 
   script:
-  - x86-64-w64-mingw32-qmake-qt5 horusqt.pro
+  - x86_64-w64-mingw32-qmake-qt5 horusqt.pro
   - make -j7
   - ls release
