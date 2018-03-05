@@ -14,6 +14,6 @@ Build Windows:
   image: registry.gitlab.com/nickdonnelly/horus/aws-deploy-hours:windows
 
   script:
-  - i686-w64-mingw32-qmake-qt5 horusqt.pro
+  - i686-w64-mingw32.static-qmake-qt5 horusqt.pro
   - make -j7
   - ls release
