@@ -1,7 +1,7 @@
 #ifndef HORUSGRAPHICSSCENE_H
 #define HORUSGRAPHICSSCENE_H
 
-#include <horustextitem.h>
+#include <components/horustextitem.h>
 #include <QObject>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>

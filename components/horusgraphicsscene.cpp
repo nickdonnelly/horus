@@ -1,5 +1,5 @@
 #include "horusgraphicsscene.h"
-#include <horustextitem.h>
+#include <components/horustextitem.h>
 #include <QGraphicsScene>
 #include <QGraphicsPathItem>
 #include <QGraphicsLineItem>

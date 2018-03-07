@@ -2,8 +2,8 @@
 #include "screenwindow.h"
 #include "ui_editimagewindow.h"
 #include <horusuploader.h>
-#include "horusgraphicsscene.h"
-#include <horusrectitem.h>
+#include <components/horusgraphicsscene.h>
+#include <components/horusrectitem.h>
 #include <QString>
 #include <QResizeEvent>
 #include <QPainter>

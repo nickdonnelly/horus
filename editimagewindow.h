@@ -1,9 +1,9 @@
 #ifndef EDITIMAGEWINDOW_H
 #define EDITIMAGEWINDOW_H
 
-#include <horusrectitem.h>
-#include <horusgraphicsscene.h>
-#include <horuspixmapgraphicsitem.h>
+#include <components/horusrectitem.h>
+#include <components/horusgraphicsscene.h>
+#include <components/horuspixmapgraphicsitem.h>
 #include <horusuploader.h>
 #include <QMainWindow>
 #include <QString>

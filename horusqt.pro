@@ -35,19 +35,19 @@ SOURCES += \
     horusuploader.cpp \
     imagehelper.cpp \
     editimagewindow.cpp \
-    horusrectitem.cpp \
-    horusgraphicsscene.cpp \
     updatedownloaddialog.cpp \
     filedropper.cpp \
     uploadfileswindow.cpp \
     textdropper.cpp \
-    horustextitem.cpp \
     expirationselectiondialog.cpp \
     horusstyle.cpp \
     horussettings.cpp \
     editsettingswindow.cpp \
     models.cpp \
-    horuspixmapgraphicsitem.cpp \
+    components/horusrectitem.cpp \
+    components/horusgraphicsscene.cpp \
+    components/horustextitem.cpp \
+    components/horuspixmapgraphicsitem.cpp \
     components/hotkeyselector.cpp \
     components/hotkeyselectorlineedit.cpp \
     components/toggleswitch.cpp \
@@ -64,22 +64,22 @@ HEADERS += \
     horusuploader.h \
     imagehelper.h \
     editimagewindow.h \
-    horusrectitem.h \
-    horusgraphicsscene.h \
     updatedownloaddialog.h \
     filedropper.h \
     uploadfileswindow.h \
     textdropper.h \
-    horustextitem.h \
     expirationselectiondialog.h \
     horusstyle.h \
     horussettings.h \
     editsettingswindow.h \
     models.h \
-    horuspixmapgraphicsitem.h \
+    horusshortcut.h \
+    components/horusrectitem.h \
+    components/horusgraphicsscene.h \
+    components/horuspixmapgraphicsitem.h \
+    components/horustextitem.h \
     components/hotkeyselector.h \
     components/hotkeyselectorlineedit.h \
-    horusshortcut.h \
     components/toggleswitch.h \
 
 linux: HEADERS += \
