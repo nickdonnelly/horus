@@ -30,20 +30,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        screenwindow.cpp \
     horus.cpp \
     horusuploader.cpp \
     imagehelper.cpp \
-    editimagewindow.cpp \
-    updatedownloaddialog.cpp \
     filedropper.cpp \
-    uploadfileswindow.cpp \
     textdropper.cpp \
-    expirationselectiondialog.cpp \
     horusstyle.cpp \
     horussettings.cpp \
-    editsettingswindow.cpp \
     models.cpp \
+    window/screenwindow.cpp \
+    window/editimagewindow.cpp \
+    window/updatedownloaddialog.cpp \
+    window/editsettingswindow.cpp \
+    window/uploadfileswindow.cpp \
+    window/expirationselectiondialog.cpp \
     components/horusrectitem.cpp \
     components/horusgraphicsscene.cpp \
     components/horustextitem.cpp \
@@ -59,21 +59,21 @@ win32: SOURCES += \
     helpers/win32hotkeyregistry.cpp
 
 HEADERS += \
-        screenwindow.h \
     horus.h \
     horusuploader.h \
     imagehelper.h \
-    editimagewindow.h \
-    updatedownloaddialog.h \
     filedropper.h \
-    uploadfileswindow.h \
     textdropper.h \
-    expirationselectiondialog.h \
     horusstyle.h \
     horussettings.h \
-    editsettingswindow.h \
     models.h \
     horusshortcut.h \
+    window/screenwindow.h \
+    window/editsettingswindow.h \
+    window/editimagewindow.h \
+    window/updatedownloaddialog.h \
+    window/uploadfileswindow.h \
+    window/expirationselectiondialog.h \
     components/horusrectitem.h \
     components/horusgraphicsscene.h \
     components/horuspixmapgraphicsitem.h \
@@ -90,12 +90,12 @@ win32: HEADERS += \
     helpers/win32hotkeyregistry.h
 
 FORMS += \
-        screenwindow.ui \
-    editimagewindow.ui \
-    updatedownloaddialog.ui \
-    uploadfileswindow.ui \
-    expirationselectiondialog.ui \
-    editsettingswindow.ui \
+    window/screenwindow.ui \
+    window/editimagewindow.ui \
+    window/updatedownloaddialog.ui \
+    window/uploadfileswindow.ui \
+    window/expirationselectiondialog.ui \
+    window/editsettingswindow.ui \
     components/hotkeyselector.ui
 
 DISTFILES += \

@@ -1,4 +1,4 @@
-#include "screenwindow.h"
+#include <window/screenwindow.h>
 #include "horus.h"
 #include <horusstyle.h>
 #include <QApplication>

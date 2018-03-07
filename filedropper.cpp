@@ -1,5 +1,5 @@
 #include "filedropper.h"
-#include <uploadfileswindow.h>
+#include <window/uploadfileswindow.h>
 #include <horusuploader.h>
 #include <QTemporaryDir>
 #include <QString>

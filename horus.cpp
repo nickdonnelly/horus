@@ -1,9 +1,9 @@
 #include "horus.h"
 #include "horusshortcut.h"
-#include <updatedownloaddialog.h>
-#include <screenwindow.h>
-#include <editimagewindow.h>
-#include <editsettingswindow.h>
+#include <window/updatedownloaddialog.h>
+#include <window/screenwindow.h>
+#include <window/editimagewindow.h>
+#include <window/editsettingswindow.h>
 #include <horusuploader.h>
 #include <horussettings.h>
 #include <QInputDialog>

@@ -1,6 +1,6 @@
 #include "horus.h"
 #include "horusuploader.h"
-#include "expirationselectiondialog.h"
+#include <window/expirationselectiondialog.h>
 #include "models.h"
 #include <QString>
 #include <QFile>

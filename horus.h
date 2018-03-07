@@ -1,7 +1,7 @@
 #ifndef HORUS_H
 #define HORUS_H
 
-#include <screenwindow.h>
+#include <window/screenwindow.h>
 #include <filedropper.h>
 #include <horusuploader.h>
 #include <horussettings.h>
