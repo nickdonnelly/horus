@@ -1,9 +1,10 @@
 #ifndef UPLOADFILESWINDOW_H
 #define UPLOADFILESWINDOW_H
 
-#include <horusuploader.h>
-#include <horussettings.h>
+#include <net/horusuploader.h>
 #include <components/toggleswitch.h>
+#include <horussettings.h>
+
 #include <QMainWindow>
 #include <QDragEnterEvent>
 #include <QKeyEvent>

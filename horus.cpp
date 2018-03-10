@@ -4,7 +4,7 @@
 #include <window/screenwindow.h>
 #include <window/editimagewindow.h>
 #include <window/editsettingswindow.h>
-#include <horusuploader.h>
+#include <net/horusuploader.h>
 #include <horussettings.h>
 #include <QInputDialog>
 #include <QApplication>
@@ -49,7 +49,7 @@ Horus::Horus(){
     trayIcon->show();
 
 #ifdef Q_OS_LINUX
-    nefScreen = new NativeKeyEventFilter(this);
+    nefScreen = new XKeyEventFilter(this);
     qApp->installNativeEventFilter(nefScreen);
     connect(nefScreen, SIGNAL(shortcutPressed(int)), this, SLOT(executeShortcut(int)));
 #else

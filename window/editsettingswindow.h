@@ -1,8 +1,9 @@
 #ifndef EDITSETTINGSWINDOW_H
 #define EDITSETTINGSWINDOW_H
 
+#include <net/horusuploader.h>
 #include <horussettings.h>
-#include <horusuploader.h>
+
 #include <QMainWindow>
 #include <QSettings>
 #include <components/hotkeyselector.h>

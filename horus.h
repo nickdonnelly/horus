@@ -2,20 +2,26 @@
 #define HORUS_H
 
 #include <window/screenwindow.h>
+#include <net/horusuploader.h>
 #include <filedropper.h>
-#include <horusuploader.h>
 #include <horussettings.h>
 #include <textdropper.h>
+
+
 #include <QObject>
 #include <QSettings>
 #include <QCloseEvent>
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+
+// These includes must come last.
 #ifdef Q_OS_LINUX
 #include <helpers/xkeyeventfilter.h>
 #else
 #include <helpers/win32hotkeyregistry.h>
 #endif
+
+
 
 class Horus : public QMainWindow
 {
@@ -65,7 +71,7 @@ private:
     TextDropper * textDropper;
 
 #ifdef Q_OS_LINUX
-    NativeKeyEventFilter *nefScreen;
+    XKeyEventFilter *nefScreen;
 #else
     Win32HotkeyRegistry *winHotkeyRegistry;
 #endif

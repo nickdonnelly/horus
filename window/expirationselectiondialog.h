@@ -1,9 +1,10 @@
 #ifndef EXPIRATIONSELECTIONDIALOG_H
 #define EXPIRATIONSELECTIONDIALOG_H
 
+#include <net/models.h>
+
 #include <QDialog>
 #include <QDateTime>
-#include <models.h>
 
 namespace Ui {
 class ExpirationSelectionDialog;

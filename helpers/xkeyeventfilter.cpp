@@ -1,5 +1,6 @@
-#include <QTextStream>
-#include "nativekeyeventfilter.h"
+#include <QTextStream> // must come first.
+
+#include <helpers/xkeyeventfilter.h>
 #include <helpers/x11helper.h>
 
 #include <QVector>

@@ -1,6 +1,7 @@
-#include "filedropper.h"
+#include <filedropper.h>
 #include <window/uploadfileswindow.h>
-#include <horusuploader.h>
+#include <net/horusuploader.h>
+
 #include <QTemporaryDir>
 #include <QString>
 #include <QProcess>

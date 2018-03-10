@@ -31,13 +31,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     horus.cpp \
-    horusuploader.cpp \
     imagehelper.cpp \
     filedropper.cpp \
     textdropper.cpp \
     horusstyle.cpp \
     horussettings.cpp \
-    models.cpp \
+    net/models.cpp \
+    net/horusuploader.cpp \
     window/screenwindow.cpp \
     window/editimagewindow.cpp \
     window/updatedownloaddialog.cpp \
@@ -60,14 +60,14 @@ win32: SOURCES += \
 
 HEADERS += \
     horus.h \
-    horusuploader.h \
     imagehelper.h \
     filedropper.h \
     textdropper.h \
     horusstyle.h \
     horussettings.h \
-    models.h \
     horusshortcut.h \
+    net/models.h \
+    net/horusuploader.h \
     window/screenwindow.h \
     window/editsettingswindow.h \
     window/editimagewindow.h \

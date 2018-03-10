@@ -1,13 +1,14 @@
 #ifndef SCREENWINDOW_H
 #define SCREENWINDOW_H
 
+#include <net/horusuploader.h>
+
 #include <QMainWindow>
 #include <QString>
 #include <QScreen>
 #include <QPixmap>
 #include <QGraphicsScene>
 #include <QProcess>
-#include <horusuploader.h>
 
 namespace Ui {
 class ScreenWindow;

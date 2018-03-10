@@ -1,9 +1,10 @@
 #include <window/screenwindow.h>
+#include <net/horusuploader.h>
 #include <horus.h>
-#include <horusuploader.h>
 #include <imagehelper.h>
 #include <ui_screenwindow.h>
-#include "qtextstream.h"
+
+#include <QTextStream>
 #include <QInputDialog>
 #include <QDesktopWidget>
 #include <QProcess>

@@ -1,8 +1,9 @@
 #ifndef TEXTDROPPER_H
 #define TEXTDROPPER_H
 
+#include <net/horusuploader.h>
 #include <horussettings.h>
-#include "horusuploader.h"
+
 #include <QObject>
 #include <QSettings>
 

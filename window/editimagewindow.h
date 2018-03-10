@@ -4,7 +4,8 @@
 #include <components/horusrectitem.h>
 #include <components/horusgraphicsscene.h>
 #include <components/horuspixmapgraphicsitem.h>
-#include <horusuploader.h>
+#include <net/horusuploader.h>
+
 #include <QMainWindow>
 #include <QString>
 #include <QGraphicsSceneWheelEvent>
