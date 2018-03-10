@@ -1,6 +1,7 @@
 stages:
   - mirror
   - buildwin
+  - buildlinux
 
 Mirror to gh:
   stage: mirror
@@ -29,4 +30,20 @@ Build Windows:
     expire_in: 1 week
   
 
-# TODO: Build Linux
+Build Linux:
+  stage: buildlinux
+  image: rabits/qt:5.10-desktop
+  only:
+  - master
+  - staging
+
+  script:
+  - sudo apt-get -qq update
+  - mkdir build && cd build
+  - qmake -r ../
+  - make -j4
+
+  artifacts:
+    paths:
+    - build/*
+    expire_in: 1 week
