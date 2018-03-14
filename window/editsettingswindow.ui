@@ -131,7 +131,7 @@ QFrame QLabel {
               <x>0</x>
               <y>0</y>
               <width>248</width>
-              <height>100</height>
+              <height>115</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -238,7 +238,7 @@ QFrame QLabel {
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="pageUpload">
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -261,8 +261,8 @@ QFrame QLabel {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>365</width>
-               <height>367</height>
+               <width>439</width>
+               <height>460</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_16">
