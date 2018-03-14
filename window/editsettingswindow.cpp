@@ -191,35 +191,13 @@ void EditSettingsWindow::setUIElementValues() {
 
 void EditSettingsWindow::saveHotkeys()
 {
-    /*
-    sets->setValue("hotkeys/screenshot",
-                   hksScreenshot->getValue().toString(QKeySequence::PortableText)
-                   .replace(",", "").replace(" ", ""));
-
-    sets->setValue("hotkeys/videodur",
-                   hksVideoDur->getValue().toString(QKeySequence::PortableText)
-                   .replace(",", "").replace(" ", ""));
-
-    sets->setValue("hotkeys/videocustom",
-                   hksVideoCustom->getValue().toString(QKeySequence::PortableText)
-                   .replace(",", "").replace(" ", ""));
-
-    sets->setValue("hotkeys/fullscreenshot",
-                   hksFullScreen->getValue().toString(QKeySequence::PortableText)
-                   .replace(",", "").replace(" ", ""));
-
-    sets->setValue("hotkeys/fullupscreenshot",
-                   hksFullUpScreen->getValue().toString(QKeySequence::PortableText)
-                   .replace(",", "").replace(" ", ""));
-
-    sets->setValue("hotkeys/pasteclip",
-                   hksPasteClip->getValue().toString(QKeySequence::PortableText)
-                   .replace(",", "").replace(" ", ""));
-
-    sets->setValue("hotkeys/filedrop",
-                   hksFileDrop->getValue().toString(QKeySequence::PortableText)
-                   .replace(",", "").replace(" ", ""));
-   */
+    for(int i = 0; i < ui->twHotkeys->rowCount(); i++){
+        // Take item in last column
+        QString setting_key = ui->twHotkeys->
+                item(i, ui->twHotkeys->columnCount() - 1)->data(150).toString();
+        QString setting_val = ui->twHotkeys->item(i, ui->twHotkeys->columnCount() - 1)->text();
+        sets->setValue(setting_key, setting_val);
+    }
 }
 
 void EditSettingsWindow::selectLocalFolder()
@@ -296,7 +274,7 @@ void EditSettingsWindow::setupHotkeysPanel()
         QString setting = sets->value(shortcutIterator.key(), "<none>").toString();
         QTableWidgetItem *col_name = new QTableWidgetItem(scut.displayString);
         QTableWidgetItem *col_shortcut = new QTableWidgetItem(setting);
-        col_name->setData(150, shortcutIterator.key()); // setting key
+        col_shortcut->setData(150, shortcutIterator.key()); // setting key
 
         ui->twHotkeys->insertRow(row);
         ui->twHotkeys->setItem(row, 0, col_name);

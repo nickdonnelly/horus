@@ -358,6 +358,7 @@ void Horus::registerHotkeys()
     while(hotkeyIter.hasNext()){
         hotkeyIter.next();
         QString hotkeyString = sets->value(hotkeyIter.key()).toString();
+        if(hotkeyString == "<none>") continue; // don't bother setting null hotkeys
         QKeySequence seq(hotkeyString, QKeySequence::PortableText);
         int ident = hotkeyIter.value().ident;
 #ifdef Q_OS_LINUX
