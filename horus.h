@@ -17,8 +17,10 @@
 // These includes must come last.
 #ifdef Q_OS_LINUX
 #include <helpers/xkeyeventfilter.h>
+#define PLATFORM "linux"
 #else
 #include <helpers/win32hotkeyregistry.h>
+#define PLATFORM "win64"
 #endif
 
 

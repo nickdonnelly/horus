@@ -56,6 +56,8 @@ void UpdateDownloadDialog::progressUpdate(qint64 bytesReceived, qint64 bytesTota
 
 void UpdateDownloadDialog::downloadUpdate(){
     QNetworkRequest req(QUrl(QString("").append(reqURL)));
+    req.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy);
+    req.setMaximumRedirectsAllowed(2); // In theory it should only be 1, but just to be safe. TODO: Make this 1 and test it.
     req.setRawHeader(QString("x-api-key").toUtf8(), AUTH_TOKEN.toUtf8());
     QNetworkReply *reply = manager->get(req);
     reply->setParent(this);

@@ -257,11 +257,13 @@ QString HorusUploader::get_auth_str() {
 }
 
 void HorusUploader::checkLatestVersion(){
-    QString reqURL = build_base_req_string().append("/meta/version");
+    QString reqURL = build_base_req_string().append("/dist/version/").append(PLATFORM);
     QEventLoop el;
     QNetworkAccessManager manager;
     QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), &el, SLOT(quit()));
     QNetworkRequest req(QUrl(QString("").append(reqURL)));
+    req.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::RedirectPolicy::NoLessSafeRedirectPolicy);
+    req.setMaximumRedirectsAllowed(MAX_REDIRECTS);
     QNetworkReply * reply = manager.get(req);
 
     el.exec();

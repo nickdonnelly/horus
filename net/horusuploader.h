@@ -33,6 +33,8 @@ private:
     ExpirationDuration getExpirationDuration();
     bool sslOn;
 
+    const int MAX_REDIRECTS = 2;
+
 public slots:
     void uploadProgressSlot(qint64 bytesSend, qint64 bytesTotal);
     void fileUploadComplete(QNetworkReply *reply);

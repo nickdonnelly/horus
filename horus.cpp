@@ -272,23 +272,16 @@ void Horus::versionStringReturned(QString version)
         confBox->addButton(QMessageBox::Yes);
         confBox->addButton(QMessageBox::No);
         confBox->setWindowTitle("Horus Update Available");
-        QString platformString("");
 
-#ifdef Q_OS_WIN
-        platformString += "win64";
-#elif defined Q_OS_LINUX
-        platformString += "linux";
-#endif
-
-        confBox->setText("A Horus update is available. Would you like to download it?\nYour version: " + HORUS_VERSION + "\nNew version: " + version + "\nPlatform: " + platformString);
+        confBox->setText("A Horus update is available. Would you like to download it?\nYour version: " + HORUS_VERSION + "\nNew version: " + version + "\nPlatform: " + PLATFORM);
 
         int res = confBox->exec();
 
         if(res == QMessageBox::Yes){
             sets->sync();
             QString reqStr = uploader->build_base_req_string();
-            reqStr += "/meta/latest/";
-            reqStr += platformString;
+            reqStr += "/dist/latest/";
+            reqStr += PLATFORM;
             UpdateDownloadDialog * downloadDialog = new UpdateDownloadDialog(
                         reqStr, sets->value("auth/authToken", "").toString());
             downloadDialog->setWindowIcon(main_icon);
