@@ -108,3 +108,5 @@ DISTFILES += \
 
 RESOURCES += \
     horus-resources.qrc
+
+DESTDIR = $$PWD/../build
