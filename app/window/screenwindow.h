@@ -3,6 +3,8 @@
 
 #include <net/horusuploader.h>
 
+#include <memory>
+
 #include <QMainWindow>
 #include <QString>
 #include <QScreen>
@@ -19,7 +21,7 @@ class ScreenWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit ScreenWindow(QScreen * screen, HorusUploader * u, int vidDuration = -1, QWidget *parent = 0);
+    explicit ScreenWindow(QScreen * screen, std::shared_ptr<HorusUploader> u, int vidDuration = -1, QWidget *parent = 0);
     ~ScreenWindow();
     QString getLastSaveLocation();
     static QString getAppSaveDirectory();
@@ -35,7 +37,7 @@ private:
     QGraphicsPixmapItem *curItem;
     QPixmap pixModeVideo, pixModeImage;
 
-    HorusUploader * uploader;
+    std::shared_ptr<HorusUploader> uploader;
     QRect windowScreen;
     QScreen * wScreen;
     QRegion full;

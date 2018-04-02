@@ -25,7 +25,8 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
-ScreenWindow::ScreenWindow(QScreen* screen, HorusUploader *u, int vidDuration, QWidget *parent) :
+
+ScreenWindow::ScreenWindow(QScreen* screen, std::shared_ptr<HorusUploader> u, int vidDuration, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ScreenWindow),
     uploader(u),

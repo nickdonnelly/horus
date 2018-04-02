@@ -4,6 +4,8 @@
 #include <net/horusuploader.h>
 #include <horussettings.h>
 
+#include <memory>
+
 #include <QMainWindow>
 #include <QSettings>
 #include <components/hotkeyselector.h>
@@ -17,7 +19,7 @@ class EditSettingsWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit EditSettingsWindow(HorusSettings *settings, HorusUploader *upl, QWidget *parent = 0);
+    explicit EditSettingsWindow(HorusSettings *settings, std::shared_ptr<HorusUploader> upl, QWidget *parent = 0);
     ~EditSettingsWindow();
 
 private:
@@ -45,7 +47,7 @@ private:
 
     int selectedRow;
     HorusSettings * sets;
-    HorusUploader * uploader;
+    std::shared_ptr<HorusUploader> uploader;
 
     HotkeySelector *hks;
 

@@ -6,6 +6,8 @@
 #include <components/horuspixmapgraphicsitem.h>
 #include <net/horusuploader.h>
 
+#include <memory>
+
 #include <QMainWindow>
 #include <QString>
 #include <QGraphicsSceneWheelEvent>
@@ -27,7 +29,7 @@ class EditImageWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit EditImageWindow(QString filename, HorusUploader * upl, QWidget *parent = 0);
+    explicit EditImageWindow(QString filename, std::shared_ptr<HorusUploader> upl, QWidget *parent = 0);
     ~EditImageWindow();
 
 private slots:
@@ -73,7 +75,7 @@ private:
     float startX, startY, startPanX, startPanY;
     int zoom_count;
 
-    HorusUploader * uploader;
+    std::shared_ptr<HorusUploader> uploader;
 
     QString fileLoc, croppedFilename;
     QPixmap * imagePixmap;

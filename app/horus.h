@@ -7,6 +7,7 @@
 #include <horussettings.h>
 #include <textdropper.h>
 
+#include <memory>
 
 #include <QObject>
 #include <QSettings>
@@ -68,7 +69,8 @@ private:
     QIcon main_icon;
     QIcon recording_icon;
 
-    HorusUploader * uploader;
+    //HorusUploader * uploader;
+    std::shared_ptr<HorusUploader> uploader;
     FileDropper * fileDropper;
     TextDropper * textDropper;
 

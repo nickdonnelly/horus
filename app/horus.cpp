@@ -60,10 +60,10 @@ Horus::Horus(){
     registerHotkeys();
 
 
-    uploader = new HorusUploader(sets);
-    connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
-    connect(uploader, SIGNAL(uploadFailed(QString)), this, SLOT(uploadFailed(QString)));
-    connect(uploader, SIGNAL(version(QString)), this, SLOT(versionStringReturned(QString)));
+    uploader = std::make_shared<HorusUploader>(sets);
+    connect(uploader.get(), SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
+    connect(uploader.get(), SIGNAL(uploadFailed(QString)), this, SLOT(uploadFailed(QString)));
+    connect(uploader.get(), SIGNAL(version(QString)), this, SLOT(versionStringReturned(QString)));
     uploader->checkLatestVersion();
 }
 

@@ -20,7 +20,7 @@
 #include <QTextStream>
 
 EditSettingsWindow::EditSettingsWindow(HorusSettings *settings,
-                                       HorusUploader *upl, QWidget *parent) :
+                                       std::shared_ptr<HorusUploader> upl, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::EditSettingsWindow),
     sets(settings),

@@ -28,7 +28,7 @@
 #include <QLabel>
 
 
-EditImageWindow::EditImageWindow(QString filename, HorusUploader * upl, QWidget *parent) :
+EditImageWindow::EditImageWindow(QString filename, std::shared_ptr<HorusUploader> upl, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::EditImageWindow),
     zoom_count(0),
