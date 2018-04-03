@@ -29,7 +29,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     horus.cpp \
-    imagehelper.cpp \
     filedropper.cpp \
     textdropper.cpp \
     horusstyle.cpp \
@@ -58,7 +57,6 @@ win32: SOURCES += \
 
 HEADERS += \
     horus.h \
-    imagehelper.h \
     filedropper.h \
     textdropper.h \
     horusstyle.h \
