@@ -1,7 +1,6 @@
 #include <window/screenwindow.h>
 #include <net/horusuploader.h>
 #include <horus.h>
-#include <imagehelper.h>
 #include <ui_screenwindow.h>
 
 #include <QTextStream>
