@@ -63,14 +63,15 @@ private:
     QList<QScreen*> screens;
     QList<QMainWindow*> windows;
     ScreenWindow * sw;
-    HorusSettings * sets;
+
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
     QIcon main_icon;
     QIcon recording_icon;
 
-    //HorusUploader * uploader;
+    std::shared_ptr<HorusSettings> sets;
     std::shared_ptr<HorusUploader> uploader;
+
     FileDropper * fileDropper;
     TextDropper * textDropper;
 

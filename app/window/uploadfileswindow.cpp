@@ -14,10 +14,13 @@
 #include <QMessageBox>
 #include <QProcess>
 
-UploadFilesWindow::UploadFilesWindow(QStringList files, HorusSettings * sets, QWidget *parent) :
+UploadFilesWindow::UploadFilesWindow(QStringList files, std::shared_ptr<HorusSettings> sets,
+                                     std::shared_ptr<HorusUploader> upl, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::UploadFilesWindow),
-    ctrlHeld(false)
+    ctrlHeld(false),
+    settings(sets),
+    uploader(upl)
 {
     setAcceptDrops(true);
     ui->setupUi(this);
@@ -25,7 +28,6 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, HorusSettings * sets, QW
     ui->pbCurrentFile->setMinimum(0);
     ui->pbCurrentFile->setMaximum(100);
     ui->pbCurrentFile->setValue(0);
-    settings = sets;
     filelist = files;
 
     zipSwitch = new ToggleSwitch(this);
@@ -39,10 +41,9 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, HorusSettings * sets, QW
     usessl = port == "443";
     QObject::connect(settings, SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
 
-    uploader = new HorusUploader(url, port, token, usessl);
-    QObject::connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(fileUploaded(QString)));
-    QObject::connect(uploader, SIGNAL(uploadFailed(QString)), this, SLOT(fileUploadFailed(QString)));
-    QObject::connect(uploader, SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(updateProgressBar(qint64,qint64)));
+    QObject::connect(uploader.get(), SIGNAL(uploadCompleted(QString)), this, SLOT(fileUploaded(QString)));
+    QObject::connect(uploader.get(), SIGNAL(uploadFailed(QString)), this, SLOT(fileUploadFailed(QString)));
+    QObject::connect(uploader.get(), SIGNAL(uploadProgress(qint64,qint64)), this, SLOT(updateProgressBar(qint64,qint64)));
 
     QObject::connect(ui->lvCompleted, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectedCompleteChanged(QListWidgetItem*,QListWidgetItem*)));
 

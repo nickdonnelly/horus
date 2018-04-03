@@ -26,7 +26,7 @@ HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString auth
     QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
 }
 
-HorusUploader::HorusUploader(QSettings * settings)
+HorusUploader::HorusUploader(std::shared_ptr<QSettings> settings)
 {
     sets = settings;
     sets->sync();
@@ -45,7 +45,7 @@ HorusUploader::HorusUploader(QSettings * settings)
 
     gmgr = new QNetworkAccessManager(this);
     QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
-    QObject::connect(sets, SIGNAL(settingsUpdated()), this, SLOT(settingsUpdated()));
+    QObject::connect(sets.get(), SIGNAL(settingsUpdated()), this, SLOT(settingsUpdated()));
 }
 
 /// Generates the base URL string (without a trailing slash) for the object's server for use in building

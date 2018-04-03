@@ -12,7 +12,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
-FileDropper::FileDropper(HorusSettings * sets, QObject *parent) : QObject(parent)
+FileDropper::FileDropper(std::shared_ptr<HorusSettings> sets, QObject *parent) : QObject(parent)
 {
     settings = sets;
 }

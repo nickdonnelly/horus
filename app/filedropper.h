@@ -2,6 +2,9 @@
 #define FILEDROPPER_H
 
 #include <horussettings.h>
+
+#include <memory>
+
 #include <QObject>
 #include <QSettings>
 #include <QClipboard>
@@ -11,7 +14,7 @@ class FileDropper : public QObject
 {
     Q_OBJECT
 public:
-    explicit FileDropper(HorusSettings * sets, QObject *parent = nullptr);
+    explicit FileDropper(std::shared_ptr<HorusSettings> sets, QObject *parent = nullptr);
 
 signals:
 
@@ -22,7 +25,7 @@ public slots:
 private:
     void runUpload(QString files);
 
-    HorusSettings * settings;
+    std::shared_ptr<HorusSettings> settings;
     QTemporaryDir * tempDir;
 };
 

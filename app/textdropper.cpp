@@ -4,9 +4,11 @@
 #include <QIcon>
 #include <QMessageBox>
 
-TextDropper::TextDropper(HorusSettings * sets, QObject *parent) : QObject(parent)
+TextDropper::TextDropper(std::shared_ptr<HorusSettings> sets,
+                         std::shared_ptr<HorusUploader> upl, QObject *parent) : QObject(parent)
 {
     settings = sets;
+    uploader = upl;
 
     settings->sync();
     url = settings->value("auth/serverURL").toString();
@@ -14,14 +16,12 @@ TextDropper::TextDropper(HorusSettings * sets, QObject *parent) : QObject(parent
     token = settings->value("auth/authToken").toString();
     usessl = port == "443";
 
-    QObject::connect(settings, SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
-
-    uploader = new HorusUploader(url, port, token, usessl);
+    QObject::connect(settings.get(), SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
 
     // Since we are uploading text (lightweight), we will ignore the progress
     // indicator signal for now and only connect succcess/failure signals.
-    QObject::connect(uploader, SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
-    QObject::connect(uploader, SIGNAL(uploadFailed(QString)), this, SLOT(uploadFail(QString)));
+    QObject::connect(uploader.get(), SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
+    QObject::connect(uploader.get(), SIGNAL(uploadFailed(QString)), this, SLOT(uploadFail(QString)));
 }
 
 void TextDropper::textDropped(){

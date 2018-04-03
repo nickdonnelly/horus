@@ -5,6 +5,8 @@
 #include <components/toggleswitch.h>
 #include <horussettings.h>
 
+#include <memory>
+
 #include <QMainWindow>
 #include <QDragEnterEvent>
 #include <QKeyEvent>
@@ -23,7 +25,8 @@ class UploadFilesWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit UploadFilesWindow(QStringList files, HorusSettings * sets, QWidget *parent = 0);
+    explicit UploadFilesWindow(QStringList files, std::shared_ptr<HorusSettings> sets,
+                               std::shared_ptr<HorusUploader> upl, QWidget *parent = 0);
     ~UploadFilesWindow();
     static QString getArchiveName();
 
@@ -43,8 +46,8 @@ private:
     QString url, port, token;
     bool usessl;
     bool ctrlHeld;
-    HorusSettings * settings;
-    HorusUploader * uploader;
+    std::shared_ptr<HorusSettings> settings;
+    std::shared_ptr<HorusUploader> uploader;
     ToggleSwitch * zipSwitch;
 
     void startNextFile();

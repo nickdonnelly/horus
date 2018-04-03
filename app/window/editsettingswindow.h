@@ -19,7 +19,7 @@ class EditSettingsWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit EditSettingsWindow(HorusSettings *settings, std::shared_ptr<HorusUploader> upl, QWidget *parent = 0);
+    explicit EditSettingsWindow(std::shared_ptr<HorusSettings> settings, std::shared_ptr<HorusUploader> upl, QWidget *parent = 0);
     ~EditSettingsWindow();
 
 private:
@@ -46,7 +46,7 @@ private:
     Ui::EditSettingsWindow *ui;
 
     int selectedRow;
-    HorusSettings * sets;
+    std::shared_ptr<HorusSettings> sets;
     std::shared_ptr<HorusUploader> uploader;
 
     HotkeySelector *hks;

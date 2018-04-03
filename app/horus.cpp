@@ -27,10 +27,11 @@ const QString Horus::HORUS_VERSION = QString("2.4");
 Horus::Horus(){
     main_icon = QIcon(":/res/horus.png");
     recording_icon = QIcon(":/res/horus_recording.png");
-    sets = new HorusSettings();
+    sets = std::make_shared<HorusSettings>();
+    uploader = std::make_shared<HorusUploader>(sets);
 
     fileDropper = new FileDropper(sets);
-    textDropper = new TextDropper(sets);
+    textDropper = new TextDropper(sets, uploader);
 
     if(sets->value("other/firstLaunchPostUpdate", false).toBool()){
         showChangelogs();
@@ -38,7 +39,7 @@ Horus::Horus(){
         sets->sync();
     }
 
-    connect(sets, SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
+    connect(sets.get(), SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
     connect(textDropper, SIGNAL(complete(QString)), this, SLOT(uploadComplete(QString)));
     connect(textDropper, SIGNAL(failure(QString)), this, SLOT(uploadFailed(QString)));
     createTrayIcon();
@@ -60,7 +61,6 @@ Horus::Horus(){
     registerHotkeys();
 
 
-    uploader = std::make_shared<HorusUploader>(sets);
     connect(uploader.get(), SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
     connect(uploader.get(), SIGNAL(uploadFailed(QString)), this, SLOT(uploadFailed(QString)));
     connect(uploader.get(), SIGNAL(version(QString)), this, SLOT(versionStringReturned(QString)));

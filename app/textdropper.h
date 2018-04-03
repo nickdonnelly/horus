@@ -4,6 +4,8 @@
 #include <net/horusuploader.h>
 #include <horussettings.h>
 
+#include <memory>
+
 #include <QObject>
 #include <QSettings>
 
@@ -11,7 +13,8 @@ class TextDropper : public QObject
 {
     Q_OBJECT
 public:
-    explicit TextDropper(HorusSettings * sets, QObject *parent = 0);
+    explicit TextDropper(std::shared_ptr<HorusSettings> sets,
+                         std::shared_ptr<HorusUploader> upl, QObject *parent = 0);
 
 signals:
     void complete(QString url);
@@ -24,8 +27,8 @@ public slots:
     void setsUpdated();
 
 private:
-    HorusSettings * settings;
-    HorusUploader * uploader;
+    std::shared_ptr<HorusSettings> settings;
+    std::shared_ptr<HorusUploader> uploader;
     QString url, port, token;
     bool usessl;
 
