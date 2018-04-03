@@ -15,7 +15,6 @@ class HorusUploader : public QObject
 {
     Q_OBJECT
 public:
-    HorusUploader(QString serverURL, QString serverPort, QString authToken, bool useSSL);
     HorusUploader(std::shared_ptr<HorusSettings> settings);
 
     void upload(bool isVideo, QString filename);
@@ -23,6 +22,7 @@ public:
     void sendText(QString text);
     void checkLatestVersion();
     void resetCreds(QString serverURL, QString serverPort, QString authToken, bool useSSL);
+
     QString build_base_req_string();
     QString build_base_browser_string();
     QString get_auth_str();

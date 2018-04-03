@@ -16,16 +16,6 @@
 #include <QUrlQuery>
 #include <QEventLoop>
 
-HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString authToken, bool useSSL)
-{
-    sslOn = useSSL;
-    SERVER_URL = serverURL;
-    SERVER_PORT = serverPort;
-    AUTH_TOKEN = authToken;
-    gmgr = new QNetworkAccessManager(this);
-    QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
-}
-
 HorusUploader::HorusUploader(std::shared_ptr<HorusSettings> settings)
 {
     sets = settings;
