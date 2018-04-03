@@ -30,7 +30,7 @@ Horus::Horus(){
     sets = std::make_shared<HorusSettings>();
     uploader = std::make_shared<HorusUploader>(sets);
 
-    fileDropper = new FileDropper(sets);
+    fileDropper = new FileDropper(sets, uploader);
     textDropper = new TextDropper(sets, uploader);
 
     if(sets->value("other/firstLaunchPostUpdate", false).toBool()){

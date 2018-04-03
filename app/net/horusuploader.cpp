@@ -26,7 +26,7 @@ HorusUploader::HorusUploader(QString serverURL, QString serverPort, QString auth
     QObject::connect(gmgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileUploadComplete(QNetworkReply*)));
 }
 
-HorusUploader::HorusUploader(std::shared_ptr<QSettings> settings)
+HorusUploader::HorusUploader(std::shared_ptr<HorusSettings> settings)
 {
     sets = settings;
     sets->sync();

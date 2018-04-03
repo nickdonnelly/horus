@@ -2,6 +2,7 @@
 #define FILEDROPPER_H
 
 #include <horussettings.h>
+#include <net/horusuploader.h>
 
 #include <memory>
 
@@ -14,7 +15,7 @@ class FileDropper : public QObject
 {
     Q_OBJECT
 public:
-    explicit FileDropper(std::shared_ptr<HorusSettings> sets, QObject *parent = nullptr);
+    explicit FileDropper(std::shared_ptr<HorusSettings> sets, std::shared_ptr<HorusUploader>, QObject *parent = nullptr);
 
 signals:
 
@@ -26,6 +27,7 @@ private:
     void runUpload(QString files);
 
     std::shared_ptr<HorusSettings> settings;
+    std::shared_ptr<HorusUploader> uploader;
     QTemporaryDir * tempDir;
 };
 

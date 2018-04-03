@@ -39,7 +39,7 @@ UploadFilesWindow::UploadFilesWindow(QStringList files, std::shared_ptr<HorusSet
     port = settings->value("auth/serverPort").toString();
     token = settings->value("auth/authToken").toString();
     usessl = port == "443";
-    QObject::connect(settings, SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
+    QObject::connect(settings.get(), SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
 
     QObject::connect(uploader.get(), SIGNAL(uploadCompleted(QString)), this, SLOT(fileUploaded(QString)));
     QObject::connect(uploader.get(), SIGNAL(uploadFailed(QString)), this, SLOT(fileUploadFailed(QString)));

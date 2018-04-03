@@ -12,9 +12,11 @@
 #include <QMessageBox>
 #include <QSettings>
 
-FileDropper::FileDropper(std::shared_ptr<HorusSettings> sets, QObject *parent) : QObject(parent)
+FileDropper::FileDropper(std::shared_ptr<HorusSettings> sets, std::shared_ptr<HorusUploader> upl, QObject *parent)
+    : QObject(parent),
+      settings(sets),
+      uploader(upl)
 {
-    settings = sets;
 }
 
 
@@ -52,7 +54,7 @@ void FileDropper::runUpload(QString files){
         }
     }
     // invoke new window with eachfile
-    UploadFilesWindow * win = new UploadFilesWindow(eachfile, settings);
+    UploadFilesWindow * win = new UploadFilesWindow(eachfile, settings, uploader);
     win->setWindowIcon(QIcon(":/res/dropfile.png"));
     win->show();
     if(isZip) connect(win, SIGNAL(complete()), this, SLOT(cleanupTempDir()));
@@ -97,7 +99,7 @@ void FileDropper::fileDropped(){
         }
     }else{
         QStringList dummyList;
-        UploadFilesWindow * win = new UploadFilesWindow(dummyList, settings);
+        UploadFilesWindow * win = new UploadFilesWindow(dummyList, settings, uploader);
         win->setWindowIcon(QIcon(":/res/dropfile.png"));
         win->show();
     }
