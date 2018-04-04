@@ -73,8 +73,8 @@ private:
     std::shared_ptr<HorusSettings> sets;
     std::shared_ptr<HorusUploader> uploader;
 
-    FileDropper * fileDropper;
-    TextDropper * textDropper;
+    std::unique_ptr<FileDropper> fileDropper;
+    std::unique_ptr<TextDropper> textDropper;
 
 #ifdef Q_OS_LINUX
     XKeyEventFilter *nefScreen;

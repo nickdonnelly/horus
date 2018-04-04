@@ -6,6 +6,7 @@
 #include <window/editsettingswindow.h>
 #include <net/horusuploader.h>
 #include <horussettings.h>
+
 #include <QInputDialog>
 #include <QApplication>
 #include <QMessageBox>
@@ -30,8 +31,8 @@ Horus::Horus(){
     sets = std::make_shared<HorusSettings>();
     uploader = std::make_shared<HorusUploader>(sets);
 
-    fileDropper = new FileDropper(sets, uploader);
-    textDropper = new TextDropper(sets, uploader);
+    fileDropper = std::make_unique<FileDropper>(sets, uploader);
+    textDropper = std::make_unique<TextDropper>(sets, uploader);
 
     if(sets->value("other/firstLaunchPostUpdate", false).toBool()){
         showChangelogs();
@@ -40,8 +41,8 @@ Horus::Horus(){
     }
 
     connect(sets.get(), SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
-    connect(textDropper, SIGNAL(complete(QString)), this, SLOT(uploadComplete(QString)));
-    connect(textDropper, SIGNAL(failure(QString)), this, SLOT(uploadFailed(QString)));
+    connect(textDropper.get(), SIGNAL(complete(QString)), this, SLOT(uploadComplete(QString)));
+    connect(textDropper.get(), SIGNAL(failure(QString)), this, SLOT(uploadFailed(QString)));
     createTrayIcon();
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
@@ -69,7 +70,7 @@ Horus::Horus(){
 
 void Horus::uploadComplete(QString url){
     if(url == "license_key_invalid"){
-        QMessageBox * mb = new QMessageBox();
+        std::unique_ptr<QMessageBox> mb = std::make_unique<QMessageBox>();
         mb->setWindowIcon(main_icon);
         mb->setIcon(QMessageBox::Critical);
         mb->setWindowTitle("Upload failed");
@@ -253,13 +254,13 @@ void Horus::createTrayIcon(){
     connect(actionBoxVideo, SIGNAL(triggered()), this, SLOT(openVideoWindow10()));
     connect(actionBoxVideoDur, SIGNAL(triggered()), this, SLOT(openVideoWindowDur()));
     connect(actionEditLast, SIGNAL(triggered()), this, SLOT(openEditLastWindow()));
-    connect(actionDropFile, SIGNAL(triggered()), fileDropper, SLOT(fileDropped()));
+    connect(actionDropFile, SIGNAL(triggered()), fileDropper.get(), SLOT(fileDropped()));
 
     connect(actionManage, SIGNAL(triggered()), this, SLOT(openManage()));
     connect(actionSettings, SIGNAL(triggered()), this, SLOT(openSettingsWindow()));
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 
-    connect(actionPaste, SIGNAL(triggered()), textDropper, SLOT(textDropped()));
+    connect(actionPaste, SIGNAL(triggered()), textDropper.get(), SLOT(textDropped()));
     // TODO: CONNECT SUCCESS/FAIL!
 
     trayIcon = new QSystemTrayIcon(this);
