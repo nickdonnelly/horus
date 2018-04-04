@@ -96,7 +96,7 @@ void Horus::uploadFailed(QString failure){
     mb->setWindowIcon(main_icon);
     mb->setIcon(QMessageBox::Critical);
     mb->setWindowTitle("Upload failed");
-    mb->setText("There was a failure in uploading the image:\n" + failure);
+    mb->setText("There was a failure in uploading the resource:\n" + failure);
     mb->exec();
 }
 
