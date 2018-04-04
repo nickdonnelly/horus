@@ -153,7 +153,7 @@ QFrame QLabel {
              <item>
               <widget class="QRadioButton" name="rbUploads">
                <property name="text">
-                <string>Upload Settings</string>
+                <string>Uploads</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -163,14 +163,14 @@ QFrame QLabel {
              <item>
               <widget class="QRadioButton" name="rbLocal">
                <property name="text">
-                <string>Local Storage Settings</string>
+                <string>Local Storage</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="rbHotkeys">
                <property name="text">
-                <string>Hotkey Settings</string>
+                <string>Hotkeys</string>
                </property>
                <property name="checked">
                 <bool>false</bool>
@@ -180,14 +180,14 @@ QFrame QLabel {
              <item>
               <widget class="QRadioButton" name="rbAuth">
                <property name="text">
-                <string>Server and Auth Settings</string>
+                <string>Server and Authentication</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="rbAbout">
                <property name="text">
-                <string>About Horus</string>
+                <string>Updates and About</string>
                </property>
               </widget>
              </item>
@@ -238,7 +238,7 @@ QFrame QLabel {
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="pageUpload">
          <layout class="QVBoxLayout" name="verticalLayout_3">
