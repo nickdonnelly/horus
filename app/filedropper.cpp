@@ -88,20 +88,26 @@ void FileDropper::fileDropped(){
         box->addButton(QMessageBox::Yes);
         box->addButton(QMessageBox::No);
         if(settings->value("file/multipleUploader", "nozip").toString() == "zip"){
-            box->setText("Are you sure you want to zip and upload the following files?\n" + actualData);
+            box->setText("Do you want to zip and upload the following files from the clipboard?\n" + actualData);
         }else{
-            box->setText("Are you sure you want to upload the following files?\n" + actualData);
+            box->setText("Do you want to upload the following files from the clipboard?\n" + actualData);
         }
         int result = box->exec();
 
         if(result == QMessageBox::Yes){
             runUpload(actualData);
+        } else {
+            openEmptyWindow();
         }
     }else{
-        QStringList dummyList;
-        UploadFilesWindow * win = new UploadFilesWindow(dummyList, settings, uploader);
-        win->setWindowIcon(QIcon(":/res/dropfile.png"));
-        win->show();
+        openEmptyWindow();
     }
 }
 
+void FileDropper::openEmptyWindow()
+{
+    QStringList dummyList;
+    UploadFilesWindow * win = new UploadFilesWindow(dummyList, settings, uploader);
+    win->setWindowIcon(QIcon(":/res/dropfile.png"));
+    win->show();
+}

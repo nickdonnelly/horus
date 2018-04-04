@@ -25,6 +25,7 @@ public slots:
 
 private:
     void runUpload(QString files);
+    void openEmptyWindow();
 
     std::shared_ptr<HorusSettings> settings;
     std::shared_ptr<HorusUploader> uploader;

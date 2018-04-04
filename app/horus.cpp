@@ -231,7 +231,7 @@ void Horus::createTrayIcon(){
     actionEditLast = trayIconMenu->addAction(tr("Screenshot Editor"));
     actionEditLast->setIcon(QIcon(":/res/edit_last.png"));
 
-    actionDropFile = trayIconMenu->addAction(tr("Drop File(s) On Clipboard"));
+    actionDropFile = trayIconMenu->addAction(tr("File Dropper"));
     actionDropFile->setIcon(QIcon(":/res/dropfile.png"));
 
     actionPaste = trayIconMenu->addAction(tr("Paste Clipboard Text"));
