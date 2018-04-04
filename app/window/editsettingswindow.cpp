@@ -3,14 +3,14 @@
 #include "ui_editsettingswindow.h"
 #include <horus.h>
 #include <horusshortcut.h>
+
 #include <QIntValidator>
 #include <QDesktopServices>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QKeySequence>
-#include <QHash>
+#include <QMap>
 #include <QHashIterator>
-
 #include <QStackedWidget>
 #include <QFileDialog>
 #include <QLineEdit>
@@ -271,8 +271,8 @@ void EditSettingsWindow::setupHotkeysPanel()
     ui->twHotkeys->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
 
     // Add the table widget elements
-    QHash<QString, HShortcut> shortcuts = getShortcutHash();
-    QHashIterator<QString, HShortcut> shortcutIterator(shortcuts);
+    QMap<QString, HShortcut> shortcuts = getShortcutHash();
+    QMapIterator<QString, HShortcut> shortcutIterator(shortcuts);
     int row = 0;
     while(shortcutIterator.hasNext()) {
         shortcutIterator.next();

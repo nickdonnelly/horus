@@ -1,7 +1,7 @@
 #ifndef HORUSSHORTCUT_H
 #define HORUSSHORTCUT_H
 
-#include <QHash>
+#include <QMap>
 
 enum HorusShortcut {
     Screenshot = 1000,
@@ -20,11 +20,11 @@ struct HShortcut {
     QString displayString; // display string for the tableview
 };
 
-/// Returns a QHash containing the shortcuts. The key is the SETTING NAME
+/// Returns a QMap containing the shortcuts. The key is the SETTING NAME
 /// of the shortcut, like `hotkeys/screenshotfull`, for example. The individual
 /// ident for each shortcut can be found in the value struct.
-static QHash<QString, HShortcut> getShortcutHash() {
-    QHash<QString, HShortcut> result;
+static QMap<QString, HShortcut> getShortcutHash() {
+    QMap<QString, HShortcut> result;
 
     result.insert("hotkeys/screenshot",
                   HShortcut { HorusShortcut::Screenshot, "Open Screenshot Window"});

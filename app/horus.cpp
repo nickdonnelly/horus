@@ -119,7 +119,7 @@ void Horus::recordingStart(){
 void Horus::recordingFinished(int exitcode){
     trayIcon->setIcon(main_icon);
     if(exitcode != 0){
-        QMessageBox confBox = MessageBox();
+        QMessageBox * confBox = new QMessageBox();
         confBox->setWindowIcon(main_icon);
         confBox->setWindowTitle("Video error");
         confBox->setText("There was a problem with ffmpeg (exit status" + QString::number(exitcode));
@@ -351,8 +351,8 @@ void Horus::executeShortcut(int ident)
 
 void Horus::registerHotkeys()
 {
-    QHash<QString, HShortcut> hotkeys = getShortcutHash();
-    QHashIterator<QString, HShortcut> hotkeyIter(hotkeys);
+    QMap<QString, HShortcut> hotkeys = getShortcutHash();
+    QMapIterator<QString, HShortcut> hotkeyIter(hotkeys);
 
     while(hotkeyIter.hasNext()){
         hotkeyIter.next();
@@ -371,8 +371,8 @@ void Horus::registerHotkeys()
 
 void Horus::deregisterHotkeys()
 {
-    QHash<QString, HShortcut> hotkeys = getShortcutHash();
-    QHashIterator<QString, HShortcut> hotkeyIter(hotkeys);
+    QMap<QString, HShortcut> hotkeys = getShortcutHash();
+    QMapIterator<QString, HShortcut> hotkeyIter(hotkeys);
 
     while(hotkeyIter.hasNext()){
         hotkeyIter.next();
