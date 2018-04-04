@@ -20,8 +20,6 @@ TextDropper::TextDropper(std::shared_ptr<HorusSettings> sets,
 
     // Since we are uploading text (lightweight), we will ignore the progress
     // indicator signal for now and only connect succcess/failure signals.
-    QObject::connect(uploader.get(), SIGNAL(uploadCompleted(QString)), this, SLOT(uploadComplete(QString)));
-    QObject::connect(uploader.get(), SIGNAL(uploadFailed(QString)), this, SLOT(uploadFail(QString)));
 }
 
 void TextDropper::textDropped(){
@@ -41,14 +39,6 @@ void TextDropper::textDropped(){
 // For manual use (if you don't want to use a signal for whatever reason)
 void TextDropper::upload(QString text){
     uploader->sendText(text);
-}
-
-void TextDropper::uploadComplete(QString url) {
-    emit complete(url);
-}
-
-void TextDropper::uploadFail(QString reason) {
-    emit failure(reason);
 }
 
 void TextDropper::setsUpdated() {

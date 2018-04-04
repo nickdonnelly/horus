@@ -41,8 +41,6 @@ Horus::Horus(){
     }
 
     connect(sets.get(), SIGNAL(settingsUpdated()), this, SLOT(setsUpdated()));
-    connect(textDropper.get(), SIGNAL(complete(QString)), this, SLOT(uploadComplete(QString)));
-    connect(textDropper.get(), SIGNAL(failure(QString)), this, SLOT(uploadFailed(QString)));
     createTrayIcon();
     connect(trayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
@@ -94,7 +92,7 @@ void Horus::openManage() {
 }
 
 void Horus::uploadFailed(QString failure){
-    QMessageBox * mb = new QMessageBox();
+    std::unique_ptr<QMessageBox> mb = std::make_unique<QMessageBox>();
     mb->setWindowIcon(main_icon);
     mb->setIcon(QMessageBox::Critical);
     mb->setWindowTitle("Upload failed");
@@ -121,7 +119,7 @@ void Horus::recordingStart(){
 void Horus::recordingFinished(int exitcode){
     trayIcon->setIcon(main_icon);
     if(exitcode != 0){
-        QMessageBox * confBox = new QMessageBox();
+        std::unique_ptr<QMessageBox> confBox = std::unique_ptr<QMessageBox>();
         confBox->setWindowIcon(main_icon);
         confBox->setWindowTitle("Video error");
         confBox->setText("There was a problem with ffmpeg (exit status" + QString::number(exitcode));

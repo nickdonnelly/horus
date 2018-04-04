@@ -15,15 +15,8 @@ class TextDropper : public QObject
 public:
     explicit TextDropper(std::shared_ptr<HorusSettings> sets,
                          std::shared_ptr<HorusUploader> upl, QObject *parent = 0);
-
-signals:
-    void complete(QString url);
-    void failure(QString reason);
-
 public slots:
     void textDropped();
-    void uploadComplete(QString url);
-    void uploadFail(QString reason);
     void setsUpdated();
 
 private:
