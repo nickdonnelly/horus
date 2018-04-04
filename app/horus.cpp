@@ -119,7 +119,7 @@ void Horus::recordingStart(){
 void Horus::recordingFinished(int exitcode){
     trayIcon->setIcon(main_icon);
     if(exitcode != 0){
-        std::unique_ptr<QMessageBox> confBox = std::unique_ptr<QMessageBox>();
+        QMessageBox confBox = MessageBox();
         confBox->setWindowIcon(main_icon);
         confBox->setWindowTitle("Video error");
         confBox->setText("There was a problem with ffmpeg (exit status" + QString::number(exitcode));
