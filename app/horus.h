@@ -53,6 +53,7 @@ private slots:
     void screenWindowClosed();
     void setsUpdated();
     void executeShortcut(int ident);
+    void refreshHotkeys();
 
 private:
     void createTrayIcon();

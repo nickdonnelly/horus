@@ -52,6 +52,12 @@ EditSettingsWindow::~EditSettingsWindow()
     delete ui;
 }
 
+void EditSettingsWindow::closeEvent(QCloseEvent *event)
+{
+    emit closing();
+    QMainWindow::closeEvent(event);
+}
+
 void EditSettingsWindow::saveAllAndClose() {
     QString copyMode;
     QString saveDirectory, serverURL, serverPort, lkey;

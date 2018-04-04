@@ -22,6 +22,9 @@ public:
     explicit EditSettingsWindow(std::shared_ptr<HorusSettings> settings, std::shared_ptr<HorusUploader> upl, QWidget *parent = 0);
     ~EditSettingsWindow();
 
+signals:
+    void closing();
+
 private:
     void setUIElementValues();
     void saveHotkeys();
@@ -52,6 +55,9 @@ private:
     HotkeySelector *hks;
 
     void setupHotkeysPanel();
+
+protected:
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // EDITSETTINGSWINDOW_H

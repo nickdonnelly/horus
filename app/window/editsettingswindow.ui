@@ -238,7 +238,7 @@ QFrame QLabel {
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="pageUpload">
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -980,6 +980,16 @@ QFrame QLabel {
          <layout class="QVBoxLayout" name="verticalLayout_17">
           <item>
            <layout class="QVBoxLayout" name="vlHotkeys">
+            <item>
+             <widget class="QLabel" name="lblGlobalHotkeysDisabled">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ef2929;&quot;&gt;Global Hotkeys are disabled when the settings window is open.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QTableWidget" name="twHotkeys">
               <property name="horizontalScrollBarPolicy">

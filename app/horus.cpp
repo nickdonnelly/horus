@@ -196,7 +196,15 @@ void Horus::openVideoWindowDur(){
 void Horus::openSettingsWindow(){
     EditSettingsWindow *sd = new EditSettingsWindow(sets, uploader);
     sd->setWindowIcon(main_icon);
+    deregisterHotkeys(); // these are registered again when the save button is clicked.
+    connect(sd, SIGNAL(closing()), this, SLOT(refreshHotkeys()));
     sd->show();
+}
+
+void Horus::refreshHotkeys()
+{
+    deregisterHotkeys();
+    registerHotkeys();
 }
 
 void Horus::openEditLastWindow(){
@@ -252,7 +260,7 @@ void Horus::createTrayIcon(){
     connect(actionQuit, SIGNAL(triggered()), qApp, SLOT(quit()));
 
     connect(actionPaste, SIGNAL(triggered()), textDropper, SLOT(textDropped()));
-    // CONNECT SUCCESS/FAIL!
+    // TODO: CONNECT SUCCESS/FAIL!
 
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(main_icon);
@@ -309,8 +317,7 @@ void Horus::screenWindowClosed()
 
 void Horus::setsUpdated()
 {
-    deregisterHotkeys();
-    registerHotkeys();
+    refreshHotkeys();
 }
 
 void Horus::executeShortcut(int ident)
