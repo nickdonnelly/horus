@@ -12,13 +12,13 @@ Mirror to gh:
 
 Build Windows:
   stage: buildwin
-  image: registry.gitlab.com/nickdonnelly/horus/aws-deploy-hours:windows
+  image: haffmans/mingw-qt5:latest
   only:
   - master
   - staging
 
   script:
-  - i686-w64-mingw32.static-qmake-qt5 horus.pro
+  - x86_64-w64-mingw32-qmake-qt5 horus.pro
   - make -j7
   - cd release
   - rm *.o *.h *.cpp
