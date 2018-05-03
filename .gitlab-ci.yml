@@ -37,8 +37,7 @@ Build Linux:
 
   script:
   - sudo apt-get -qq update
-  - mkdir build && cd build
-  - qmake -r ../
+  - qmake horus.pro 
   - make -j4
 
   artifacts:
