@@ -20,7 +20,6 @@ Build Windows:
   script:
   - x86_64-w64-mingw32-qmake-qt5 horus.pro
   - make -j7
-  - rm *.o *.h *.cpp
   - cd ..
 
   artifacts: # save the file 
