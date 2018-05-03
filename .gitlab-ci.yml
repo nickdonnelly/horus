@@ -36,6 +36,7 @@ Build Linux:
   - staging
 
   script:
+  - export QMAKE_CXXFLAGS="-std=c++14"
   - sudo apt-get -qq update
   - qmake horus.pro 
   - make -j4
