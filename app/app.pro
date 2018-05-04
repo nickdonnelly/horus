@@ -12,6 +12,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = horusqt
 TEMPLATE = app
 
+CONFIG += c++14
+
 linux: CONFIG += link_pkgconfig
 linux: PKGCONFIG += x11
 
