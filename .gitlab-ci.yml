@@ -55,5 +55,9 @@ Deploy both platforms:
 
   script:
   - export VERSION=$(cat app/horus.cpp | grep "HORUS_VERSION = QString(" | grep -o '"[^"]\+"' | sed -e 's/\"//g')
-  - echo 'Uploading linux with version $VERSION'
-  - req post https://horus.donnelly.cc/dist/deploy/new/linux/${VERSION} --header "content-type" "application/octet-stream" --header "x-deployment-key" "${HORUS_SERVER_DEPLOY_KEY}" --header "x-api-key" "${HORUS_SERVER_API_KEY}" --body build/horusqt
+  - echo 'Zipping linux binary artifact...'
+  - zip linux.zip build/horusqt
+  - zip windows.zip build/horusqt.exe
+  - echo 'Uploading linux with version ${VERSION}'
+  - req post https://horus.donnelly.cc/dist/deploy/new/linux/${VERSION} --header "content-type" "application/octet-stream" --header "x-deployment-key" "${HORUS_SERVER_DEPLOY_KEY}" --header "x-api-key" "${HORUS_SERVER_API_KEY}" --body linux.zip
+  - req post https://horus.donnelly.cc/dist/deploy/new/win64/${VERSION} --header "content-type" "application/octet-stream" --header "x-deployment-key" "${HORUS_SERVER_DEPLOY_KEY}" --header "x-api-key" "${HORUS_SERVER_API_KEY}" --body windows.zip
