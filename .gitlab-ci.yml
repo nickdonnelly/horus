@@ -1,7 +1,8 @@
 stages:
   - mirror
-  - buildwin
-  - buildlinux
+  - build:win
+  - build:linux
+  - deploy:both
 
 Mirror to gh:
   stage: mirror
@@ -11,7 +12,7 @@ Mirror to gh:
 
 
 Build Windows:
-  stage: buildwin
+  stage: build:win
   image: haffmans/mingw-qt5:latest
   only:
   - master
@@ -28,7 +29,7 @@ Build Windows:
   
 
 Build Linux:
-  stage: buildlinux
+  stage: build:linux
   image: rabits/qt:5.10-desktop
   only:
   - master
@@ -44,3 +45,19 @@ Build Linux:
     paths:
     - build/*
     expire_in: 1 week
+
+
+Deploy both platforms:
+  stage: deploy:both
+  image: nickdonnelly/deploy_horus
+  only:
+  - master
+
+  dependencies:
+  - build:linux
+  - build:win
+
+  script:
+  - export VERSION=$(cat app/horus.cpp | grep "HORUS_VERSION = QString(" | grep -o '"[^"]\+"' | sed -e 's/\"//g')
+  - echo 'Uploading linux with version $VERSION'
+  - req post https://horus.donnelly.cc/dist/deploy/new/linux/${VERSION} --header "content-type" "application/octet-stream" --header "x-deployment-key" "${HORUS_SERVER_DEPLOY_KEY}" --header "x-api-key" "${HORUS_SERVER_API_KEY}" --body build/horusqt
