@@ -53,10 +53,6 @@ Deploy both platforms:
   only:
   - master
 
-  dependencies:
-  - build:linux
-  - build:win
-
   script:
   - export VERSION=$(cat app/horus.cpp | grep "HORUS_VERSION = QString(" | grep -o '"[^"]\+"' | sed -e 's/\"//g')
   - echo 'Uploading linux with version $VERSION'
