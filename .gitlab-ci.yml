@@ -62,3 +62,5 @@ Deploy both platforms:
   - req post --timeout 100000 https://horus.donnelly.cc/dist/deploy/new/linux/${VERSION} --header "content-type" "application/octet-stream" --header "x-deployment-key" "${HORUS_SERVER_DEPLOY_KEY}" --header "x-api-key" "${HORUS_SERVER_API_KEY}" --body linux.zip
   - echo 'Uploading windows with version $(echo -n ${VERSION})'
   - req post --timeout 100000 https://horus.donnelly.cc/dist/deploy/new/win64/${VERSION} --header "content-type" "application/octet-stream" --header "x-deployment-key" "${HORUS_SERVER_DEPLOY_KEY}" --header "x-api-key" "${HORUS_SERVER_API_KEY}" --body windows.zip
+  - echo "A server restart may be required after processing."
+    
