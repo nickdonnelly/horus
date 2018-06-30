@@ -70,6 +70,10 @@ void HorusUploader::append_auth_str(QString * req, bool firstParam){
 /// Catch all for uploading images and videos. Internal use only (only called by member functions that the client
 /// class invokes to upload each individual media type).
 void HorusUploader::upload(bool isVideo, QString filename){
+    // Break out if we shouldn't be uploading.
+    // TODO: Abstract this into another area of the logic. It doesn't really belong here.
+    if((!sets.get()->value("image/upload", true).toBool() && !isVideo) || (!sets.get()->value("video/upload", true).toBool() && isVideo)) return;
+
     filename = filename.trimmed();
     QFile toUpload(filename);
     if(toUpload.exists()){
